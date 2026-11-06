@@ -437,7 +437,7 @@ const VARIANTS = {
  spirit:[
   {id:'oak',title:'Дубовый',env:'forest',color:'#8a9d69',accent:'#d3efaa',skin:'bark',head:'long',tail:'feather',wings:'none',glow:30,trait:'Древесная кора служит бронёй, а переплетённые корни помогают удерживать влагу.'},
   {id:'mushroom',title:'Грибной',env:'forest',color:'#ac89a9',accent:'#f7d5cb',skin:'spots',head:'wide',tail:'none',wings:'none',glow:65,trait:'Светящиеся споры и сеть подземных гиф связывают представителей колонии.'},
-  {id:'willow',title:'Ивовый',env:'coast',color:'#689d90',accent:'#b7efdd',skin:'bark',head:'long',tail:'feather',wings:'none',glow:45,trait:'Гибкие лозы и влаголюбивые покровы позволяют существовать у водоёмов.'}
+  {id:'willow',title:'Ивовый',env:'forest',color:'#689d90',accent:'#b7efdd',skin:'bark',head:'long',tail:'feather',wings:'none',glow:45,trait:'Гибкие лозы и влаголюбивые покровы позволяют существовать у водоёмов.'}
  ]
 };
 const defaultId=(k)=>VARIANTS[k] ? VARIANTS[k][0].id:'reef';
@@ -574,6 +574,7 @@ render=function(sync=true){
  try{localStorage.setItem('atlas_draft_v03',JSON.stringify(s))}catch(e){}
 };
 $('ecotype').onchange=()=>chooseVariant($('ecotype').value);
+$('json').onclick=()=>downloadText(JSON.stringify({version:3,catalog,selected:s},null,2),'atlas_catalog.json','application/json');
 $('habitatToggle').onclick=()=>{
  scenery=!scenery;
  $('habitatToggle').textContent=scenery?'Пейзаж · ВКЛ':'Пейзаж · ВЫКЛ';
@@ -581,13 +582,15 @@ $('habitatToggle').onclick=()=>{
  $('habitatToggle').setAttribute('aria-pressed',String(scenery));
  render(false);
 };
-$('species').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>render()));
+$('species').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>chooseVariant(defaultId(s.k))));
 $('random').addEventListener('click',()=>{s.ecotype=defaultId(s.k);render()});
 $('reset').addEventListener('click',()=>{s.ecotype=defaultId(s.k);render()});
+let restored=false;
 try{
  const draft=JSON.parse(localStorage.getItem('atlas_draft_v03')||'null');
- if(valid(draft))s=clean(draft);
+ if(valid(draft)){s=clean(draft);restored=true}
 }catch(e){}
-render();
+if(!restored)chooseVariant(defaultId(s.k));
+else render();
 })();
 </script></body></html>
