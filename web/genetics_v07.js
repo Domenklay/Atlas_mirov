@@ -92,6 +92,9 @@ const selA=el('v7A'),selB=el('v7B'),btn=el('v7Breed'),chance=el('v7Chance'),stat
 chance.oninput=()=>el('v7ChanceOut').textContent=chance.value+'%';
 const find=id=>catalog.find(x=>x.id===id);
 function parentsUI(){
+ let assigned=false;
+ for(const parent of catalog){if(!parent.id){parent.id=uid();assigned=true}}
+ if(assigned)persist();
  const signature=catalog.map(x=>x.id+':'+x.name).join('|');
  if(selA.dataset.sig===signature&&selB.dataset.sig===signature)return;
  const beforeA=selA.value,beforeB=selB.value;
@@ -204,5 +207,7 @@ const exportButton=$('json');
 exportButton.onclick=()=>downloadText(JSON.stringify({version:7,format:'atlas-living-worlds',catalog,selected:s},null,2),'atlas_catalog_v07.json','application/json');
 const renderBefore=render;
 render=function(sync=true){renderBefore(sync);parentsUI();familyUI()};
+const catalogBefore=renderCatalog;
+renderCatalog=function(){catalogBefore();parentsUI();familyUI()};
 render();
 })();
