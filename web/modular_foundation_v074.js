@@ -58,6 +58,8 @@ function restoreDraft(){
  }catch(err){}
  return false
 }
+const previousCleaner=clean;
+clean=function(raw){const obj=raw&&typeof raw==='object'?raw:{};const v=previousCleaner(obj);v.spriteCustomColor=obj.spriteCustomColor===true;return v};
 restoreCatalog();
 restoreDraft();
 const target=(a,sw,sh)=>{
@@ -176,8 +178,6 @@ style.textContent='#modular73 .m74diagnostics{margin:12px 0 0;padding:10px;borde
  '#m74note{font-size:11px;color:var(--ui-muted,#a8b8b1);line-height:1.45;margin:6px 0 0}';
 document.head.appendChild(style);
 const colorCheckbox=document.getElementById('m74customColor'),debugCheckbox=document.getElementById('m74anchors');
-const previousCleaner=clean;
-clean=function(raw){const obj=raw&&typeof raw==='object'?raw:{};const v=previousCleaner(obj);v.spriteCustomColor=obj.spriteCustomColor===true;return v};
 colorCheckbox.onchange=()=>{s.spriteCustomColor=colorCheckbox.checked;render(false)};
 debugCheckbox.onchange=()=>{showAnchors=debugCheckbox.checked;render(false)};
 const ancestorRender=render;
