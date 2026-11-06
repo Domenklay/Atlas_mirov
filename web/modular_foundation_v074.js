@@ -173,7 +173,8 @@ const title=panel.querySelector('h3');if(title)title.textContent='Сборный
 const note=panel.querySelector('.m73note');
 if(note)note.textContent='Прототип: шесть SVG-туловищ, отдельные варианты головы, рук и ног. Настройки сохраняются при повторном открытии. Новый режим пока поддерживает только вид спереди.';
 const style=document.createElement('style');
-style.textContent='#modular73 .m74diagnostics{margin:12px 0 0;padding:10px;border:1px solid var(--ui-gold-deep,#78694c);border-radius:9px;background:var(--ui-pane,#132c32)}'+
+style.textContent='body[data-modular="true"] #stage svg#art{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;min-width:0!important;min-height:0!important;display:block!important;overflow:hidden!important}'+
+ '#modular73 .m74diagnostics{margin:12px 0 0;padding:10px;border:1px solid var(--ui-gold-deep,#78694c);border-radius:9px;background:var(--ui-pane,#132c32)}'+
  '#modular73 .m74check{display:flex;align-items:center;gap:8px;padding:6px 0;color:var(--ui-accent,#a6d1c4);font-size:12px}'+
  '#modular73 .m74check input{width:16px;height:16px;accent-color:var(--ui-gold,#e6c993)}'+
  '#m74note{font-size:11px;color:var(--ui-muted,#a8b8b1);line-height:1.45;margin:6px 0 0}';
@@ -185,6 +186,7 @@ const ancestorRender=render;
 render=function(sync=true){
  if(s.spriteCustomColor==null)s.spriteCustomColor=false;
  ancestorRender(sync);
+ document.body.setAttribute('data-modular',String(!!s.spriteMode&&s.view==='front'));
  colorCheckbox.checked=!!s.spriteCustomColor;
  debugCheckbox.checked=showAnchors;
  try{localStorage.setItem('atlas_draft_v074',JSON.stringify(s))}catch(e){}
