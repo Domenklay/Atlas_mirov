@@ -702,7 +702,7 @@ function defs(v){
  '<linearGradient id="vShade" x1="0" x2="1" y1="0" y2=".3"><stop stop-color="#0c2436" stop-opacity=".0"/><stop offset="1" stop-color="#031522" stop-opacity=".4"/></linearGradient>'+
  '</defs>'
 }
-let sceneryOn=true,transparent=false,zoom=1,biomode=true;
+let sceneryOn=true,transparent=false,zoom=1,biomode=true,exporting=false;
 function landscape(v){
  const a=safeColor(v.accent),j=[];
  if(v.env==='coast'||v.env==='abyss'){
@@ -927,7 +927,7 @@ function body(v){
 }
 creature=function(v){
  extend(v);const a=safeColor(v.accent);
- return defs(v)+(sceneryOn?landscape(v):'')+
+ return defs(v)+((sceneryOn&&!exporting)?landscape(v):'')+
  '<circle cx="310" cy="380" r="271" stroke="'+a+'" stroke-opacity=".10" stroke-dasharray="4 13" fill="none"/>'+
  '<ellipse cx="310" cy="389" rx="226" ry="309" fill="url(#vGlow)" opacity="'+Q(v.glow/100)+'"/>'+
  body(v)
@@ -996,9 +996,12 @@ render=function(sync=true){
  try{localStorage.setItem('atlas_draft_v04',JSON.stringify(s))}catch(e){}
 };
 svgSource=function(){
- return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 780" width="2480" height="3120">'+
- (transparent?'':'<rect width="620" height="780" fill="#102836"/>')+
- creature(s)+'</svg>'
+ exporting=transparent;
+ try {
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 780" width="2480" height="3120">'+
+  (transparent?'':'<rect width="620" height="780" fill="#102836"/>')+
+  creature(s)+'</svg>';
+ } finally {exporting=false}
 };
 exportPNG=function(){
  const source=svgSource(),obj=new Blob([source],{type:'image/svg+xml'}),url=URL.createObjectURL(obj),img=new Image();
