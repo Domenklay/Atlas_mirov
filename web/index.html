@@ -606,13 +606,58 @@ input[type=range],input[type=checkbox]{accent-color:var(--ui-gold)}
 #stage::after{right:auto;left:50%;transform:translateX(-50%);bottom:16px;white-space:nowrap;opacity:.79}
 @media(max-width:690px){#stage::after{right:auto;left:50%;bottom:12px;transform:translateX(-50%);font-size:8px}}
 
+
+/* v0.6 — new species laboratory */
+.v6launch{display:grid;grid-template-columns:32px 1fr;align-items:center;gap:8px 10px;background:linear-gradient(135deg,#234d47,#15373c 60%,#152735);border:1px solid var(--ui-gold-deep,#9a8058);border-radius:12px;margin:12px 0 14px;padding:13px 11px;box-shadow:inset 0 1px 0 #fff2,0 7px 18px #0005}
+.v6launch-icon{font-size:26px;color:var(--ui-gold,#e9c883);text-align:center}
+.v6launch strong{font:600 15px Georgia,serif;color:#ffeac6;display:block}
+.v6launch small{display:block;font-size:11px;color:#b8d5d2;margin-top:3px}
+#v6new{grid-column:1/-1;background:linear-gradient(130deg,#ffe3a9,#d8b679);color:#2c2319;border-color:#ffebc2;font-weight:800;min-height:42px;box-shadow:0 3px 10px #0004}
+#v6custom{margin:12px 0;border-top:1px solid var(--ui-gold-deep);padding:15px 0 12px}
+#v6custom[hidden]{display:none!important}
+#v6custom h3{margin-top:8px;color:var(--ui-gold)}
+#v6custom .v6help{color:var(--ui-muted,#bcb9a8);font-size:12px;line-height:1.45}
+.v6profile{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.v6profile>div{min-width:0}
+.v6profile label{font-size:11px}
+.v6profile select{padding:8px 5px;font-size:12px;min-width:0}
+#species button[data-kind=custom]{grid-column:1/-1;border-color:var(--ui-gold);font-size:14px;background:linear-gradient(150deg,#294d50,#182d3d);color:#ffe4ac}
+body[data-species=custom] #ecotypeLabel,body[data-species=custom] #ecotype,body[data-species=custom] .variant-help,body[data-species=custom] #speciesNote{display:none!important}
+@media(max-width:690px){.v6launch{margin:12px 0 16px}.v6profile{gap:9px 7px}}
+
 </style></head>
 <body>
-<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>ИЛЛЮСТРИРОВАННЫЙ БЕСТИАРИЙ · v0.5.4</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
+<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>ЛАБОРАТОРИЯ ЖИВЫХ МИРОВ · v0.6</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
 <nav id="mobileNav" aria-label="Разделы конструктора"><button type="button" data-tab="preview" aria-selected="true">Существо</button><button type="button" data-tab="editor" aria-selected="false">Настройки</button><button type="button" data-tab="dossier" aria-selected="false">Досье</button></nav>
 <main>
 <aside class="panel">
-<section class="section"><div class="caps">01 · происхождение</div><h2>Создание вида</h2><div class="species" id="species"></div><label for="ecotype">Подвид и природная адаптация</label><select id="ecotype"></select><p class="variant-help">Три природные формы для каждого исходного вида</p><div id="speciesNote"></div><label for="name">Название вида</label><input id="name" maxlength="48" autocomplete="off"><label for="env">Среда обитания</label><select id="env"></select><label for="ability">Основная способность</label><select id="ability"></select></section>
+<section class="section"><div class="caps">01 · происхождение</div><h2>Создание вида</h2><div class="species" id="species"></div>
+<div class="v6launch">
+  <span class="v6launch-icon" aria-hidden="true">✦</span>
+  <span><strong>Лаборатория новой жизни</strong><small>Начни с чистой формы — без готовой расы</small></span>
+  <button id="v6new" type="button">Создать с нуля</button>
+</div>
+<div id="v6custom" hidden>
+  <div class="caps">Новый вид · независимое происхождение</div>
+  <h3>Конструктор тела</h3>
+  <p class="v6help">Выбери исходную форму, затем меняй любую часть в разделе «Анатомия».</p>
+  <label for="v6form">Базовая форма</label>
+  <select id="v6form">
+   <option value="humanoid">Прямоходящий организм</option>
+   <option value="aquatic">Водное существо</option>
+   <option value="winged">Крылатое существо</option>
+   <option value="serpentine">Змеевидное существо</option>
+   <option value="fourarmed">Четырёхрукий организм</option>
+  </select>
+  <div class="v6profile">
+   <div><label for="v6diet">Тип питания</label><select id="v6diet"><option value="omnivore">Всеядный</option><option value="predator">Хищник</option><option value="herbivore">Травоядный</option><option value="energy">Энергия и свет</option></select></div>
+   <div><label for="v6move">Передвижение</label><select id="v6move"><option value="walk">Ходьба</option><option value="swim">Плавание</option><option value="fly">Полёт</option><option value="slither">Ползание</option><option value="float">Парение</option></select></div>
+   <div><label for="v6repro">Размножение</label><select id="v6repro"><option value="live">Живорождение</option><option value="eggs">Яйцекладка</option><option value="spores">Споры</option><option value="division">Деление</option><option value="none">Бесполая форма</option></select></div>
+   <div><label for="v6mind">Разумность</label><select id="v6mind"><option value="sentient">Разумный вид</option><option value="instinct">Инстинкты</option><option value="social">Социальный интеллект</option><option value="collective">Коллективный разум</option></select></div>
+   <div><label for="v6life">Продолжительность жизни</label><select id="v6life"><option value="medium">30–120 лет</option><option value="short">До 30 лет</option><option value="long">120–500 лет</option><option value="ancient">Более 500 лет</option></select></div>
+  </div>
+  <p class="v6help">Всё это сохраняется вместе с внешностью, названием и анатомией.</p>
+</div><label id="ecotypeLabel" for="ecotype">Подвид и природная адаптация</label><select id="ecotype"></select><p class="variant-help">Три природные формы для каждого исходного вида</p><div id="speciesNote"></div><label for="name">Название вида</label><input id="name" maxlength="48" autocomplete="off"><label for="env">Среда обитания</label><select id="env"></select><label for="ability">Основная способность</label><select id="ability"></select></section>
 <section class="section"><div class="caps">02 · морфология</div><h3>Строение тела</h3><label>Основной цвет</label><div class="row"><input id="color" type="color" value="#65aebe" aria-label="Цвет тела"><select id="eyes"><option value="standard">Обычные глаза</option><option value="large">Крупные глаза</option><option value="slit">Вертикальный зрачок</option><option value="blank">Светящиеся глаза</option></select></div><label for="size">Рост — <output id="sizeOut"></output></label><input id="size" type="range" min="60" max="190" step="5"><label for="build">Мускулатура — <output id="buildOut"></output></label><input id="build" type="range" min="0" max="100" step="5"><label for="armor">Защита кожи — <output id="armorOut"></output></label><input id="armor" type="range" min="0" max="100" step="5"><label for="glow">Биолюминесценция — <output id="glowOut"></output></label><input id="glow" type="range" min="0" max="100" step="5"></section>
 
 <section class="section" id="morphSection">
@@ -691,7 +736,7 @@ input[type=range],input[type=checkbox]{accent-color:var(--ui-gold)}
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
-const TYPES={mermaid:{name:'Русалка',icon:'◈',env:'coast',color:'#62adb6',features:['gills','fins','scales'],desc:'Амфибийная разумная форма с мощным хвостом.'},fairy:{name:'Фея',icon:'✧',env:'forest',color:'#bb95d4',features:['wings','glow'],desc:'Лёгкое гуманоидное существо с перепончатыми крыльями.'},alien:{name:'Инопланетянин',icon:'◎',env:'exoplanet',color:'#86c6a7',features:['glow'],desc:'Разумная внеземная форма с необычной сенсорикой.'},dragon:{name:'Драконид',icon:'♜',env:'volcanic',color:'#ca8064',features:['wings','horns','scales'],desc:'Крупный чешуйчатый гуманоид с рогами.'},spirit:{name:'Лесной дух',icon:'❧',env:'forest',color:'#76a994',features:['horns','glow'],desc:'Мистический организм, адаптированный к лесной среде.'}};
+const TYPES={custom:{name:'Новый вид',icon:'✦',env:'forest',color:'#8abbb0',features:[],desc:'Авторский вид: анатомия и образ жизни определяются в конструкторе.'},mermaid:{name:'Русалка',icon:'◈',env:'coast',color:'#62adb6',features:['gills','fins','scales'],desc:'Амфибийная разумная форма с мощным хвостом.'},fairy:{name:'Фея',icon:'✧',env:'forest',color:'#bb95d4',features:['wings','glow'],desc:'Лёгкое гуманоидное существо с перепончатыми крыльями.'},alien:{name:'Инопланетянин',icon:'◎',env:'exoplanet',color:'#86c6a7',features:['glow'],desc:'Разумная внеземная форма с необычной сенсорикой.'},dragon:{name:'Драконид',icon:'♜',env:'volcanic',color:'#ca8064',features:['wings','horns','scales'],desc:'Крупный чешуйчатый гуманоид с рогами.'},spirit:{name:'Лесной дух',icon:'❧',env:'forest',color:'#76a994',features:['horns','glow'],desc:'Мистический организм, адаптированный к лесной среде.'}};
 const ENVS={coast:'Море и побережье',abyss:'Океанские глубины',forest:'Лес',sky:'Небесные острова',volcanic:'Вулканические земли',exoplanet:'Чужая планета'};
 const ABILITIES={sonar:'Эхолокация',healing:'Регенерация',telepathy:'Телепатия',fire:'Термостойкость',flight:'Полёт',camouflage:'Маскировка',magic:'Биомагия'};
 const FEATURES={gills:'Жабры',fins:'Плавники',scales:'Чешуя',wings:'Крылья',horns:'Рога',glow:'Светящиеся органы'};
@@ -714,7 +759,7 @@ $('features').innerHTML=order.map(k=>'<label><input type="checkbox" data-feature
 $('species').querySelectorAll('button').forEach(b=>b.onclick=()=>{s=preset(b.dataset.kind);render()});
 for(const key of ['name','env','ability','color','eyes','size','build','armor','glow'])$(key).oninput=()=>{s[key]=['size','build','armor','glow'].includes(key)?Number($(key).value):$(key).value;render(false)};
 $('features').querySelectorAll('input').forEach(b=>b.onchange=()=>{s.features=order.filter(k=>$('features').querySelector('[data-feature="'+k+'"]').checked);render(false)});
-$('random').onclick=()=>{const k=Object.keys(TYPES)[Math.floor(Math.random()*5)];s=preset(k);s.color='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');s.eyes=['standard','large','slit','blank'][Math.floor(Math.random()*4)];s.glow=Math.floor(Math.random()*21)*5;s.armor=Math.floor(Math.random()*21)*5;s.features=order.filter(()=>Math.random()>.5);render();message('Создан случайный вид')};
+$('random').onclick=()=>{const k=['mermaid','fairy','alien','dragon','spirit'][Math.floor(Math.random()*5)];s=preset(k);s.color='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');s.eyes=['standard','large','slit','blank'][Math.floor(Math.random()*4)];s.glow=Math.floor(Math.random()*21)*5;s.armor=Math.floor(Math.random()*21)*5;s.features=order.filter(()=>Math.random()>.5);render();message('Создан случайный вид')};
 $('reset').onclick=()=>{s=preset(s.k);render()};
 $('evolve').onclick=()=>{s.generation++;let key=['size','build','armor','glow'][Math.floor(Math.random()*4)];s[key]=clamp(s[key]+(Math.random()>.3?5:-5),key==='size'?60:0,key==='size'?190:100);if(s.env==='abyss'&&Math.random()>.5&&!s.features.includes('glow'))s.features.push('glow');if(s.env==='sky'&&Math.random()>.5&&!s.features.includes('wings'))s.features.push('wings');render();message('Появилось поколение '+s.generation)};
 $('save').onclick=()=>{catalog.unshift({...clean(s),id:Date.now()+'-'+Math.random().toString(36).slice(2)});catalog=catalog.slice(0,100);persist();renderCatalog();message('Вид сохранён')};
@@ -776,7 +821,7 @@ const MORPH_OPTIONS={
  head:[['oval','Овальная'],['wide','Широкая'],['long','Вытянутая'],['beak','Клюв'],['spike','Гребень']],
  eyeCount:[['1','Один'],['2','Два'],['4','Четыре']],
  skin:[['smooth','Гладкая'],['scales','Чешуя'],['spots','Пятнистая'],['stripes','Полосатая'],['bark','Древесная']],
- tail:[['none','Без хвоста'],['fish','Рыбий'],['reptile','Рептилий'],['feather','Перьевой']],
+ tail:[['none','Без хвоста'],['fish','Рыбий'],['serpent','Змеиный'],['reptile','Рептилий'],['feather','Перьевой']],
  wings:[['none','Без крыльев'],['membrane','Перепончатые'],['insect','Насекомые'],['feather','Перьевые']],
  arms:[['0','Нет'],['2','Две'],['4','Четыре']],
  legs:[['0','Нет'],['2','Две'],['4','Четыре']]
@@ -786,6 +831,7 @@ const MORPH_BINDINGS={
  mArms:'arms',mLegs:'legs',mAccent:'accent'
 };
 const MORPH_PRESET={
+ custom:{head:'oval',eyeCount:2,skin:'smooth',tail:'none',wings:'none',arms:2,legs:2,accent:'#c9eddd'},
  mermaid:{head:'oval',eyeCount:2,skin:'scales',tail:'fish',wings:'none',arms:2,legs:0,accent:'#c9f5e9'},
  fairy:{head:'oval',eyeCount:2,skin:'smooth',tail:'none',wings:'insect',arms:2,legs:2,accent:'#fad5e6'},
  alien:{head:'wide',eyeCount:4,skin:'spots',tail:'none',wings:'none',arms:2,legs:2,accent:'#d2eb9b'},
@@ -1004,6 +1050,7 @@ render();
 (function(){
 'use strict';
 const VARIANTS = {
+ custom:[{id:'blank',title:'Индивидуальный вид',env:'forest',color:'#8abbb0',accent:'#c9eddd',skin:'smooth',head:'oval',tail:'none',wings:'none',glow:10,trait:'У этого вида нет предопределённой расы: органы и образ жизни задаются самостоятельно.'}],
  mermaid:[
   {id:'reef',title:'Рифовая',env:'coast',color:'#4ab9ac',accent:'#b2ffea',skin:'scales',head:'oval',tail:'fish',wings:'none',glow:35,trait:'Подвижные жаберные лепестки и переливчатая чешуя помогают жить среди коралловых рифов.'},
   {id:'abyss',title:'Глубинная',env:'abyss',color:'#3959a1',accent:'#66ffd9',skin:'spots',head:'long',tail:'fish',wings:'none',glow:90,trait:'Светящиеся пятна используются для маскировки и сигналов в глубоководной темноте.'},
@@ -1049,7 +1096,7 @@ function chooseVariant(id){
  if(!q)return;
  s.ecotype=q.id;
  for(const field of ['env','color','accent','skin','head','tail','wings','glow'])s[field]=q[field];
- s.ability=({mermaid:'sonar',fairy:'magic',alien:'telepathy',dragon:'fire',spirit:'healing'})[s.k];
+ s.ability=({custom:'camouflage',mermaid:'sonar',fairy:'magic',alien:'telepathy',dragon:'fire',spirit:'healing'})[s.k];
  const featureSet=new Set(s.features);
  if(s.k==='mermaid'){featureSet.add('gills');featureSet.add('fins');}
  if(s.wings!=='none')featureSet.add('wings');else featureSet.delete('wings');
@@ -1206,6 +1253,7 @@ const SLIDERS={
  texture:['Рельеф покрова',0,100]
 };
 const PER_SPECIES={
+ custom:{ears:'none',mouth:'soft',horns:'none',hands:'fingers',feet:'human',markings:'none',spine:'none',headWidth:100,neckLen:18,shoulderWidth:100,waistWidth:100,armLength:100,texture:20},
  mermaid:{ears:'fin',mouth:'soft',horns:'none',hands:'webbed',feet:'webbed',markings:'scales',spine:'fins',headWidth:100,neckLen:19,shoulderWidth:90,waistWidth:85,armLength:102,texture:68},
  fairy:{ears:'point',mouth:'soft',horns:'none',hands:'fingers',feet:'human',markings:'dots',spine:'none',headWidth:90,neckLen:27,shoulderWidth:76,waistWidth:70,armLength:107,texture:26},
  alien:{ears:'none',mouth:'mandible',horns:'single',hands:'fingers',feet:'human',markings:'runes',spine:'plates',headWidth:130,neckLen:36,shoulderWidth:82,waistWidth:78,armLength:123,texture:43},
@@ -1288,6 +1336,11 @@ function wing(v,side){
 }
 function tail(v){
  const a=safeColor(v.accent),c=safeColor(v.color);
+ if(v.tail==='serpent'){
+  let g=path('M269 442Q255 493 270 555Q292 604 310 630Q325 659 340 633Q361 596 345 568Q333 545 324 550Q347 579 319 585Q296 584 310 542Q334 496 348 444Z','url(#vBody)','#183e47',5);
+  for(let i=0;i<16;i++){const y=478+i*9,dx=17+(i%4)*3;g+=path('M'+(310-dx)+' '+y+'q'+dx+' 10 '+(dx*2)+' 0','none',safeColor(v.accent),1.7,'opacity=".4"')}
+  return g;
+ }
  if(v.tail==='fish'){
   let g=path('M263 444Q246 522 282 593Q299 640 310 675Q326 637 341 594Q376 517 357 444Z','url(#vBody)','#183e47',5);
   g+=path('M310 646Q269 694 163 715Q243 770 309 722Q379 772 458 715Q353 693 310 646Z','url(#vFin)',a,5);
@@ -1308,7 +1361,7 @@ function tail(v){
  return ''
 }
 function legs(v,side=false){
- if(v.tail==='fish'||Number(v.legs)===0)return '';
+ if(v.tail==='fish'||v.tail==='serpent'||Number(v.legs)===0)return '';
  const n=Number(v.legs),a=safeColor(v.accent),fill='url(#vBody)',l=Q((v.size/110)*8);
  let g='';
  const centers=n===4?[247,283,337,373]:[280,340];
@@ -1594,6 +1647,7 @@ extend(s);render();
 (function(){
 'use strict';
 const E={
+ custom:{blank:{latin:'Species nova',diet:'На выбор создателя',years:'Не указано',mind:'На выбор создателя',family:'На выбор создателя',talk:'Сигналы и жесты',society:'Социальная организация неизвестна.',ecology:'Органы приспосабливаются к выбранной среде обитания.',history:'Искусственно созданный вид без заданной родословной.'}},
  mermaid:{
   reef:{latin:'Thalassia coralina',diet:'Моллюски, водоросли',years:'80–130 лет',mind:'Высокий',family:'Живорождение, забота о молоди',talk:'Голос, жесты, акустические сигналы',society:'Прибрежные общины охраняют участки коралловых рифов, строят убежища и сохраняют маршруты миграций.',ecology:'Обитает на мелководных рифах. Широкие грудные плавники обеспечивают точное маневрирование, а чешуя рассеивает солнечный свет.',history:'Согласно легендам Атласа, вид сформировался в тёплых архипелагах после тысячелетий жизни среди ветвящихся кораллов.'},
   abyss:{latin:'Thalassia luminosa',diet:'Глубоководная рыба, беспозвоночные',years:'110–180 лет',mind:'Высокий',family:'Крупная икра, длительное развитие',talk:'Биолюминесцентные импульсы, низкие звуки',society:'Небольшие кланы взаимодействуют через световые цепочки, сохраняя карты безопасных глубин.',ecology:'Живёт при высоком давлении и почти полном отсутствии света. Светящиеся органы служат сигналами, но требуют значительных энергетических затрат.',history:'Потомки прибрежных русалок, постепенно переселившихся в океанические впадины, сохранившие разум и сложное социальное поведение.'},
@@ -1675,6 +1729,20 @@ function plate(v){
 const originalCreature=creature;
 creature=function(v){return artMode?plate(v):originalCreature(v)};
 function bio(){
+ if(s.k==='custom'){
+   const d=s.v6diet||'omnivore',r=s.v6repro||'live',m=s.v6mind||'sentient',l=s.v6life||'medium';
+   return {
+    latin:'Species nova',
+    diet:({predator:'Хищник',herbivore:'Травоядный',omnivore:'Всеядный',energy:'Фотосинтез / энергия'})[d]||'Всеядный',
+    years:({short:'До 30 лет',medium:'30–120 лет',long:'120–500 лет',ancient:'Более 500 лет'})[l]||'30–120 лет',
+    mind:({instinct:'Инстинкты',social:'Социальный интеллект',sentient:'Разумный вид',collective:'Коллективный разум'})[m]||'Разумный вид',
+    family:({live:'Живорождение',eggs:'Яйцекладка',spores:'Споры',division:'Деление',none:'Бесполое размножение'})[r]||'Живорождение',
+    talk:'Видовые сигналы и жесты',
+    society:'Устройство общества определяется создателем вида.',
+    ecology:'Среда: '+(ENVS[s.env]||'Неизвестная')+'. Передвижение: '+({walk:'ходьба',swim:'плавание',fly:'полёт',slither:'ползание',float:'парение'})[s.v6move||'walk']+'.',
+    history:'Авторский вид с самостоятельно выбранной анатомией; поколение '+s.generation+'.'
+   }
+ }
  const sub=E[s.k]&&E[s.k][s.ecotype]||E[s.k][Object.keys(E[s.k])[0]];
  return sub
 }
@@ -1977,5 +2045,90 @@ if(st&&!st.querySelector('.atlas-corner')){
  compass.className='atlas-stage-compass';compass.textContent='✦  ✧  ✦';compass.setAttribute('aria-hidden','true');st.append(compass);
  const note=document.createElement('div');note.className='atlas-stage-footer';note.textContent='SPECIMEN • COD. Ⅴ';note.setAttribute('aria-hidden','true');st.append(note);
 }
+})();
+</script>
+<script>
+/* Atlas v0.6.0 – neutral species, morphogenesis and safe JSON schema */
+(function(){
+'use strict';
+const ATTRS={
+ v6form:['humanoid','aquatic','winged','serpentine','fourarmed'],
+ v6diet:['omnivore','predator','herbivore','energy'],
+ v6move:['walk','swim','fly','slither','float'],
+ v6repro:['live','eggs','spores','division','none'],
+ v6mind:['sentient','instinct','social','collective'],
+ v6life:['medium','short','long','ancient']
+};
+const base={v6form:'humanoid',v6diet:'omnivore',v6move:'walk',v6repro:'live',v6mind:'sentient',v6life:'medium'};
+const previousClean=clean;
+const safeV6=(src,dst)=>{
+ for(const [k,allowed] of Object.entries(ATTRS)){
+  const v=src&&src[k];
+  dst[k]=allowed.includes(v)?v:base[k];
+ }
+ return dst
+};
+clean=function(obj){return safeV6(obj,previousClean(obj))};
+function startNew(){
+ s=safeV6({},preset('custom'));
+ Object.assign(s,{name:'Неизвестный вид',ecotype:'blank',accent:'#c9eddd',head:'oval',skin:'smooth',eyes:'standard',eyeCount:2,arms:2,legs:2,tail:'none',wings:'none',
+  ears:'none',mouth:'soft',horns:'none',hands:'fingers',feet:'human',markings:'none',spine:'none',headWidth:100,neckLen:18,shoulderWidth:100,waistWidth:100,armLength:100,texture:20,
+  color:'#8abbb0',glow:10,armor:22,build:40,size:100,features:[],generation:1,v4species:'custom',view:'front'});
+ render();
+ const details=$('v6custom').closest('details');
+ if(details)details.open=true;
+ message('Начальный организм создан. Теперь настрой его органы и образ жизни.');
+}
+function applyForm(key){
+ if(s.k!=='custom')return;
+ s.v6form=key;
+ const config={
+  humanoid:{arms:2,legs:2,tail:'none',wings:'none',env:'forest',features:[],v6move:'walk'},
+  aquatic:{arms:2,legs:0,tail:'fish',wings:'none',env:'coast',features:['gills','fins'],v6move:'swim'},
+  winged:{arms:2,legs:2,tail:'none',wings:'membrane',env:'sky',features:['wings'],v6move:'fly'},
+  serpentine:{arms:2,legs:0,tail:'serpent',wings:'none',env:'forest',features:[],v6move:'slither'},
+  fourarmed:{arms:4,legs:2,tail:'none',wings:'none',env:'exoplanet',features:[],v6move:'walk'}
+ }[key];
+ if(!config)return;
+ Object.assign(s,config);
+ render();
+ message('Изменена базовая форма. Тонкая анатомия остаётся настраиваемой.');
+}
+const prevRender=render;
+render=function(sync=true){
+ prevRender(sync);
+ const own=s.k==='custom';
+ document.body.dataset.species=s.k;
+ $('v6custom').hidden=!own;
+ for(const k of Object.keys(ATTRS))$(''+k).value=ATTRS[k].includes(s[k])?s[k]:base[k];
+ $('v6new').textContent=own?'Новый организм с нуля':'Создать с нуля';
+ const customBtn=$('species').querySelector('[data-kind=custom]');
+ if(customBtn){customBtn.setAttribute('aria-current',String(own));customBtn.title='Без заранее заданной расы'}
+ if(own){
+  $('taxonomy').textContent='Авторская раса · '+(ENVS[s.env]||'Новая среда');
+  $('description').textContent='Самостоятельно созданный организм. Настройка формы, органов и среды обитания полностью свободная.';
+ }
+ try{localStorage.setItem('atlas_draft_v06',JSON.stringify(s))}catch(e){}
+};
+$('v6new').onclick=startNew;
+$('species').querySelector('[data-kind=custom]').addEventListener('click',()=>{startNew()});
+for(const k of Object.keys(ATTRS))$(k).addEventListener('change',()=>{
+ if(s.k!=='custom')return;
+ if(k==='v6form'){applyForm($(k).value);return}
+ s[k]=$(k).value;render(false)
+});
+const oldRandom=$('random').onclick;
+$('random').onclick=()=>{oldRandom();render()};
+const previousSave=$('save').onclick;
+$('save').onclick=()=>{
+ previousSave();
+ message('Вид сохранён в коллекцию. Для переноса на другое устройство экспортируй JSON.')
+};
+$('json').onclick=()=>downloadText(JSON.stringify({version:6,format:'atlas-living-worlds',catalog,selected:s},null,2),'atlas_catalog_v06.json','application/json');
+try{
+ const draft=JSON.parse(localStorage.getItem('atlas_draft_v06')||'null');
+ if(valid(draft))s=clean(draft);
+}catch(e){}
+render();
 })();
 </script></body></html>
