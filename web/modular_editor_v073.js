@@ -146,7 +146,7 @@ function asset(id){return globalThis.AtlasTorsoAssets?.[id]||lib[id]||null}
 function assembled(v){
  const body=BODY.find(x=>x[0]===v.spriteTorso)||BODY[0],assetSVG=asset(body[0]);
  if(!assetSVG)return '<text x="310" y="380" fill="#f6dd9d" text-anchor="middle">Подготовка спрайтов…</text>';
- const torso=assetSVG.replace('<svg ','<svg x="0" y="0" ');
+ const torso='<g data-part="torso">'+assetSVG.slice(assetSVG.indexOf('>')+1,assetSVG.lastIndexOf('</svg>'))+'</g>';
  return backdrop(v)+defs(body)+'<g data-atlas-modular="v073" aria-label="Персонаж собран из независимых деталей">'+
  limbs(v,body)+arms(v,body)+torso+head(v,body)+'</g>';
 }
