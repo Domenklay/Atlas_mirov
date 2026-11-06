@@ -104,9 +104,27 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 #v5Actions button{flex:1;min-width:105px}
 #v5CardTitle{font:18px Georgia;margin:0 0 8px}
 @media(max-width:690px){#v5ModeBar button{min-height:44px}#v5Bio{grid-template-columns:1fr 1fr}#v5CardTitle{font-size:21px}}
+
+/* v0.5.1: offline mermaid art collection */
+#v51Artwork{display:none;position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:contain;object-position:center;border-radius:17px;background:#091725}
+.stage.v51Photo #v51Artwork{display:block}
+.stage.v51Photo svg{visibility:hidden}
+#v51Gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:1px}
+#v51Gallery button{min-width:0;padding:0;background:#122b39;border:1px solid #31505a;border-radius:11px;overflow:hidden;text-align:center}
+#v51Gallery button[aria-pressed=true]{border:2px solid #91ebd5;background:#1d4c4d}
+#v51Gallery img{display:block;width:100%;height:105px;object-fit:cover;object-position:center 30%}
+#v51Gallery span{display:block;padding:6px 2px 7px;color:#d1e9e5;font-size:11px}
+#v51Gallery[hidden]{display:none!important}
+#v51Caption{font-size:12px;color:#9bbfc0;margin:2px 0 10px}
+#v51DossierGallery{margin:8px 0 13px;display:flex;gap:7px}
+#v51DossierGallery button{padding:0;border:1px solid #41656d;flex:1;overflow:hidden;min-width:0;max-height:125px;border-radius:8px;background:#122532}
+#v51DossierGallery img{width:100%;height:103px;object-fit:cover;object-position:center 25%;display:block}
+#v51DossierGallery button[aria-pressed=true]{border:2px solid #9aebd8}
+#v51DossierGallery[hidden]{display:none!important}
+@media(max-width:690px){#v51Gallery img{height:92px}#v51DossierGallery img{height:90px}.stage.v51Photo{min-height:530px}}
 </style></head>
 <body>
-<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии · v0.5</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
+<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии · v0.5.1</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
 <nav id="mobileNav" aria-label="Разделы конструктора"><button type="button" data-tab="preview" aria-selected="true">Существо</button><button type="button" data-tab="editor" aria-selected="false">Настройки</button><button type="button" data-tab="dossier" aria-selected="false">Досье</button></nav>
 <main>
 <aside class="panel">
@@ -155,7 +173,16 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 <div class="zooms"><button id="v4minus" type="button" aria-label="Уменьшить">−</button><button id="v4plus" type="button" aria-label="Увеличить">+</button><button id="v4fit" type="button">100%</button></div>
 <button type="button" id="v4mode" aria-pressed="true">Биология · ВКЛ</button>
 <span id="v4zoom" class="muted">100%</span>
-</div><div class="stage" id="stage"><svg id="art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 780" role="img" aria-label="Визуализация существа"></svg></div>
+</div><div class="stage" id="stage"><svg id="art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 780" role="img" aria-label="Визуализация существа"></svg>
+<img id="v51Artwork" alt="Детализированная иллюстрация русалки" decoding="async" loading="eager">
+</div>
+
+<div id="v51Gallery" aria-label="Галерея русалок" hidden>
+  <button type="button" data-mermaid="reef" aria-pressed="false"><img src="assets/mermaids/reef.webp" alt="Рифовая русалка"><span>Рифовая</span></button>
+  <button type="button" data-mermaid="abyss" aria-pressed="false"><img src="assets/mermaids/abyss.webp" alt="Глубинная русалка"><span>Глубинная</span></button>
+  <button type="button" data-mermaid="lagoon" aria-pressed="false"><img src="assets/mermaids/lagoon.webp" alt="Лагунная русалка"><span>Лагунная</span></button>
+</div>
+<p id="v51Caption" hidden>Художественные изображения из концептов. Для точного изменения органов используй анатомический редактор.</p>
 <div class="btnrow"><button class="primary" id="save">Сохранить вид</button><button id="evolve">Следующее поколение</button><button id="reset">Сбросить</button></div>
 <div id="v4export"><label><input type="checkbox" id="v4transparent"> Прозрачный фон при экспорте</label><span class="muted" style="font-size:11px">PNG · 2480×3120</span></div><div class="btnrow"><button id="png">Скачать PNG</button><button id="svg">Скачать SVG</button><button id="json">Экспорт каталога</button><button id="importButton">Импорт JSON</button></div>
 <input type="file" accept=".json,application/json" id="import" hidden><footer>Офлайн · Локальное хранение · Иллюстрации SVG</footer>
@@ -168,6 +195,12 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 <div class="caps">Энциклопедия · v0.5</div>
 <div class="v5Header" id="v5CardTitle">Биологическая карточка</div>
 <span id="v5PlateMode">Фантастическая биология</span>
+
+<div id="v51DossierGallery" hidden aria-label="Выбрать подвид русалки">
+  <button type="button" data-mermaid="reef" aria-pressed="false"><img src="assets/mermaids/reef.webp" alt="Рифовая русалка"></button>
+  <button type="button" data-mermaid="abyss" aria-pressed="false"><img src="assets/mermaids/abyss.webp" alt="Глубинная русалка"></button>
+  <button type="button" data-mermaid="lagoon" aria-pressed="false"><img src="assets/mermaids/lagoon.webp" alt="Лагунная русалка"></button>
+</div>
 <div id="v5Bio"></div>
 <div class="v5Chapter"><strong>Экология</strong><p id="v5Ecology"></p></div>
 <div class="v5Chapter"><strong>Поведение и общество</strong><p id="v5Society"></p></div>
@@ -1227,6 +1260,70 @@ $('v5Export').onclick=()=>downloadText(bioText(),fileName()+'_dossier.txt','text
 $('json').onclick=()=>downloadText(JSON.stringify({version:5,catalog,selected:s},null,2),'atlas_catalog_v05.json','application/json');
 const draft=(()=>{try{return JSON.parse(localStorage.getItem('atlas_draft_v05')||'null')}catch(e){return null}})();
 if(valid(draft)){s=clean(draft);artMode=!!draft.artMode}
+render();
+})();
+</script><script>
+/* v0.5.1: real locally bundled mermaid gallery; independent of the anatomy SVG renderer */
+(function(){
+'use strict';
+const IMAGES={reef:'assets/mermaids/reef.webp',abyss:'assets/mermaids/abyss.webp',lagoon:'assets/mermaids/lagoon.webp'};
+const $g=id=>document.getElementById(id);
+const photo=$g('v51Artwork');
+const before=render, originalPng=$g('png').onclick;
+const isIllustration=()=>document.querySelector('[data-v5mode="illustration"]').getAttribute('aria-pressed')==='true';
+const photoSelected=()=>s.k==='mermaid' && !!IMAGES[s.ecotype] && isIllustration();
+function galleryChange(id){
+ if(s.k!=='mermaid'){
+   const species=document.querySelector('#species button[data-kind="mermaid"]');
+   if(species)species.click();
+ }
+ const field=$g('ecotype');field.value=id;field.dispatchEvent(new Event('change',{bubbles:true}));
+ document.querySelector('[data-v5mode="illustration"]').click();
+ // Make the large art visible immediately on phones after selecting a variant from dossier.
+ const previewTab=document.querySelector('#mobileNav button[data-tab="preview"]');
+ if(window.matchMedia('(max-width:690px)').matches&&previewTab)previewTab.click();
+ render(false);
+}
+for(const b of document.querySelectorAll('[data-mermaid]'))b.onclick=()=>galleryChange(b.dataset.mermaid);
+photo.addEventListener('error',()=>{
+ $g('stage').classList.remove('v51Photo');
+ $g('v51Caption').textContent='Иллюстрация недоступна. Показана векторная модель.';
+});
+render=function(sync=true){
+ before(sync);
+ const isMermaid=s.k==='mermaid' && !!IMAGES[s.ecotype], usePhoto=photoSelected();
+ $g('v51Gallery').hidden=!isMermaid;
+ $g('v51DossierGallery').hidden=!isMermaid;
+ $g('v51Caption').hidden=!isMermaid;
+ $g('v51Caption').textContent=usePhoto?'Иллюстрация из художественных концептов. Ползунки меняют модель в режиме редактора.':'Выбери подвид и нажми «Иллюстрация вида» для просмотра изображения.';
+ for(const b of document.querySelectorAll('[data-mermaid]'))b.setAttribute('aria-pressed',String(isMermaid && b.dataset.mermaid===s.ecotype));
+ $g('stage').classList.toggle('v51Photo',usePhoto);
+ if(usePhoto&&photo.dataset.variant!==s.ecotype){
+  photo.dataset.variant=s.ecotype;
+  photo.src=IMAGES[s.ecotype];
+ }
+ $g('png').textContent=usePhoto?'Скачать арт PNG':'Скачать PNG';
+ $g('svg').textContent=usePhoto?'SVG модели':'Скачать SVG';
+};
+$g('png').onclick=()=>{
+ if(!photoSelected()){originalPng();return}
+ if(!photo.complete||!photo.naturalWidth){message('Изображение ещё не загружено');return}
+ const canvas=document.createElement('canvas'),w=1100,h=1540;
+ canvas.width=w;canvas.height=h;
+ const ctx=canvas.getContext('2d');
+ if(!ctx){message('Нет Canvas для экспорта');return}
+ ctx.fillStyle='#091725';ctx.fillRect(0,0,w,h);
+ const ratio=Math.min(w/photo.naturalWidth,h/photo.naturalHeight);
+ const tw=Math.round(photo.naturalWidth*ratio),th=Math.round(photo.naturalHeight*ratio);
+ ctx.drawImage(photo,Math.floor((w-tw)/2),Math.floor((h-th)/2),tw,th);
+ canvas.toBlob(blob=>{
+  if(!blob){message('Ошибка PNG');return}
+  const url=URL.createObjectURL(blob);
+  downloadUrl(url,fileName()+'_art.png');
+  setTimeout(()=>URL.revokeObjectURL(url),6000);
+  message('Иллюстрация PNG подготовлена');
+ },'image/png');
+};
 render();
 })();
 </script></body></html>
