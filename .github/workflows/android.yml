@@ -59,6 +59,11 @@ jobs:
               raise SystemExit('Missing anatomy detail module')
           detail_js = Path('web/anatomy_detail_v071.js').read_text(encoding='utf-8')
           html = html.replace(detail_tag, "<script>\n" + detail_js + "\n</script>", 1)
+          shape_tag = '<script src="anatomy_shapes_v072.js"></script>'
+          if shape_tag not in html:
+              raise SystemExit('Missing anatomy shapes script')
+          shapes_js = Path("web/anatomy_shapes_v072.js").read_text(encoding="utf-8")
+          html = html.replace(shape_tag, "<script>\n" + shapes_js + "\n</script>", 1)
           Path("android/app/src/main/assets/index.html").write_text(html,encoding="utf-8")
           PY
 
