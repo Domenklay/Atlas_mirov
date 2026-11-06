@@ -1396,7 +1396,7 @@ try{
  const draft=JSON.parse(localStorage.getItem('atlas_draft_v052')||'null');
  if(valid(draft))s=clean(draft);
 }catch(e){}
-artMode=false;
+document.querySelector('[data-v5mode="constructor"]').click();
 render();
 const oldSave=document.getElementById('save').onclick;
 document.getElementById('save').onclick=()=>{oldSave();try{localStorage.setItem('atlas_draft_v052',JSON.stringify(s))}catch(e){}};
