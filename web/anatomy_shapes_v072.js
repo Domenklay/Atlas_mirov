@@ -162,7 +162,7 @@ function arm(v,m,side,layer){
   for(let k=-1;k<=2;k++){
    const xx=handX-11+k*8;
    g+=path('M'+F(xx-3)+' '+(hy+23)+'q-2 13 5 '+(v.hands==='claws'?22:14)+'q7 -4 4 -'+(v.hands==='claws'?22:15)+'Z','url(#atlas72edge)',a,1.5,.87);
-   if(v.hands==='claws'||v.k==='dragon')g+=path('M'+F(xx)+' '+(hy+v.hands==='claws'?42:39)+'l7 12l-12 -2Z','#eefce1',a,1.0,.85);
+   if(v.hands==='claws'||v.k==='dragon')g+=path('M'+F(xx)+' '+(hy+(v.hands==='claws'?42:39))+'l7 12l-12 -2Z','#eefce1',a,1.0,.85);
   }
  }
  return g
