@@ -48,7 +48,13 @@ jobs:
           new_logo = '<span class="mark"><img alt="" src="' + data_uri + '" style="height:100%;width:100%;object-fit:cover;border-radius:50%;display:block"></span>'
           if old_logo not in html:
               raise SystemExit("Missing logo placeholder in HTML")
-          Path("android/app/src/main/assets/index.html").write_text(html.replace(old_logo,new_logo,1),encoding="utf-8")
+          html = html.replace(old_logo, new_logo, 1)
+          genetics_tag = '<script src="genetics_v07.js"></script>'
+          if genetics_tag not in html:
+              raise SystemExit("Missing genetics script tag")
+          genetics = Path("web/genetics_v07.js").read_text(encoding="utf-8")
+          html = html.replace(genetics_tag, "<script>\\n" + genetics + "\\n</script>", 1)
+          Path("android/app/src/main/assets/index.html").write_text(html,encoding="utf-8")
           PY
 
       - name: Build APK
