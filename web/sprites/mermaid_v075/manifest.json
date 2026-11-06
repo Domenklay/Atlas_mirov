@@ -1,0 +1,113 @@
+{
+  "version": "0.7.5",
+  "name": "Articulated mermaid painterly sprite kit",
+  "canvas": {
+    "width": 620,
+    "height": 780,
+    "transparent": true
+  },
+  "projection": "front",
+  "license": "OpenAI original generated art edited for modular game prototype",
+  "assets": {
+    "torso_pearl": {
+      "src": "torso_pearl.webp",
+      "box": [
+        208,
+        232,
+        204,
+        308
+      ]
+    },
+    "torso_aqua": {
+      "src": "torso_aqua.webp",
+      "box": [
+        208,
+        232,
+        204,
+        308
+      ]
+    },
+    "head_silver": {
+      "src": "head_silver.webp",
+      "box": [
+        222,
+        76,
+        174,
+        185
+      ]
+    },
+    "head_deep": {
+      "src": "head_deep.webp",
+      "box": [
+        224,
+        79,
+        167,
+        181
+      ]
+    },
+    "upper_arm": {
+      "src": "upper_arm.webp",
+      "box": [
+        200,
+        289,
+        88,
+        133
+      ]
+    },
+    "forearm": {
+      "src": "forearm.webp",
+      "box": [
+        150,
+        350,
+        110,
+        132
+      ]
+    },
+    "hand": {
+      "src": "hand.webp",
+      "box": [
+        137,
+        443,
+        72,
+        118
+      ]
+    },
+    "tail_lagoon": {
+      "src": "tail_lagoon.webp",
+      "box": [
+        228,
+        465,
+        164,
+        284
+      ]
+    },
+    "tail_amethyst": {
+      "src": "tail_amethyst.webp",
+      "box": [
+        230,
+        465,
+        157,
+        286
+      ]
+    }
+  },
+  "anchors": {
+    "neck": [
+      310,
+      244
+    ],
+    "shoulderLeft": [
+      255,
+      306
+    ],
+    "shoulderRight": [
+      365,
+      306
+    ],
+    "tail": [
+      310,
+      475
+    ]
+  },
+  "notes": "All sprites are isolated images with transparency. PNG originals are provided separately in the asset ZIP. Join areas are still being refined."
+}
