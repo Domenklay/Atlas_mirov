@@ -54,6 +54,11 @@ jobs:
               raise SystemExit("Missing genetics script tag")
           genetics = Path("web/genetics_v07.js").read_text(encoding="utf-8")
           html = html.replace(genetics_tag, "<script>\n" + genetics + "\n</script>", 1)
+          detail_tag = '<script src="anatomy_detail_v071.js"></script>'
+          if detail_tag not in html:
+              raise SystemExit('Missing anatomy detail module')
+          detail_js = Path('web/anatomy_detail_v071.js').read_text(encoding='utf-8')
+          html = html.replace(detail_tag, "<script>\n" + detail_js + "\n</script>", 1)
           Path("android/app/src/main/assets/index.html").write_text(html,encoding="utf-8")
           PY
 
