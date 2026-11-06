@@ -2,6 +2,7 @@
 (function(){
 'use strict';
 const priorCreature=creature,priorClean=clean,priorRender=render;
+let comparing=false;
 const safe=(x,a,b)=>Math.max(a,Math.min(b,Number(x)||a));
 const f=x=>Number(x).toFixed(1);
 const A=v=>safeColor(v.accent||'#cee4d2');
@@ -18,7 +19,7 @@ function torso(v){
  return 'M'+f(310-s)+' 273Q310 253 '+f(310+s)+' 273Q'+f(320+s)+' 333 '+f(310+w)+' 391Q'+f(300+w)+' 420 362 454Q310 473 258 454Q'+f(320-w)+' 420 '+f(310-w)+' 391Q'+f(300-s)+' 333 '+f(310-s)+' 273Z';
 }
 function overlay(v){
- const amount=safe(v.detailLevel??85,0,100)/100;if(amount===0)return '';
+ const amount=comparing?0:safe(v.detailLevel??85,0,100)/100;if(amount===0)return '';
  const accent=A(v),base=safeColor(v.color),h=head(v),side=v.view==='side';
  let out='<defs><linearGradient id="atlasDetailShade" x1="0" x2="1"><stop stop-color="#061421" stop-opacity=".60"/><stop offset=".24" stop-color="'+base+'" stop-opacity=".10"/><stop offset=".52" stop-color="#f7fff2" stop-opacity=".26"/><stop offset=".84" stop-color="'+base+'" stop-opacity=".04"/><stop offset="1" stop-color="#04101d" stop-opacity=".62"/></linearGradient>'+
  '<linearGradient id="atlasDetailPlate" x1="0" x2=".75" y1="0" y2="1"><stop stop-color="#f0fff7" stop-opacity=".7"/><stop offset=".29" stop-color="'+accent+'" stop-opacity=".65"/><stop offset=".75" stop-color="'+base+'" stop-opacity=".18"/><stop offset="1" stop-color="#08212a" stop-opacity=".69"/></linearGradient>'+
@@ -129,24 +130,19 @@ css.textContent=['#detail71{margin:8px 0 16px;padding:13px;border:1px solid var(
 '#detail71 p{font-size:11px;line-height:1.4;color:var(--ui-muted,#adbec3);margin:8px 0 0}'].join('\n');
 document.head.append(css);if(stage)stage.parentNode.insertBefore(control,stage);
 const slide=document.getElementById('detail71slider'),output=document.getElementById('detail71out'),button=document.getElementById('detail71compare');
-let comparing=false,restore=85;
 render=function(sync=true){
  if(s.detailLevel==null)s.detailLevel=85;
  priorRender(sync);
- slide.value=s.detailLevel;output.textContent=Math.round(s.detailLevel)+'%';
+ slide.value=comparing?0:s.detailLevel;output.textContent=Math.round(comparing?0:s.detailLevel)+'%';
  button.setAttribute('aria-pressed',String(comparing));
  button.textContent=comparing?'Вернуть детали':'Сравнить';
  try{localStorage.setItem('atlas_draft_v071',JSON.stringify(s))}catch(e){}
 };
 slide.oninput=()=>{comparing=false;s.detailLevel=Number(slide.value);render(false)};
-button.onclick=()=>{
- if(!comparing){restore=s.detailLevel;comparing=true;s.detailLevel=0}
- else{comparing=false;s.detailLevel=restore}
- render(false)
-};
+button.onclick=()=>{comparing=!comparing;render(false)};
 const originalSave=document.getElementById('save').onclick;
 document.getElementById('save').onclick=()=>{
- if(comparing){comparing=false;s.detailLevel=restore;render(false)}
+ if(comparing){comparing=false;render(false)}
  originalSave()
 };
 try{const draft=JSON.parse(localStorage.getItem('atlas_draft_v071')||'null');if(valid(draft))s=clean(draft)}catch(e){}
