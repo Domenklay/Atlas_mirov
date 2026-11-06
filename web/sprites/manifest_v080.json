@@ -1,0 +1,290 @@
+{
+  "version": 1,
+  "kind": "modular-2d-parts",
+  "pack": "torso-starter-v080",
+  "license": "User project original generative vector art",
+  "canvas": {
+    "width": 620,
+    "height": 780,
+    "transparent": true
+  },
+  "projection": "front",
+  "fixedAnchors": {
+    "neck": {
+      "x": 310,
+      "y": 244
+    },
+    "shoulderLeft": {
+      "x": 255,
+      "y": 306
+    },
+    "shoulderRight": {
+      "x": 365,
+      "y": 306
+    },
+    "hipLeft": {
+      "x": 283,
+      "y": 478
+    },
+    "hipRight": {
+      "x": 337,
+      "y": 478
+    },
+    "wingLeft": {
+      "x": 277,
+      "y": 310
+    },
+    "wingRight": {
+      "x": 343,
+      "y": 310
+    },
+    "tail": {
+      "x": 310,
+      "y": 475
+    }
+  },
+  "partType": "torso",
+  "notes": "No head, arms, hands, legs, feet or tail are included. Anchors are in master canvas coordinates. All variants share attachment coordinates.",
+  "sprites": [
+    {
+      "id": "humanoid",
+      "name": "Гуманоидное",
+      "path": "torso_humanoid.svg",
+      "type": "torso",
+      "anchors": {
+        "neck": {
+          "x": 310,
+          "y": 244
+        },
+        "shoulderLeft": {
+          "x": 255,
+          "y": 306
+        },
+        "shoulderRight": {
+          "x": 365,
+          "y": 306
+        },
+        "hipLeft": {
+          "x": 283,
+          "y": 478
+        },
+        "hipRight": {
+          "x": 337,
+          "y": 478
+        },
+        "wingLeft": {
+          "x": 277,
+          "y": 310
+        },
+        "wingRight": {
+          "x": 343,
+          "y": 310
+        },
+        "tail": {
+          "x": 310,
+          "y": 475
+        }
+      }
+    },
+    {
+      "id": "aquatic",
+      "name": "Водное",
+      "path": "torso_aquatic.svg",
+      "type": "torso",
+      "anchors": {
+        "neck": {
+          "x": 310,
+          "y": 244
+        },
+        "shoulderLeft": {
+          "x": 255,
+          "y": 306
+        },
+        "shoulderRight": {
+          "x": 365,
+          "y": 306
+        },
+        "hipLeft": {
+          "x": 283,
+          "y": 478
+        },
+        "hipRight": {
+          "x": 337,
+          "y": 478
+        },
+        "wingLeft": {
+          "x": 277,
+          "y": 310
+        },
+        "wingRight": {
+          "x": 343,
+          "y": 310
+        },
+        "tail": {
+          "x": 310,
+          "y": 475
+        }
+      }
+    },
+    {
+      "id": "fae",
+      "name": "Фейское",
+      "path": "torso_fae.svg",
+      "type": "torso",
+      "anchors": {
+        "neck": {
+          "x": 310,
+          "y": 244
+        },
+        "shoulderLeft": {
+          "x": 255,
+          "y": 306
+        },
+        "shoulderRight": {
+          "x": 365,
+          "y": 306
+        },
+        "hipLeft": {
+          "x": 283,
+          "y": 478
+        },
+        "hipRight": {
+          "x": 337,
+          "y": 478
+        },
+        "wingLeft": {
+          "x": 277,
+          "y": 310
+        },
+        "wingRight": {
+          "x": 343,
+          "y": 310
+        },
+        "tail": {
+          "x": 310,
+          "y": 475
+        }
+      }
+    },
+    {
+      "id": "draconic",
+      "name": "Драконье",
+      "path": "torso_draconic.svg",
+      "type": "torso",
+      "anchors": {
+        "neck": {
+          "x": 310,
+          "y": 244
+        },
+        "shoulderLeft": {
+          "x": 255,
+          "y": 306
+        },
+        "shoulderRight": {
+          "x": 365,
+          "y": 306
+        },
+        "hipLeft": {
+          "x": 283,
+          "y": 478
+        },
+        "hipRight": {
+          "x": 337,
+          "y": 478
+        },
+        "wingLeft": {
+          "x": 277,
+          "y": 310
+        },
+        "wingRight": {
+          "x": 343,
+          "y": 310
+        },
+        "tail": {
+          "x": 310,
+          "y": 475
+        }
+      }
+    },
+    {
+      "id": "alien",
+      "name": "Инопланетное",
+      "path": "torso_alien.svg",
+      "type": "torso",
+      "anchors": {
+        "neck": {
+          "x": 310,
+          "y": 244
+        },
+        "shoulderLeft": {
+          "x": 255,
+          "y": 306
+        },
+        "shoulderRight": {
+          "x": 365,
+          "y": 306
+        },
+        "hipLeft": {
+          "x": 283,
+          "y": 478
+        },
+        "hipRight": {
+          "x": 337,
+          "y": 478
+        },
+        "wingLeft": {
+          "x": 277,
+          "y": 310
+        },
+        "wingRight": {
+          "x": 343,
+          "y": 310
+        },
+        "tail": {
+          "x": 310,
+          "y": 475
+        }
+      }
+    },
+    {
+      "id": "arboreal",
+      "name": "Растительное",
+      "path": "torso_arboreal.svg",
+      "type": "torso",
+      "anchors": {
+        "neck": {
+          "x": 310,
+          "y": 244
+        },
+        "shoulderLeft": {
+          "x": 255,
+          "y": 306
+        },
+        "shoulderRight": {
+          "x": 365,
+          "y": 306
+        },
+        "hipLeft": {
+          "x": 283,
+          "y": 478
+        },
+        "hipRight": {
+          "x": 337,
+          "y": 478
+        },
+        "wingLeft": {
+          "x": 277,
+          "y": 310
+        },
+        "wingRight": {
+          "x": 343,
+          "y": 310
+        },
+        "tail": {
+          "x": 310,
+          "y": 475
+        }
+      }
+    }
+  ]
+}
