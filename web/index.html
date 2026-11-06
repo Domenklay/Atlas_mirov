@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b1620">
+<title>Атлас живых миров</title>
+<style>
+:root{color-scheme:dark;--bg:#09121b;--p:#122231;--p2:#192d3d;--line:#284252;--text:#edf4f7;--muted:#9ab0bc;--accent:#80e2ca}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0%,#163943,#09121b 65%);font:14px/1.5 system-ui,Arial;color:var(--text)}button,input,select{font:inherit}button{cursor:pointer;transition:.15s}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+header{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:16px 25px;border-bottom:1px solid var(--line);background:#0b1824db}
+.logo{display:flex;align-items:center;gap:12px}.mark{font:29px Georgia;color:var(--accent);border:1px solid #51897c;border-radius:50%;width:47px;height:47px;display:grid;place-items:center}h1{font:25px Georgia;margin:0}header small{color:#b7ccce;letter-spacing:.15em;font-size:10px;text-transform:uppercase}
+main{display:grid;grid-template-columns:minmax(245px,310px) minmax(350px,1fr) minmax(250px,310px);max-width:1800px;margin:auto;min-height:calc(100vh - 80px)}
+.panel{background:#0e1c29e8;padding:22px;border-right:1px solid var(--line)}.panel.right{border-left:1px solid var(--line);border-right:0}
+.section{margin-bottom:22px;padding-bottom:21px;border-bottom:1px solid var(--line)}.section:last-child{border:0}h2{font:24px Georgia;margin:0 0 12px}h3{font:18px Georgia;margin:0 0 10px}label{font-size:12px;color:#c8dce0;display:block;margin:9px 0 5px}input:not([type=checkbox]):not([type=range]),select{width:100%;min-width:0;background:#1a3040;border:1px solid #39566a;color:#f2f7fa;padding:10px;border-radius:9px}
+input[type=range]{width:100%;accent-color:var(--accent)}input[type=checkbox]{accent-color:var(--accent)}button{border:1px solid #395564;border-radius:10px;color:#dfedf1;background:#1a3041;padding:10px 12px}button:hover{background:#254456}button.primary{background:#83dbc7;border-color:#83dbc7;color:#0a2730;font-weight:750}button.primary:hover{background:#b2f2df}
+.species{display:grid;grid-template-columns:1fr 1fr;gap:8px}.species button{text-align:left;padding:12px 11px;min-height:60px}.species button.active{border-color:#75d2c1;background:#204344;color:#e9fffa}.muted{color:var(--muted)}.caps{color:var(--accent);font-size:10px;text-transform:uppercase;letter-spacing:.2em;font-weight:800}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.checks{display:grid;grid-template-columns:1fr 1fr;gap:5px}.checks label{background:#1b2e3c;padding:8px;border-radius:8px;margin:0;font-size:11px;display:flex;align-items:center;gap:6px}
+.stagecol{padding:23px;min-width:0;display:flex;flex-direction:column;gap:12px}.stage-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.stage-head p{margin:0;font:28px Georgia}.stage{position:relative;min-height:530px;flex:1;display:grid;place-items:center;overflow:hidden;border:1px solid #315469;border-radius:20px;background:radial-gradient(ellipse at 50% 33%,#214959,#11283b 55%,#0c1b2a);box-shadow:inset 0 0 90px #0005}
+.stage svg{width:min(100%,670px);height:auto;max-height:740px;filter:drop-shadow(0 23px 22px #001b)}
+.stage:after{content:'SPECIMEN · ATLAS';position:absolute;bottom:18px;right:20px;letter-spacing:.18em;font-size:10px;color:#a6c5c280;pointer-events:none}
+.stage[data-env=forest]{background:radial-gradient(ellipse at 50% 33%,#2c533f,#132b2a 68%,#101b23)}.stage[data-env=volcanic]{background:radial-gradient(ellipse at 50% 33%,#633c3c,#2b222d 68%,#131822)}.stage[data-env=sky]{background:radial-gradient(ellipse at 50% 33%,#538493,#273f55 68%,#15253b)}.stage[data-env=exoplanet]{background:radial-gradient(ellipse at 50% 33%,#514276,#282842 68%,#121827)}
+.btnrow{display:flex;gap:7px;flex-wrap:wrap}.btnrow button{flex:1}.stat{border:1px solid var(--line);background:linear-gradient(130deg,#192d3a,#10202d);border-radius:12px;padding:14px;margin-bottom:12px}
+.big{font:30px Georgia;color:#b0eadc}.pill{display:inline-block;padding:5px 8px;background:#20433e;border:1px solid #33665f;border-radius:50px;font-size:11px;color:#c5efe6;margin:3px}
+.saved{display:flex;align-items:center;gap:8px;border:1px solid #34505d;background:#182b39;border-radius:10px;padding:9px;margin:7px 0}.saved strong{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.saved button{padding:4px 9px}.notice{border-left:2px solid #d5b989;background:#80694418;padding:10px 12px;font-size:12px;color:#dfceae;border-radius:0 8px 8px 0}
+footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
+#toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);padding:13px 20px;background:#a9eddd;color:#10222b;border-radius:10px;font-weight:700;display:none;z-index:40}
+@media(max-width:1120px){main{grid-template-columns:minmax(220px,300px) minmax(350px,1fr)}.panel.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}}
+@media(max-width:690px){header{padding:13px}h1{font-size:19px}main{display:flex;flex-direction:column}.panel{order:2;border:0;border-top:1px solid var(--line)}.stagecol{order:1;padding:13px}.stage{min-height:410px}.stage-head p{font-size:23px}.panel.right{order:3}header small{font-size:8px}}
+</style></head>
+<body>
+<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
+<main>
+<aside class="panel">
+<section class="section"><div class="caps">01 · происхождение</div><h2>Создание вида</h2><div class="species" id="species"></div><label for="name">Название вида</label><input id="name" maxlength="48" autocomplete="off"><label for="env">Среда обитания</label><select id="env"></select><label for="ability">Основная способность</label><select id="ability"></select></section>
+<section class="section"><div class="caps">02 · морфология</div><h3>Строение тела</h3><label>Основной цвет</label><div class="row"><input id="color" type="color" value="#65aebe" aria-label="Цвет тела"><select id="eyes"><option value="standard">Обычные глаза</option><option value="large">Крупные глаза</option><option value="slit">Вертикальный зрачок</option><option value="blank">Светящиеся глаза</option></select></div><label for="size">Рост — <output id="sizeOut"></output></label><input id="size" type="range" min="60" max="190" step="5"><label for="build">Мускулатура — <output id="buildOut"></output></label><input id="build" type="range" min="0" max="100" step="5"><label for="armor">Защита кожи — <output id="armorOut"></output></label><input id="armor" type="range" min="0" max="100" step="5"><label for="glow">Биолюминесценция — <output id="glowOut"></output></label><input id="glow" type="range" min="0" max="100" step="5"></section>
+<section class="section"><div class="caps">03 · адаптации</div><h3>Дополнительные органы</h3><div class="checks" id="features"></div></section>
+</aside>
+<section class="stagecol">
+<div class="stage-head"><div><div class="caps">Визуальный анализ</div><p id="stageName"></p></div><span class="pill" id="generation"></span></div>
+<div class="stage" id="stage"><svg id="art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 780" role="img" aria-label="Визуализация существа"></svg></div>
+<div class="btnrow"><button class="primary" id="save">Сохранить вид</button><button id="evolve">Следующее поколение</button><button id="reset">Сбросить</button></div>
+<div class="btnrow"><button id="png">Скачать PNG</button><button id="svg">Скачать SVG</button><button id="json">Экспорт каталога</button><button id="importButton">Импорт JSON</button></div>
+<input type="file" accept=".json,application/json" id="import" hidden><footer>Офлайн · Локальное хранение · Иллюстрации SVG</footer>
+</section>
+<aside class="panel right">
+<section class="section"><div class="caps">Досье вида</div><h2>Биология</h2><div class="stat"><div class="muted">Условная приспособленность</div><span class="big" id="fitness"></span><p id="fitnessText" class="muted"></p></div><div class="stat"><div class="muted">Тип организма</div><strong id="taxonomy"></strong><p id="description" class="muted"></p><div id="traitList"></div></div><div class="notice">Биологическая модель игровая: оценка приспособленности — художественная условность.</div></section>
+<section class="section"><div class="caps">Коллекция</div><h3>Сохранённые виды <span id="count" class="muted"></span></h3><div id="saved"></div></section>
+</aside>
+</main><div id="toast" role="status"></div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const TYPES={mermaid:{name:'Русалка',icon:'◈',env:'coast',color:'#62adb6',features:['gills','fins','scales'],desc:'Амфибийная разумная форма с мощным хвостом.'},fairy:{name:'Фея',icon:'✧',env:'forest',color:'#bb95d4',features:['wings','glow'],desc:'Лёгкое гуманоидное существо с перепончатыми крыльями.'},alien:{name:'Инопланетянин',icon:'◎',env:'exoplanet',color:'#86c6a7',features:['glow'],desc:'Разумная внеземная форма с необычной сенсорикой.'},dragon:{name:'Драконид',icon:'♜',env:'volcanic',color:'#ca8064',features:['wings','horns','scales'],desc:'Крупный чешуйчатый гуманоид с рогами.'},spirit:{name:'Лесной дух',icon:'❧',env:'forest',color:'#76a994',features:['horns','glow'],desc:'Мистический организм, адаптированный к лесной среде.'}};
+const ENVS={coast:'Море и побережье',abyss:'Океанские глубины',forest:'Лес',sky:'Небесные острова',volcanic:'Вулканические земли',exoplanet:'Чужая планета'};
+const ABILITIES={sonar:'Эхолокация',healing:'Регенерация',telepathy:'Телепатия',fire:'Термостойкость',flight:'Полёт',camouflage:'Маскировка',magic:'Биомагия'};
+const FEATURES={gills:'Жабры',fins:'Плавники',scales:'Чешуя',wings:'Крылья',horns:'Рога',glow:'Светящиеся органы'};
+const order=Object.keys(FEATURES);
+const preset=k=>({name:TYPES[k].name,k:k,env:TYPES[k].env,color:TYPES[k].color,eyes:'standard',size:100,build:45,armor:35,glow:25,ability:'camouflage',features:TYPES[k].features.slice(),generation:1});
+let s=preset('mermaid'),catalog=[];
+try{catalog=JSON.parse(localStorage.getItem('atlas_catalog_v1')||'[]');if(!Array.isArray(catalog))catalog=[]}catch(e){catalog=[]}
+function message(t){const a=$('toast');a.textContent=t;a.style.display='block';clearTimeout(message.timer);message.timer=setTimeout(()=>a.style.display='none',2700)}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function safeColor(c){return /^#[a-fA-F0-9]{6}$/.test(c)?c:'#65aebe'}
+function safeName(n){return String(n||'Новый вид').slice(0,48)}
+function esc(s){return String(s).replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]))}
+function valid(o){return o&&typeof o==='object'&&TYPES[o.k]&&Array.isArray(o.features)}
+function clean(o){const x=preset(TYPES[o.k]?o.k:'mermaid');x.name=safeName(o.name);x.env=ENVS[o.env]?o.env:x.env;x.ability=ABILITIES[o.ability]?o.ability:'camouflage';x.color=safeColor(o.color);x.eyes=['standard','large','slit','blank'].includes(o.eyes)?o.eyes:'standard';for(const key of ['size','build','armor','glow'])x[key]=clamp(Number(o[key])||0,key==='size'?60:0,key==='size'?190:100);x.features=order.filter(f=>o.features.includes(f));x.generation=clamp(parseInt(o.generation)||1,1,100000);return x}
+function setup(){
+$('species').innerHTML=Object.keys(TYPES).map(k=>'<button data-kind="'+k+'">'+TYPES[k].icon+' '+TYPES[k].name+'</button>').join('');
+$('env').innerHTML=Object.entries(ENVS).map(v=>'<option value="'+v[0]+'">'+v[1]+'</option>').join('');
+$('ability').innerHTML=Object.entries(ABILITIES).map(v=>'<option value="'+v[0]+'">'+v[1]+'</option>').join('');
+$('features').innerHTML=order.map(k=>'<label><input type="checkbox" data-feature="'+k+'">'+FEATURES[k]+'</label>').join('');
+$('species').querySelectorAll('button').forEach(b=>b.onclick=()=>{s=preset(b.dataset.kind);render()});
+for(const key of ['name','env','ability','color','eyes','size','build','armor','glow'])$(key).oninput=()=>{s[key]=['size','build','armor','glow'].includes(key)?Number($(key).value):$(key).value;render(false)};
+$('features').querySelectorAll('input').forEach(b=>b.onchange=()=>{s.features=order.filter(k=>$('features').querySelector('[data-feature="'+k+'"]').checked);render(false)});
+$('random').onclick=()=>{const k=Object.keys(TYPES)[Math.floor(Math.random()*5)];s=preset(k);s.color='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');s.eyes=['standard','large','slit','blank'][Math.floor(Math.random()*4)];s.glow=Math.floor(Math.random()*21)*5;s.armor=Math.floor(Math.random()*21)*5;s.features=order.filter(()=>Math.random()>.5);render();message('Создан случайный вид')};
+$('reset').onclick=()=>{s=preset(s.k);render()};
+$('evolve').onclick=()=>{s.generation++;let key=['size','build','armor','glow'][Math.floor(Math.random()*4)];s[key]=clamp(s[key]+(Math.random()>.3?5:-5),key==='size'?60:0,key==='size'?190:100);if(s.env==='abyss'&&Math.random()>.5&&!s.features.includes('glow'))s.features.push('glow');if(s.env==='sky'&&Math.random()>.5&&!s.features.includes('wings'))s.features.push('wings');render();message('Появилось поколение '+s.generation)};
+$('save').onclick=()=>{catalog.unshift({...clean(s),id:Date.now()+'-'+Math.random().toString(36).slice(2)});catalog=catalog.slice(0,100);persist();renderCatalog();message('Вид сохранён')};
+$('png').onclick=exportPNG;$('svg').onclick=()=>downloadText(svgSource(),fileName()+'.svg','image/svg+xml');$('json').onclick=()=>downloadText(JSON.stringify({version:1,catalog,selected:s},null,2),'atlas_catalog.json','application/json');
+$('importButton').onclick=()=>$('import').click();$('import').onchange=importJson;
+render();
+}
+function persist(){try{localStorage.setItem('atlas_catalog_v1',JSON.stringify(catalog))}catch(e){message('Нет места для сохранения. Экспортируйте JSON.')}}
+function renderCatalog(){const root=$('saved');root.replaceChildren();$('count').textContent='('+catalog.length+')';if(!catalog.length){const p=document.createElement('p');p.className='muted';p.textContent='Пока нет сохранённых существ';root.append(p);return}catalog.forEach((item,i)=>{const d=document.createElement('div');d.className='saved';const title=document.createElement('strong');title.textContent=item.name;const load=document.createElement('button');load.textContent='Открыть';load.onclick=()=>{s=clean(item);render()};const del=document.createElement('button');del.textContent='×';del.title='Удалить';del.onclick=()=>{catalog.splice(i,1);persist();renderCatalog()};d.append(title,load,del);root.append(d)})}
+function fitness(){let n=55;const f=s.features;n+=s.env==='coast'||s.env==='abyss'?(f.includes('gills')?18:-20)+(f.includes('fins')?12:-10):0;n+=s.env==='sky'?(f.includes('wings')?24:-25):0;n+=s.env==='volcanic'?Math.round(s.armor/6):0;n+=s.env==='abyss'?Math.round(s.glow/7):0;n+=s.env==='forest'?(f.includes('glow')?4:9):0;n+=s.env==='exoplanet'?12:0;return clamp(n,5,100)}
+function render(sync=true){
+if(sync){for(const key of ['name','env','ability','color','eyes','size','build','armor','glow'])$(key).value=s[key];$('features').querySelectorAll('input').forEach(b=>b.checked=s.features.includes(b.dataset.feature))}
+$('species').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.kind===s.k));
+for(const k of ['size','build','armor','glow'])$(k+'Out').textContent=s[k]+(k==='size'?'%':' / 100');
+$('stageName').textContent=s.name;$('generation').textContent='Поколение '+s.generation;
+$('stage').dataset.env=s.env;$('taxonomy').textContent=TYPES[s.k].name+' · '+ENVS[s.env];
+$('description').textContent=TYPES[s.k].desc+' Способность: '+ABILITIES[s.ability]+'.';
+$('traitList').innerHTML=s.features.map(t=>'<span class="pill">'+FEATURES[t]+'</span>').join('');
+const ft=fitness();$('fitness').textContent=ft+'%';$('fitnessText').textContent=ft>75?'Высокая совместимость со средой':ft>45?'Нужны дополнительные адаптации':'Среда обитания представляет высокий риск';
+$('art').innerHTML=creature(s);
+renderCatalog();
+}
+function creature(v){
+const c=safeColor(v.color),gl=v.glow/100;
+let a=['<defs><radialGradient id="body"><stop stop-color="#d6e8e0" stop-opacity=".60"/><stop offset=".38" stop-color="'+c+'"/><stop offset="1" stop-color="'+c+'" stop-opacity=".6"/></radialGradient><linearGradient id="wing" x2="1" y2="1"><stop stop-color="'+c+'" stop-opacity=".85"/><stop offset="1" stop-color="#a7f8ed" stop-opacity=".18"/></linearGradient><radialGradient id="halo"><stop stop-color="#a2fff1" stop-opacity=".35"/><stop offset="1" stop-color="#a2fff1" stop-opacity="0"/></radialGradient></defs>'];
+a.push('<circle cx="310" cy="380" r="285" stroke="#e1f6ef" stroke-opacity=".09" stroke-dasharray="4 10" fill="none"/><circle cx="310" cy="380" r="195" stroke="#e1f6ef" stroke-opacity=".07" fill="none"/>');
+if(v.features.includes('glow'))a.push('<ellipse cx="310" cy="392" rx="190" ry="290" fill="url(#halo)" opacity="'+gl+'"/>');
+a.push('<g transform="translate(310 385) scale('+(v.size/110).toFixed(2)+' '+(v.size/110).toFixed(2)+') translate(-310 -385)">');
+if(v.features.includes('wings'))a.push('<path d="M285 276Q150 90 110 160Q100 250 202 337Q96 365 161 485Q254 450 291 354Z M335 276Q470 90 510 160Q520 250 418 337Q524 365 459 485Q366 450 329 354Z" fill="url(#wing)" stroke="'+c+'" stroke-width="5"/><path d="M281 301L126 170M275 373L162 470M340 301L494 170M345 373L458 470" stroke="#dcfffa" stroke-opacity=".42" stroke-width="4"/>');
+if(v.k==='mermaid'){
+a.push('<path d="M282 428Q253 496 278 558L312 665L347 559Q368 488 337 427Z" fill="url(#body)" stroke="#072c36" stroke-width="5"/><path d="M310 640Q273 706 204 718Q267 742 309 704Q351 742 417 718Q348 706 310 640Z" fill="url(#wing)" stroke="'+c+'" stroke-width="5"/>');
+if(v.features.includes('fins'))a.push('<path d="M275 494Q215 461 203 415Q246 422 287 460M344 493Q412 450 417 414Q378 424 336 460" fill="url(#wing)" stroke="'+c+'" stroke-width="4"/>');
+}else{a.push('<path d="M280 420Q265 490 257 611Q264 645 281 642Q308 562 316 498Q327 566 343 642Q363 646 364 615Q353 480 339 420Z" fill="url(#body)" stroke="#18353b" stroke-width="5"/>');
+if(v.k==='dragon')a.push('<path d="M337 443Q446 523 456 623Q472 677 508 678Q451 700 432 654Q408 555 320 478Z" fill="url(#wing)" stroke="'+c+'" stroke-width="4"/>')}
+const shoulder=16+v.build/7;
+a.push('<path d="M'+(265-shoulder)+' 278Q218 316 206 413Q212 440 226 427L'+(282-shoulder)+' 342M'+(355+shoulder)+' 278Q402 316 414 413Q408 440 394 427L'+(338+shoulder)+' 342" fill="url(#body)" stroke="#133840" stroke-width="14" stroke-linecap="round"/>');
+a.push('<path d="M270 254Q310 267 350 254Q370 311 359 365Q345 410 356 449Q310 469 264 449Q275 409 261 366Q248 310 270 254Z" fill="url(#body)" stroke="#11343c" stroke-width="5"/>');
+if(v.features.includes('scales'))for(let y=315;y<435;y+=23)for(let x=278;x<351;x+=20)a.push('<path d="M'+(x+(y%2)*6)+' '+y+'q11 14 20 0" stroke="#e7ffee" stroke-width="'+(1+v.armor/55)+'" opacity=".38" fill="none"/>');
+a.push('<path d="M292 248L292 216Q280 201 270 170Q249 119 273 96Q304 79 338 97Q367 122 346 170L327 218L328 249Z" fill="url(#body)" stroke="#10313b" stroke-width="5"/>');
+if(v.features.includes('horns'))a.push('<path d="M278 126Q239 91 238 40Q281 57 294 100M337 101Q353 61 382 41Q384 104 344 126" fill="'+c+'" stroke="#d3ede0" stroke-width="4"/>');
+if(v.features.includes('gills'))a.push('<path d="M265 170l-19 10m21-1-19 13m22-2-19 13M355 170l19 10m-21-1 19 13m-22-2 19 13" stroke="#b9edec" stroke-width="4"/>');
+const eyeY=155;const rx=v.eyes==='large'?16:10;
+for(const x of [289,333]){a.push('<ellipse cx="'+x+'" cy="'+eyeY+'" rx="'+rx+'" ry="'+(rx*1.1)+'" fill="'+(v.eyes==='blank'?'#b8fff4':'#ecf8ee')+'"/>');if(v.eyes!=='blank')a.push('<ellipse cx="'+x+'" cy="'+eyeY+'" rx="'+(v.eyes==='slit'?2:5)+'" ry="'+(v.eyes==='slit'?12:6)+'" fill="#122838"/>')}
+a.push('<path d="M295 191q15 9 30 0" fill="none" stroke="#20454b" stroke-width="4" stroke-linecap="round"/>');
+if(v.features.includes('glow'))for(let i=0;i<18;i++){const x=279+(i*17)%68,y=282+(i*37)%151;a.push('<circle cx="'+x+'" cy="'+y+'" r="'+(2+i%3)+'" fill="#bbfff0" opacity="'+(.24+.65*gl).toFixed(2)+'"/>')}
+a.push('</g>');return a.join('')
+}
+function svgSource(){return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 780" width="1240" height="1560"><rect width="620" height="780" fill="#102836"/>'+creature(s)+'</svg>'}
+function fileName(){return (s.name||'creature').replace(/[^a-zа-яё0-9_-]/gi,'_').slice(0,35)||'creature'}
+function downloadUrl(url,name){const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove()}
+function downloadText(content,name,mime){const url=URL.createObjectURL(new Blob([content],{type:mime}));downloadUrl(url,name);setTimeout(()=>URL.revokeObjectURL(url),6000);message('Файл подготовлен: '+name)}
+function exportPNG(){const b=new Blob([svgSource()],{type:'image/svg+xml'}),url=URL.createObjectURL(b),img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=1240;c.height=1560;c.getContext('2d').drawImage(img,0,0,1240,1560);URL.revokeObjectURL(url);c.toBlob(out=>{if(!out)return message('Ошибка изображения');const u=URL.createObjectURL(out);downloadUrl(u,fileName()+'.png');setTimeout(()=>URL.revokeObjectURL(u),6000);message('PNG подготовлен')},'image/png')};img.onerror=()=>{URL.revokeObjectURL(url);message('Экспорт PNG недоступен, используйте SVG')};img.src=url}
+function importJson(e){const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result),list=Array.isArray(x)?x:x.catalog;if(!Array.isArray(list))throw Error('Некорректный каталог');catalog=list.filter(valid).slice(0,100).map(clean);if(valid(x.selected))s=clean(x.selected);persist();render();message('Импортировано: '+catalog.length)}catch(err){message('Ошибка: '+err.message)}$('import').value=''};r.readAsText(f)}
+setup();
+</script></body></html>
