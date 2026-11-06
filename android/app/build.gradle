@@ -7,11 +7,11 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId 'com.atlas.mirov.v73'
+        applicationId 'com.atlas.mirov.v74'
         minSdk 26
         targetSdk 35
-        versionCode 15
-        versionName '0.7.3'
+        versionCode 16
+        versionName '0.7.4'
     }
 
     compileOptions {
