@@ -130,21 +130,22 @@ function enhanceSVG(v,markup){
  if(torsoGroup){
   const available=['humanoid','aquatic','fae','draconic','alien','arboreal'];
   const originalPalette={
-   humanoid:['#ba8978','#f6d7ac'],aquatic:['#2a91a0','#b5faeb'],
-   fae:['#9880bf','#f0d5ff'],draconic:['#ae644b','#f9c680'],
-   alien:['#747bb6','#d4edff'],arboreal:['#587e5c','#c8edab']
+   humanoid:['#ba8978','#f6d7ac','#765258'],aquatic:['#2a91a0','#b5faeb','#184c66'],
+   fae:['#9880bf','#f0d5ff','#544977'],draconic:['#ae644b','#f9c680','#613b43'],
+   alien:['#747bb6','#d4edff','#383e72'],arboreal:['#587e5c','#c8edab','#354b45']
   };
-  if(available.includes(v.spriteTorso)){
-   const [base,highlight]=originalPalette[v.spriteTorso];
+  if(available.includes(v.spriteTorso)&&v.spriteCustomColor===true){
+   const [base,highlight,dark]=originalPalette[v.spriteTorso];
    const newBase=safeColor(v.color||base),newHighlight=safeColor(v.accent||highlight);
-   if(v.spriteCustomColor===true){
-    const it=torsoGroup.querySelectorAll('[fill],[stroke],[stop-color]');
-    for(const node of it){
-     for(const att of ['fill','stroke','stop-color']){
-      const hex=node.getAttribute(att);
-      if(hex===base)node.setAttribute(att,newBase);
-      if(hex===highlight)node.setAttribute(att,newHighlight)
-     }
+   const makeShadow=hex=>'#'+[1,3,5].map(i=>Math.max(0,Math.round(parseInt(hex.slice(i,i+2),16)*.49)).toString(16).padStart(2,'0')).join('');
+   const shadow=makeShadow(newBase);
+   // Apply to both the torso sprite and the independent limb/head gradients.
+   for(const node of root.querySelectorAll('[fill],[stroke],[stop-color]')){
+    for(const att of ['fill','stroke','stop-color']){
+     const hex=node.getAttribute(att);
+     if(hex===base)node.setAttribute(att,newBase);
+     if(hex===highlight)node.setAttribute(att,newHighlight);
+     if(hex===dark)node.setAttribute(att,shadow)
     }
    }
   }
