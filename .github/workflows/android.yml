@@ -84,6 +84,18 @@ jobs:
               raise SystemExit("Missing modular foundation")
           foundation_js = Path("web/modular_foundation_v074.js").read_text(encoding="utf-8")
           html = html.replace(foundation_tag, "<script>\n" + foundation_js + "\n</script>", 1)
+          art_tag = '<script src="mermaid_painter_v075.js"></script>'
+          if art_tag not in html:
+              raise SystemExit('Missing mermaid art module')
+          art_directory = Path('web/sprites/mermaid_v075')
+          art_parts = {p.stem: base64.b64encode(p.read_bytes()).decode('ascii')
+                       for p in sorted(art_directory.glob('*.webp'))}
+          if len(art_parts) != 9:
+              raise SystemExit('Missing mermaid painted sprite layers')
+          art_manifest = json.loads((art_directory / 'manifest.json').read_text(encoding='utf-8'))
+          art_globals = '<script>window.AtlasPaintedMermaidAssets=' + json.dumps(art_parts) + ';window.AtlasMermaidPaintManifest=' + json.dumps(art_manifest,ensure_ascii=False) + ';</script>'
+          art_js = Path('web/mermaid_painter_v075.js').read_text(encoding='utf-8')
+          html = html.replace(art_tag, art_globals + '<script>\n' + art_js + '\n</script>', 1)
           # Preserve the standalone sprite assets and their manifest in the APK too.
           import shutil
           shutil.copytree("web/sprites", "android/app/src/main/assets/sprites", dirs_exist_ok=True)
