@@ -105,26 +105,16 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 #v5CardTitle{font:18px Georgia;margin:0 0 8px}
 @media(max-width:690px){#v5ModeBar button{min-height:44px}#v5Bio{grid-template-columns:1fr 1fr}#v5CardTitle{font-size:21px}}
 
-/* v0.5.1: offline mermaid art collection */
-#v51Artwork{display:none;position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:contain;object-position:center;border-radius:17px;background:#091725}
-.stage.v51Photo #v51Artwork{display:block}
-.stage.v51Photo svg{visibility:hidden}
-#v51Gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:1px}
-#v51Gallery button{min-width:0;padding:0;background:#122b39;border:1px solid #31505a;border-radius:11px;overflow:hidden;text-align:center}
-#v51Gallery button[aria-pressed=true]{border:2px solid #91ebd5;background:#1d4c4d}
-#v51Gallery img{display:block;width:100%;height:105px;object-fit:cover;object-position:center 30%}
-#v51Gallery span{display:block;padding:6px 2px 7px;color:#d1e9e5;font-size:11px}
-#v51Gallery[hidden]{display:none!important}
-#v51Caption{font-size:12px;color:#9bbfc0;margin:2px 0 10px}
-#v51DossierGallery{margin:8px 0 13px;display:flex;gap:7px}
-#v51DossierGallery button{padding:0;border:1px solid #41656d;flex:1;overflow:hidden;min-width:0;max-height:125px;border-radius:8px;background:#122532}
-#v51DossierGallery img{width:100%;height:103px;object-fit:cover;object-position:center 25%;display:block}
-#v51DossierGallery button[aria-pressed=true]{border:2px solid #9aebd8}
-#v51DossierGallery[hidden]{display:none!important}
-@media(max-width:690px){#v51Gallery img{height:92px}#v51DossierGallery img{height:90px}.stage.v51Photo{min-height:530px}}
+\n/* 0.5.2 — detailed editable procedural character models */
+#v5ModeBar button{border-radius:9px}
+#v5ArtHint{border-left:2px solid #7ccdbc;padding-left:10px;line-height:1.55}
+.stage{background:radial-gradient(circle at 48% 34%,#24444f 0%,#152b37 54%,#0b1928 94%)}
+.stage svg{filter:drop-shadow(0 18px 13px #05131a99)}
+#art{overflow:visible}
+.v52-note{font-size:11px;color:#a0c9c4;letter-spacing:.01em}
 </style></head>
 <body>
-<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии · v0.5.1</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
+<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии · v0.5.2</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
 <nav id="mobileNav" aria-label="Разделы конструктора"><button type="button" data-tab="preview" aria-selected="true">Существо</button><button type="button" data-tab="editor" aria-selected="false">Настройки</button><button type="button" data-tab="dossier" aria-selected="false">Досье</button></nav>
 <main>
 <aside class="panel">
@@ -160,10 +150,10 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 
 
 <div id="v5ModeBar" role="group" aria-label="Режим изображения">
-<button type="button" data-v5mode="constructor" aria-pressed="true">Анатомический редактор</button>
-<button type="button" data-v5mode="illustration" aria-pressed="false">Иллюстрация вида</button>
+<button type="button" data-v5mode="constructor" aria-pressed="true">Модель</button>
+<button type="button" data-v5mode="illustration" aria-pressed="false">Атласный вид</button>
 </div>
-<p id="v5ArtHint">Редактор: изменения частей тела отображаются непосредственно на модели.</p>
+<p id="v5ArtHint">Изменяемая векторная модель: каждое изменение отображается на существе.</p>
 <div id="v4views" role="group" aria-label="Проекция существа">
 <button type="button" data-view="front" aria-pressed="true">Спереди</button>
 <button type="button" data-view="side" aria-pressed="false">Сбоку</button>
@@ -174,15 +164,8 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 <button type="button" id="v4mode" aria-pressed="true">Биология · ВКЛ</button>
 <span id="v4zoom" class="muted">100%</span>
 </div><div class="stage" id="stage"><svg id="art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 780" role="img" aria-label="Визуализация существа"></svg>
-<img id="v51Artwork" alt="Детализированная иллюстрация русалки" decoding="async" loading="eager">
 </div>
 
-<div id="v51Gallery" aria-label="Галерея русалок" hidden>
-  <button type="button" data-mermaid="reef" aria-pressed="false"><img src="assets/mermaids/reef.webp" alt="Рифовая русалка"><span>Рифовая</span></button>
-  <button type="button" data-mermaid="abyss" aria-pressed="false"><img src="assets/mermaids/abyss.webp" alt="Глубинная русалка"><span>Глубинная</span></button>
-  <button type="button" data-mermaid="lagoon" aria-pressed="false"><img src="assets/mermaids/lagoon.webp" alt="Лагунная русалка"><span>Лагунная</span></button>
-</div>
-<p id="v51Caption" hidden>Художественные изображения из концептов. Для точного изменения органов используй анатомический редактор.</p>
 <div class="btnrow"><button class="primary" id="save">Сохранить вид</button><button id="evolve">Следующее поколение</button><button id="reset">Сбросить</button></div>
 <div id="v4export"><label><input type="checkbox" id="v4transparent"> Прозрачный фон при экспорте</label><span class="muted" style="font-size:11px">PNG · 2480×3120</span></div><div class="btnrow"><button id="png">Скачать PNG</button><button id="svg">Скачать SVG</button><button id="json">Экспорт каталога</button><button id="importButton">Импорт JSON</button></div>
 <input type="file" accept=".json,application/json" id="import" hidden><footer>Офлайн · Локальное хранение · Иллюстрации SVG</footer>
@@ -196,11 +179,6 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 <div class="v5Header" id="v5CardTitle">Биологическая карточка</div>
 <span id="v5PlateMode">Фантастическая биология</span>
 
-<div id="v51DossierGallery" hidden aria-label="Выбрать подвид русалки">
-  <button type="button" data-mermaid="reef" aria-pressed="false"><img src="assets/mermaids/reef.webp" alt="Рифовая русалка"></button>
-  <button type="button" data-mermaid="abyss" aria-pressed="false"><img src="assets/mermaids/abyss.webp" alt="Глубинная русалка"></button>
-  <button type="button" data-mermaid="lagoon" aria-pressed="false"><img src="assets/mermaids/lagoon.webp" alt="Лагунная русалка"></button>
-</div>
 <div id="v5Bio"></div>
 <div class="v5Chapter"><strong>Экология</strong><p id="v5Ecology"></p></div>
 <div class="v5Chapter"><strong>Поведение и общество</strong><p id="v5Society"></p></div>
@@ -1233,7 +1211,7 @@ const prevRender=render;
 render=function(sync=true){
  prevRender(sync);
  for(const b of document.querySelectorAll('[data-v5mode]'))b.setAttribute('aria-pressed',String((b.dataset.v5mode==='illustration')===artMode));
- $('v5ArtHint').textContent=artMode?'Художественная композиция: общий облик и пейзаж. Для точной настройки органов переключитесь в редактор.':'Анатомический редактор: изменения органов отображаются непосредственно на модели.';
+ $('v5ArtHint').textContent=artMode?'Атласная проекция: подробный векторный рисунок, который меняется вместе с анатомией.':'Изменяемая 2D-модель: настройка всех органов без заранее готовых изображений.';
  if(artMode)$('v4transparent').checked=false;
  $('v4transparent').disabled=artMode;
  const d=bio(),traits=[
@@ -1263,67 +1241,166 @@ if(valid(draft)){s=clean(draft);artMode=!!draft.artMode}
 render();
 })();
 </script><script>
-/* v0.5.1: real locally bundled mermaid gallery; independent of the anatomy SVG renderer */
+/* v0.5.2 — procedural organic detail overlay, all traits remain editable. */
 (function(){
 'use strict';
-const IMAGES={reef:'assets/mermaids/reef.webp',abyss:'assets/mermaids/abyss.webp',lagoon:'assets/mermaids/lagoon.webp'};
-const $g=id=>document.getElementById(id);
-const photo=$g('v51Artwork');
-const before=render, originalPng=$g('png').onclick;
-const isIllustration=()=>document.querySelector('[data-v5mode="illustration"]').getAttribute('aria-pressed')==='true';
-const photoSelected=()=>s.k==='mermaid' && !!IMAGES[s.ecotype] && isIllustration();
-function galleryChange(id){
- if(s.k!=='mermaid'){
-   const species=document.querySelector('#species button[data-kind="mermaid"]');
-   if(species)species.click();
+const before=creature;
+const round=n=>Math.round(n*10)/10;
+const cstr=c=>safeColor(c);
+const line=(d,color,width=2,op=.5)=>'<path d="'+d+'" stroke="'+color+'" stroke-width="'+width+'" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="'+op+'"/>';
+const ellipse=(x,y,rx,ry,fill,op=.7,other='')=>'<ellipse cx="'+round(x)+'" cy="'+round(y)+'" rx="'+round(rx)+'" ry="'+round(ry)+'" fill="'+fill+'" opacity="'+op+'" '+other+'/>';
+const defs=(v)=>{
+ const a=cstr(v.accent),c=cstr(v.color);
+ return '<defs id="v52defs">'+
+ '<linearGradient id="v52Relief" x1="0" y1="0" x2="1" y2=".1"><stop stop-color="'+a+'" stop-opacity=".06"/><stop offset=".16" stop-color="#e6fff6" stop-opacity=".35"/><stop offset=".5" stop-color="'+c+'" stop-opacity=".06"/><stop offset=".83" stop-color="#071a30" stop-opacity=".36"/><stop offset="1" stop-color="#041521" stop-opacity=".60"/></linearGradient>'+
+ '<linearGradient id="v52Scute" x1=".1" y1="0" x2=".8" y2="1"><stop stop-color="#ecfff7" stop-opacity=".52"/><stop offset=".32" stop-color="'+a+'" stop-opacity=".45"/><stop offset=".8" stop-color="'+c+'" stop-opacity=".18"/><stop offset="1" stop-color="#041521" stop-opacity=".55"/></linearGradient>'+
+ '<radialGradient id="v52Pearl"><stop stop-color="'+a+'" stop-opacity=".9"/><stop offset=".5" stop-color="#a9fff1" stop-opacity=".5"/><stop offset="1" stop-color="'+a+'" stop-opacity="0"/></radialGradient>'+
+ '</defs>';
+};
+function ornate(v){
+ const a=cstr(v.accent),c=cstr(v.color),front=v.view==='front',back=v.view==='back',side=v.view==='side';
+ const scale=round(clamp(v.size/110,.58,1.65));
+ const density=clamp(Math.round(v.texture/11)+3,3,13),light=clamp(v.glow/100,0,1);
+ let g=['<g transform="translate(310 392) scale('+scale+') translate(-310 -392)" pointer-events="none">'];
+ if(!side){
+  const shoulder=42+Number(v.shoulderWidth)*.21,waist=26+Number(v.waistWidth)*.17;
+  const torso='M'+round(310-shoulder)+' 273Q310 253 '+round(310+shoulder)+' 273Q'+round(320+shoulder)+' 333 '+round(310+waist)+' 391Q'+round(300+waist)+' 420 362 454Q310 473 258 454Q'+round(320-waist)+' 420 '+round(310-waist)+' 391Q'+round(300-shoulder)+' 333 '+round(310-shoulder)+' 273Z';
+  g.push('<path d="'+torso+'" fill="url(#v52Relief)" opacity=".62"/>');
+  g.push(line('M'+round(310-shoulder+15)+' 315Q310 349 '+round(310+shoulder-15)+' 315',a,2,.26));
+  for(let z=0;z<density;z++){
+   const y=309+z*11,rx=10+(z%3)*3;
+   if(y>449)break;
+   for(let j=-2;j<=2;j++){
+    const xx=310+j*22+((z%2)*10),yy=y+(Math.abs(j)%2)*2;
+    if(v.skin==='scales'||v.markings==='scales'||v.k==='mermaid'||v.k==='dragon'){
+     g.push('<path d="M'+(xx-rx)+' '+(yy-4)+'q'+rx+' 17 '+(rx*2)+' 0q-'+rx+' 3 -'+(rx*2)+' 0Z" fill="url(#v52Scute)" stroke="'+a+'" stroke-opacity=".22" stroke-width=".9" opacity="'+round(.17+v.texture/230)+'"/>');
+    }else if(v.skin==='bark'||v.markings==='stripes'){
+     if((j+z)%2===0)g.push(line('M'+xx+' '+(yy-6)+'q'+(j%2?-4:5)+' 10 0 15',a,1.8,.28));
+    }else if((j+z)%3===0)g.push(ellipse(xx,yy,1.7+z%3,2.6+z%3,a,.2));
+   }
+  }
+  // Paired keratin ridges on the chest and shoulder, no additional appendages.
+  if(v.armor>30||v.k==='dragon')for(let i=0;i<4;i++){
+   const y=300+i*23;
+   g.push('<path d="M'+(268+i*4)+' '+y+'Q310 '+(y-7)+' '+(352-i*4)+' '+y+'Q310 '+(y+17)+' '+(268+i*4)+' '+y+'Z" fill="url(#v52Scute)" stroke="'+a+'" stroke-opacity=".27" stroke-width="1.4" opacity="'+round(.22+v.armor/290)+'"/>');
+  }
+  // Forehead and cheek markings react to species and skin properties.
+  const headY=159-v.neckLen*.44,hw=49*v.headWidth/100;
+  if(front){
+   g.push(line('M'+round(310-hw*.54)+' '+(headY-35)+'q'+round(hw*.22)+' -8 '+round(hw*.40)+' -2',a,2.4,.43));
+   g.push(line('M'+round(310+hw*.54)+' '+(headY-35)+'q-'+round(hw*.22)+' -8 -'+round(hw*.40)+' -2',a,2.4,.43));
+   g.push(line('M310 '+(headY+1)+'q-7 17 0 23q5 4 11 -2','#143b45',2.2,.7));
+   for(const sign of [-1,1]){
+    const x=310+sign*(hw*.63),y=headY+16;
+    if(v.k==='mermaid'){
+     for(let i=0;i<5;i++)g.push(ellipse(x+sign*(i%2)*3,y+i*6,2.1,2.8,a,.5));
+    }else if(v.k==='fairy'){
+     g.push(line('M'+x+' '+(y-6)+'q'+sign*14+' 8 '+sign*5+' 22',a,1.6,.39));
+    }else if(v.k==='alien')g.push(ellipse(x,y,3,6,a,.42));
+    else if(v.k==='dragon')g.push(line('M'+x+' '+(y-7)+'l'+sign*12+' 3l'+sign*-5+' 8',a,2.7,.55));
+    else g.push(line('M'+x+' '+(y-10)+'q'+sign*12+' 13 '+sign*2+' 25',a,1.8,.43));
+   }
+  }
+  // Decorative neck plates on a living body, distinct from the face.
+  if(v.k==='dragon'||v.k==='mermaid')for(let i=0;i<4;i++){
+   const y=232+i*10;
+   g.push(line('M295 '+y+'Q310 '+(y+6)+' 326 '+y,a,1.6,.33));
+  }
+  if(v.k==='spirit')for(let i=0;i<12;i++){
+   const x=271+(i*31)%78,y=303+(i*29)%123;
+   g.push(line('M'+x+' '+y+'q'+(i%2?7:-7)+' -9 '+(i%2?3:-3)+' -21',a,1.7,.44));
+  }
+  // Fin and scale layering follows the actual fish-tail option only.
+  if(v.tail==='fish'){
+   for(let row=0;row<11;row++){
+    let y=465+row*15,spread=25-Math.max(0,row-6)*2;
+    for(let j=-2;j<=2;j++){
+     const xx=310+j*(spread/2)+(row%2)*5,yy=y+Math.abs(j)*2;
+     if(Math.abs(j)*(spread/2)>spread)continue;
+     g.push('<path d="M'+round(xx-8)+' '+yy+'q8 10 16 0q-8 4 -16 0Z" fill="url(#v52Scute)" stroke="'+a+'" stroke-opacity=".34" stroke-width=".8" opacity=".56"/>');
+    }
+   }
+   for(let j=-9;j<=9;j++){
+    const end=310+j*14,y=733+Math.round(12*Math.sin(j*.42));
+    g.push(line('M310 662Q'+round(310+j*5)+' 703 '+end+' '+y,a,j%3===0?1.6:.8,.28));
+   }
+   // Curved lateral fin ray clusters do not create extra limbs.
+   if(v.features.includes('fins'))for(const sign of [-1,1])for(let k=0;k<4;k++){
+    const x=310+sign*30,y=488+k*16;
+    g.push(line('M'+x+' '+y+'q'+sign*46+' -'+(16+k*4)+' '+sign*58+' -'+(27+k*5),a,1.7,.48));
+   }
+  }
+  if(v.tail==='reptile')for(let k=0;k<11;k++){
+   const x=355+k*13,y=467+k*15;
+   g.push(line('M'+x+' '+y+'l18 -12',a,1.5,.30));
+  }
+  if(v.wings!=='none')for(const sign of [-1,1]){
+   const origin=310+sign*63;
+   for(let k=0;k<5;k++){
+    const edgeX=310+sign*(128+k*20),edgeY=177+k*51;
+    g.push(line('M'+origin+' 314Q'+round(310+sign*123)+' '+(180+k*29)+' '+edgeX+' '+edgeY,a,1.2,.31));
+   }
+  }
+  // Arms and legs are not redrawn: highlight their existing surface for anatomical accuracy.
+  if(v.arms>0)for(const sign of [-1,1]){
+   const x=310+sign*75;
+   g.push(line('M'+x+' 329Q'+(x+sign*17)+' 367 '+(x+sign*38)+' 408','#e7fff4',1.5,.20));
+   if(v.hands==='webbed')g.push(ellipse(x+sign*44,410,5,7,a,.20));
+  }
+  if(v.tail!=='fish'&&v.legs>0)for(const sign of [-1,1]){
+   const x=310+sign*31;
+   g.push(line('M'+x+' 475Q'+(x+sign*15)+' 548 '+(x+sign*4)+' 613','#e8fff4',1.5,.22));
+  }
+ }else{
+  // One-sided profile marks, not duplicate heads or arms.
+  for(let i=0;i<density;i++){
+   const xx=297+i%3*17,yy=295+i*14;
+   if(yy>450)break;
+   if(v.skin==='scales'||v.k==='mermaid'||v.k==='dragon')g.push('<path d="M'+xx+' '+yy+'q8 10 16 0" stroke="'+a+'" stroke-opacity=".45" fill="none" stroke-width="1.8"/>');
+   else g.push(ellipse(xx,yy,2.4,4,a,.26));
+  }
+  if(v.features.includes('gills'))for(let i=0;i<4;i++)g.push(line('M280 '+(163+i*12)+'l-9 5',a,2.1,.6));
+  const cy=151-v.neckLen*.44;
+  g.push(line('M347 '+(cy-25)+'q15 -6 26 5',a,2.2,.35));
+  g.push(line('M364 '+(cy+32)+'q-5 11 -19 12',a,1.7,.46));
  }
- const field=$g('ecotype');field.value=id;field.dispatchEvent(new Event('change',{bubbles:true}));
- document.querySelector('[data-v5mode="illustration"]').click();
- // Make the large art visible immediately on phones after selecting a variant from dossier.
- const previewTab=document.querySelector('#mobileNav button[data-tab="preview"]');
- if(window.matchMedia('(max-width:690px)').matches&&previewTab)previewTab.click();
- render(false);
+ // Bioluminescence and freckles; density and brightness remain functional.
+ if(v.glow>0){
+  for(let i=0;i<Math.round(4+light*28);i++){
+   const xx=269+(i*37)%84,yy=293+(i*51)%154;
+   g.push(ellipse(xx,yy,round(2+light*2.5),round(2+light*2.5),'url(#v52Pearl)',round(.20+light*.52)));
+  }
+ }
+ g.push('</g>');return g.join('');
 }
-for(const b of document.querySelectorAll('[data-mermaid]'))b.onclick=()=>galleryChange(b.dataset.mermaid);
-photo.addEventListener('error',()=>{
- $g('stage').classList.remove('v51Photo');
- $g('v51Caption').textContent='Иллюстрация недоступна. Показана векторная модель.';
-});
+creature=function(v){
+ const base=before(v);
+ const idx=base.indexOf('</defs>');
+ const svg=idx>=0?base.slice(0,idx)+defs(v)+base.slice(idx):defs(v)+base;
+ return svg+ornate(v);
+};
+const prevRender=render;
 render=function(sync=true){
- before(sync);
- const isMermaid=s.k==='mermaid' && !!IMAGES[s.ecotype], usePhoto=photoSelected();
- $g('v51Gallery').hidden=!isMermaid;
- $g('v51DossierGallery').hidden=!isMermaid;
- $g('v51Caption').hidden=!isMermaid;
- $g('v51Caption').textContent=usePhoto?'Иллюстрация из художественных концептов. Ползунки меняют модель в режиме редактора.':'Выбери подвид и нажми «Иллюстрация вида» для просмотра изображения.';
- for(const b of document.querySelectorAll('[data-mermaid]'))b.setAttribute('aria-pressed',String(isMermaid && b.dataset.mermaid===s.ecotype));
- $g('stage').classList.toggle('v51Photo',usePhoto);
- if(usePhoto&&photo.dataset.variant!==s.ecotype){
-  photo.dataset.variant=s.ecotype;
-  photo.src=IMAGES[s.ecotype];
- }
- $g('png').textContent=usePhoto?'Скачать арт PNG':'Скачать PNG';
- $g('svg').textContent=usePhoto?'SVG модели':'Скачать SVG';
+ prevRender(sync);
+ const b=document.getElementById('art');
+ b.setAttribute('aria-label','Изменяемая детализированная векторная модель: '+s.name);
 };
-$g('png').onclick=()=>{
- if(!photoSelected()){originalPng();return}
- if(!photo.complete||!photo.naturalWidth){message('Изображение ещё не загружено');return}
- const canvas=document.createElement('canvas'),w=1100,h=1540;
- canvas.width=w;canvas.height=h;
- const ctx=canvas.getContext('2d');
- if(!ctx){message('Нет Canvas для экспорта');return}
- ctx.fillStyle='#091725';ctx.fillRect(0,0,w,h);
- const ratio=Math.min(w/photo.naturalWidth,h/photo.naturalHeight);
- const tw=Math.round(photo.naturalWidth*ratio),th=Math.round(photo.naturalHeight*ratio);
- ctx.drawImage(photo,Math.floor((w-tw)/2),Math.floor((h-th)/2),tw,th);
- canvas.toBlob(blob=>{
-  if(!blob){message('Ошибка PNG');return}
-  const url=URL.createObjectURL(blob);
-  downloadUrl(url,fileName()+'_art.png');
-  setTimeout(()=>URL.revokeObjectURL(url),6000);
-  message('Иллюстрация PNG подготовлена');
- },'image/png');
-};
+const previousPNG=document.getElementById('png').onclick;
+document.getElementById('png').onclick=function(){previousPNG();};
+const previousImport=document.getElementById('import').onchange;
+if(previousImport){document.getElementById('import').onchange=previousImport;}
+const oldJSON=document.getElementById('json');
+oldJSON.onclick=()=>downloadText(JSON.stringify({version:5.2,catalog,selected:s},null,2),'atlas_catalog_v052.json','application/json');
+// New version is a separate application. The previous JSON schema remains importable.
+try{
+ const draft=JSON.parse(localStorage.getItem('atlas_draft_v052')||'null');
+ if(valid(draft))s=clean(draft);
+}catch(e){}
+artMode=false;
 render();
+const oldSave=document.getElementById('save').onclick;
+document.getElementById('save').onclick=()=>{oldSave();try{localStorage.setItem('atlas_draft_v052',JSON.stringify(s))}catch(e){}};
+const oldEvolve=document.getElementById('evolve').onclick;
+document.getElementById('evolve').onclick=()=>{oldEvolve();try{localStorage.setItem('atlas_draft_v052',JSON.stringify(s))}catch(e){}};
 })();
 </script></body></html>
