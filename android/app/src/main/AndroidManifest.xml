@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
   <application
       android:allowBackup="true"
-      android:label="Атлас миров 0.7.2"
+      android:label="Атлас миров 0.7.3"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher"
       android:theme="@style/AtlasTheme"
