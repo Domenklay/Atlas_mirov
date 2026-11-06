@@ -17,6 +17,7 @@ const choices={
  v6mind:['sentient','instinct','social','collective'],v6life:['medium','short','long','ancient']
 };
 const mutable=['head','skin','tail','wings','horns','ears','mouth','markings','spine','eyeCount','glow','armor','build','headWidth','armLength','texture'];
+const mutationNames={head:'форма головы',skin:'кожа',tail:'хвост',wings:'крылья',horns:'рога',ears:'уши',mouth:'рот',markings:'узоры',spine:'спинной гребень',eyeCount:'число глаз',glow:'свечение',armor:'защита кожи',build:'мускулатура',headWidth:'ширина головы',armLength:'длина рук',texture:'фактура кожи'};
 const oldClean=clean;
 function normalizedMeta(x,out){
  const obj=x&&typeof x==='object'?x:{};
@@ -186,7 +187,7 @@ function inherit(a,b){
    const options=choices[key].filter(x=>x!==offspring[key]);
    if(options.length)offspring[key]=choose(options)
   }
-  offspring.v7sources[key]='M';offspring.v7mutations.push('Изменён признак: '+key);
+  offspring.v7sources[key]='M';offspring.v7mutations.push('Изменён признак: '+(mutationNames[key]||key));
   if(offspring.tail==='fish'||offspring.tail==='serpent')offspring.legs=0;
   if(offspring.wings==='none')offspring.features=offspring.features.filter(f=>f!=='wings');
   else if(!offspring.features.includes('wings'))offspring.features.push('wings')
@@ -200,7 +201,7 @@ btn.onclick=()=>{
  const child=inherit(a,b);child.id=uid();
  catalog.unshift(child);catalog=catalog.slice(0,100);persist();
  s=clean(child);render();
- parentsUI();status.textContent='Потомок '+child.name+' сохранён. Открой вкладку «Существо».';
+ parentsUI();status.textContent='Создан вид «'+child.name+'». Открой вкладку «Существо».';
  message('Потомок создан и сохранён')
 };
 const exportButton=$('json');
