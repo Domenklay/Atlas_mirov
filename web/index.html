@@ -593,6 +593,19 @@ input[type=range],input[type=checkbox]{accent-color:var(--ui-gold)}
  *,*:before,*:after{transition:none!important;animation:none!important}
 }
 
+
+/* v0.5.4: adaptive tablet grid and clear specimen decorations */
+@media (min-width:691px) and (max-width:1130px){
+ main{display:grid;grid-template-columns:minmax(245px,285px) minmax(0,1fr);width:100%;height:auto;overflow:visible}
+ main>.panel.right{grid-column:1/-1;width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+ main>.panel:not(.right),main>.stagecol{min-width:0;max-width:100%;box-sizing:border-box}
+ .stagecol{overflow:visible}
+ .panel.right{overflow:visible}
+}
+.atlas-stage-footer{display:none}
+#stage::after{right:auto;left:50%;transform:translateX(-50%);bottom:16px;white-space:nowrap;opacity:.79}
+@media(max-width:690px){#stage::after{right:auto;left:50%;bottom:12px;transform:translateX(-50%);font-size:8px}}
+
 </style></head>
 <body>
 <header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>ИЛЛЮСТРИРОВАННЫЙ БЕСТИАРИЙ · v0.5.4</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
