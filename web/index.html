@@ -46,13 +46,27 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
  body[data-tab=preview] .stagecol{min-height:calc(100vh - 200px)}
  .stage-head{flex-wrap:wrap}
 }
-@media(min-width:691px){.stage{max-height:790px;min-height:600px;flex:0 0 auto}}@media(max-width:690px){#mobileNav button[aria-selected="true"]{background:#94e5d1;color:#0c2931;border-color:#94e5d1}}</style></head>
+@media(min-width:691px){.stage{max-height:790px;min-height:600px;flex:0 0 auto}}@media(max-width:690px){#mobileNav button[aria-selected="true"]{background:#94e5d1;color:#0c2931;border-color:#94e5d1}}
+/* v0.3: species-specific illustrated editions */
+#ecotype{background:#163643;border:1px solid #49777d;font-weight:650;color:#d7fff1}
+.variant-help{font-size:11px;color:#93b5b6;margin:6px 0 0}
+#speciesNote{font-size:12px;line-height:1.6;color:#c0d8d8;padding:12px 13px;background:#1935408c;border-radius:10px;border:1px solid #315b60;margin:9px 0 14px}
+#art[data-enhanced="true"]{filter:drop-shadow(0 19px 19px #02182288)}
+#habitatToggle{border-color:#426d6a;white-space:nowrap}
+#habitatToggle.active{background:#285149;color:#d0f4e6;border-color:#679d87}
+#fieldReport{padding:12px;border-radius:12px;background:#182d39;border:1px solid #325665}
+#fieldReport p{margin:6px 0;color:#b8cfd0}
+#fieldReport strong{font-size:13px;color:#c5eadf}
+.legend{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#93c7bb}
+@media(max-width:690px){#habitatToggle{padding:8px;font-size:11px} .stage{min-height:420px}}
+
+</style></head>
 <body>
-<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии · v0.2</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
+<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии · v0.3</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
 <nav id="mobileNav" aria-label="Разделы конструктора"><button type="button" data-tab="preview" aria-selected="true">Существо</button><button type="button" data-tab="editor" aria-selected="false">Настройки</button><button type="button" data-tab="dossier" aria-selected="false">Досье</button></nav>
 <main>
 <aside class="panel">
-<section class="section"><div class="caps">01 · происхождение</div><h2>Создание вида</h2><div class="species" id="species"></div><label for="name">Название вида</label><input id="name" maxlength="48" autocomplete="off"><label for="env">Среда обитания</label><select id="env"></select><label for="ability">Основная способность</label><select id="ability"></select></section>
+<section class="section"><div class="caps">01 · происхождение</div><h2>Создание вида</h2><div class="species" id="species"></div><label for="ecotype">Подвид и природная адаптация</label><select id="ecotype"></select><p class="variant-help">Три природные формы для каждого исходного вида</p><div id="speciesNote"></div><label for="name">Название вида</label><input id="name" maxlength="48" autocomplete="off"><label for="env">Среда обитания</label><select id="env"></select><label for="ability">Основная способность</label><select id="ability"></select></section>
 <section class="section"><div class="caps">02 · морфология</div><h3>Строение тела</h3><label>Основной цвет</label><div class="row"><input id="color" type="color" value="#65aebe" aria-label="Цвет тела"><select id="eyes"><option value="standard">Обычные глаза</option><option value="large">Крупные глаза</option><option value="slit">Вертикальный зрачок</option><option value="blank">Светящиеся глаза</option></select></div><label for="size">Рост — <output id="sizeOut"></output></label><input id="size" type="range" min="60" max="190" step="5"><label for="build">Мускулатура — <output id="buildOut"></output></label><input id="build" type="range" min="0" max="100" step="5"><label for="armor">Защита кожи — <output id="armorOut"></output></label><input id="armor" type="range" min="0" max="100" step="5"><label for="glow">Биолюминесценция — <output id="glowOut"></output></label><input id="glow" type="range" min="0" max="100" step="5"></section>
 
 <section class="section" id="morphSection">
@@ -73,7 +87,7 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 <section class="section"><div class="caps">04 · адаптации</div><h3>Дополнительные органы</h3><div class="checks" id="features"></div></section>
 </aside>
 <section class="stagecol">
-<div class="stage-head"><div><div class="caps">Визуальный анализ</div><p id="stageName"></p></div><span class="pill" id="generation"></span></div>
+<div class="stage-head"><div><div class="caps">Визуальный анализ</div><p id="stageName"></p></div><span class="pill" id="generation"></span><button type="button" id="habitatToggle" class="active" aria-pressed="true" title="Включить или выключить фон местообитания">Пейзаж · ВКЛ</button></div>
 <div class="stage" id="stage"><svg id="art" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 780" role="img" aria-label="Визуализация существа"></svg></div>
 <div class="btnrow"><button class="primary" id="save">Сохранить вид</button><button id="evolve">Следующее поколение</button><button id="reset">Сбросить</button></div>
 <div class="btnrow"><button id="png">Скачать PNG</button><button id="svg">Скачать SVG</button><button id="json">Экспорт каталога</button><button id="importButton">Импорт JSON</button></div>
@@ -81,7 +95,7 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 </section>
 <aside class="panel right">
 <section class="section"><div class="caps">Досье вида</div><h2>Биология</h2><div class="stat"><div class="muted">Условная приспособленность</div><span class="big" id="fitness"></span><p id="fitnessText" class="muted"></p></div><div class="stat"><div class="muted">Тип организма</div><strong id="taxonomy"></strong><p id="description" class="muted"></p><div id="traitList"></div></div><div class="notice">Биологическая модель игровая: оценка приспособленности — художественная условность.</div></section>
-<section class="section"><div class="caps">Коллекция</div><h3>Сохранённые виды <span id="count" class="muted"></span></h3><div id="saved"></div></section>
+<section class="section"><div class="caps">Записи натуралиста</div><h3>Полевой журнал</h3><div id="fieldReport"></div></section><section class="section"><div class="caps">Коллекция</div><h3>Сохранённые виды <span id="count" class="muted"></span></h3><div id="saved"></div></section>
 </aside>
 </main><div id="toast" role="status"></div>
 <script>
@@ -393,6 +407,187 @@ try{
  const draft=JSON.parse(localStorage.getItem('atlas_draft_v02')||'null');
  if(valid(draft))s=clean(draft);else s=supplement(s);
 }catch(e){s=supplement(s)}
+render();
+})();
+</script><script>
+/* Atlas v0.3 – illustrated ecoforms, scenic specimens and field notes */
+(function(){
+'use strict';
+const VARIANTS = {
+ mermaid:[
+  {id:'reef',title:'Рифовая',env:'coast',color:'#4ab9ac',accent:'#b2ffea',skin:'scales',head:'oval',tail:'fish',wings:'none',glow:35,trait:'Подвижные жаберные лепестки и переливчатая чешуя помогают жить среди коралловых рифов.'},
+  {id:'abyss',title:'Глубинная',env:'abyss',color:'#3959a1',accent:'#66ffd9',skin:'spots',head:'long',tail:'fish',wings:'none',glow:90,trait:'Светящиеся пятна используются для маскировки и сигналов в глубоководной темноте.'},
+  {id:'lagoon',title:'Лагунная',env:'coast',color:'#db9b7c',accent:'#d4f5f1',skin:'smooth',head:'wide',tail:'fish',wings:'none',glow:10,trait:'Широкие плавники позволяют маневрировать на мелководье и среди морских растений.'}
+ ],
+ fairy:[
+  {id:'moth',title:'Лунная',env:'forest',color:'#b6a5e3',accent:'#f6dfff',skin:'spots',head:'oval',tail:'none',wings:'insect',glow:75,trait:'Ночное зрение, световые узоры на крыльях и длинные антенны помогают находить сородичей.'},
+  {id:'bee',title:'Пыльцевая',env:'forest',color:'#dcad53',accent:'#fff1ab',skin:'stripes',head:'oval',tail:'none',wings:'insect',glow:15,trait:'Устойчивость к пыльце и короткие быстрые крылья позволяют опылять высокие цветы.'},
+  {id:'cloud',title:'Небесная',env:'sky',color:'#86c9e2',accent:'#edffff',skin:'smooth',head:'long',tail:'none',wings:'feather',glow:30,trait:'Лёгкие полые структуры и широкие крылья рассчитаны на парение в воздушных потоках.'}
+ ],
+ alien:[
+  {id:'crystal',title:'Кристаллический',env:'exoplanet',color:'#78b7d3',accent:'#dcb4ff',skin:'spots',head:'wide',tail:'none',wings:'none',glow:65,trait:'Фотоактивные рецепторы и полупрозрачные пластины позволяют реагировать на минералы.'},
+  {id:'dune',title:'Пустынный',env:'exoplanet',color:'#c58c65',accent:'#fbe2b7',skin:'stripes',head:'long',tail:'reptile',wings:'none',glow:10,trait:'Плотная кожа, низкая потребность во влаге и балансирующий хвост помогают пережить засуху.'},
+  {id:'void',title:'Теневой',env:'exoplanet',color:'#64589d',accent:'#aaedff',skin:'smooth',head:'wide',tail:'none',wings:'none',glow:90,trait:'Большие сенсорные глаза и световые сигналы используются в темноте пещер.'}
+ ],
+ dragon:[
+  {id:'ember',title:'Пепельный',env:'volcanic',color:'#a85b48',accent:'#f7ba73',skin:'scales',head:'spike',tail:'reptile',wings:'membrane',glow:25,trait:'Толстая термостойкая броня и перепончатые крылья защищают при полёте над лавой.'},
+  {id:'frost',title:'Морозный',env:'sky',color:'#7aa8cf',accent:'#e5fcff',skin:'scales',head:'spike',tail:'reptile',wings:'feather',glow:30,trait:'Многослойная теплоизоляция и широкие крылья приспособлены к холодным восходящим потокам.'},
+  {id:'moss',title:'Мшистый',env:'forest',color:'#6d9162',accent:'#daef9b',skin:'bark',head:'spike',tail:'reptile',wings:'none',glow:20,trait:'Панцирь обрастает мхом и помогает маскироваться среди корней древних деревьев.'}
+ ],
+ spirit:[
+  {id:'oak',title:'Дубовый',env:'forest',color:'#8a9d69',accent:'#d3efaa',skin:'bark',head:'long',tail:'feather',wings:'none',glow:30,trait:'Древесная кора служит бронёй, а переплетённые корни помогают удерживать влагу.'},
+  {id:'mushroom',title:'Грибной',env:'forest',color:'#ac89a9',accent:'#f7d5cb',skin:'spots',head:'wide',tail:'none',wings:'none',glow:65,trait:'Светящиеся споры и сеть подземных гиф связывают представителей колонии.'},
+  {id:'willow',title:'Ивовый',env:'coast',color:'#689d90',accent:'#b7efdd',skin:'bark',head:'long',tail:'feather',wings:'none',glow:45,trait:'Гибкие лозы и влаголюбивые покровы позволяют существовать у водоёмов.'}
+ ]
+};
+const defaultId=(k)=>VARIANTS[k] ? VARIANTS[k][0].id:'reef';
+const variant=(v)=>VARIANTS[v.k]?.find(q=>q.id===v.ecotype) || VARIANTS[v.k]?.[0];
+let scenery=true;
+const escAttr=t=>String(t).replace(/["<>&]/g,c=>({'"':'&quot;','<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+const formerClean=clean;
+clean=function(o){
+ const v=formerClean(o);
+ v.ecotype=VARIANTS[v.k].some(q=>q.id===o.ecotype)?o.ecotype:defaultId(v.k);
+ return v;
+};
+function defaults(){
+ if(!s.ecotype||!VARIANTS[s.k].some(q=>q.id===s.ecotype))s.ecotype=defaultId(s.k);
+}
+function chooseVariant(id){
+ defaults();
+ const q=VARIANTS[s.k].find(v=>v.id===id);
+ if(!q)return;
+ s.ecotype=q.id;
+ for(const field of ['env','color','accent','skin','head','tail','wings','glow'])s[field]=q[field];
+ s.ability=({mermaid:'sonar',fairy:'magic',alien:'telepathy',dragon:'fire',spirit:'healing'})[s.k];
+ const featureSet=new Set(s.features);
+ if(s.k==='mermaid'){featureSet.add('gills');featureSet.add('fins');}
+ if(s.wings!=='none')featureSet.add('wings');else featureSet.delete('wings');
+ if(s.skin==='scales')featureSet.add('scales');
+ if(s.glow>45)featureSet.add('glow');
+ s.features=[...featureSet].filter(x=>order.includes(x));
+ render();
+}
+function sceneryArt(v){
+ const A=safeColor(v.accent);
+ let p=['<g aria-hidden="true">'];
+ p.push('<circle cx="310" cy="365" r="277" fill="none" stroke="'+A+'" stroke-opacity=".08" stroke-width="2"/>');
+ if(v.env==='coast'||v.env==='abyss'){
+  p.push('<path d="M0 525Q120 465 234 524T620 505V780H0Z" fill="#164c59" opacity=".42"/>');
+  for(let i=0;i<9;i++){let x=18+i*78,y=420+(i*77)%285;p.push('<circle cx="'+x+'" cy="'+y+'" r="'+(5+i%4*6)+'" fill="none" stroke="'+A+'" stroke-opacity=".13" stroke-width="2"/>')}
+  for(let i=0;i<8;i++){let x=35+i*81,h=28+i%4*23;p.push('<path d="M'+x+' 770Q'+(x-23)+' '+(730-h)+' '+x+' '+(730-h*2)+'M'+x+' 770Q'+(x+28)+' '+(740-h)+' '+(x+38)+' '+(739-h*1.45)+'" fill="none" stroke="'+(i%2?'#5b9b93':'#d58c98')+'" opacity=".35" stroke-width="'+(5+i%3*3)+'" stroke-linecap="round"/>')}
+  if(v.env==='abyss'){p.push('<ellipse cx="310" cy="340" rx="283" ry="325" fill="#050b2c" opacity=".40"/>');for(let i=0;i<16;i++)p.push('<circle cx="'+(20+i*43%570)+'" cy="'+(160+i*83%520)+'" r="'+(1+i%3)+'" fill="'+A+'" opacity=".48"/>')}
+ }else if(v.env==='forest'){
+  p.push('<path d="M0 590Q130 500 270 563T620 534V780H0Z" fill="#183f35" opacity=".48"/>');
+  for(let i=0;i<6;i++){const x=34+i*110;p.push('<path d="M'+x+' 756V'+(320+i%3*60)+'M'+x+' 520L'+(x-40)+' 450M'+x+' 475L'+(x+51)+' 405" stroke="#5e8c68" stroke-opacity=".25" stroke-width="'+(15+i%3*4)+'" stroke-linecap="round" fill="none"/>');}
+  for(let i=0;i<10;i++){const x=28+i*61;p.push('<circle cx="'+x+'" cy="'+(300+i*71%290)+'" r="'+(3+i%3)+'" fill="'+A+'" opacity=".28"/>')}
+ }else if(v.env==='volcanic'){
+  p.push('<path d="M0 660L96 452L171 545L241 401L335 570L425 440L540 547L620 403V780H0Z" fill="#723934" opacity=".35"/><path d="M0 735Q143 699 260 741T620 720" stroke="#ff9d63" stroke-opacity=".33" stroke-width="12" fill="none"/>');
+  for(let i=0;i<18;i++)p.push('<circle cx="'+(30+i*69%565)+'" cy="'+(240+i*91%470)+'" r="'+(1+i%4)+'" fill="#faac79" opacity=".32"/>');
+ }else if(v.env==='sky'){
+  p.push('<path d="M0 605Q90 547 158 603Q231 520 315 585Q391 543 475 596Q552 543 620 598V780H0Z" fill="#c1eafb" opacity=".14"/>');
+  for(let i=0;i<5;i++){const x=48+i*117;const y=165+i%3*138;p.push('<path d="M'+x+' '+y+'q25 -37 54 0q30 -21 50 2" stroke="#dff6ff" opacity=".20" stroke-width="10" fill="none" stroke-linecap="round"/>')}
+ }else {
+  p.push('<path d="M0 650L102 585L171 605L277 540L389 600L493 563L620 650V780H0Z" fill="#554071" opacity=".38"/>');
+  for(let i=0;i<13;i++){
+   const x=35+i*47,y=460+i*23%260;p.push('<path d="M'+x+' '+y+'l12 -'+(25+i%4*16)+'l11 '+(25+i%4*16)+'Z" fill="'+A+'" opacity=".23"/>')
+  }
+  p.push('<circle cx="505" cy="174" r="53" fill="#c7b5ff" opacity=".11"/>');
+ }
+ p.push('</g>');
+ return p.join('');
+}
+function extras(v){
+ const A=safeColor(v.accent),C=safeColor(v.color), f=v.features,selected=variant(v);
+ let p=['<g aria-hidden="true" stroke-linecap="round" stroke-linejoin="round">'];
+ if(v.k==='mermaid'){
+  // Frilled cheeks, layered fin-rays, ventral gill shimmer.
+  p.push('<path d="M268 165Q233 142 221 160Q228 180 265 188M352 165Q387 142 399 160Q392 180 355 188" fill="url(#veil)" stroke="'+A+'" stroke-width="3"/>');
+  p.push('<path d="M259 182L230 188L254 196M361 182L390 188L366 196" fill="'+A+'" opacity=".62"/>');
+  if(v.tail==='fish'){
+   for(let row=0;row<7;row++){const y=469+row*27,width=22+(row%3)*5;
+    p.push('<path d="M'+(310-width)+' '+y+'q'+width+' 17 '+(width*2)+' 0" stroke="'+A+'" stroke-width="2.4" fill="none" opacity=".55"/>');
+   }
+   p.push('<path d="M312 670Q266 704 200 714M312 670Q350 703 419 713" stroke="#defff5" stroke-opacity=".35" stroke-width="3" fill="none"/>');
+  }
+  p.push('<path d="M265 273Q290 302 310 307Q333 304 357 273" stroke="'+A+'" stroke-opacity=".55" stroke-width="4" fill="none"/>');
+  if(selected.id==='abyss')for(let i=0;i<9;i++)p.push('<circle cx="'+(257+i*13)+'" cy="'+(120+i%3*18)+'" r="2.8" fill="'+A+'" opacity=".85"/>');
+ }
+ if(v.k==='fairy'){
+  p.push('<path d="M286 111Q264 65 244 60M334 111Q355 63 374 60" stroke="'+A+'" stroke-width="4" fill="none"/>');
+  p.push('<circle cx="244" cy="58" r="7" fill="'+A+'"/><circle cx="374" cy="58" r="7" fill="'+A+'"/>');
+  p.push('<path d="M267 270Q309 289 354 270L339 316Q308 333 281 316Z" fill="url(#veil)" stroke="'+A+'" stroke-width="3"/>');
+  for(let i=0;i<5;i++){const x=281+i*14,y=329+(i%2)*18;p.push('<path d="M'+x+' '+y+'q-10 -12 -18 2q15 8 18 -2" fill="'+A+'" opacity=".46"/>');}
+  if(v.wings!=='none')for(const x of [177,443])for(const y of [210,292,389])p.push('<circle cx="'+x+'" cy="'+y+'" r="10" fill="none" stroke="'+A+'" opacity=".36" stroke-width="3"/>');
+  if(selected.id==='bee')p.push('<path d="M279 378h62M280 404h60" stroke="#55421d" opacity=".55" stroke-width="10"/>');
+ }
+ if(v.k==='alien'){
+  p.push('<path d="M262 187Q223 212 232 253M357 187Q397 212 388 253" stroke="'+A+'" stroke-width="5" opacity=".55" fill="none"/>');
+  for(let i=0;i<6;i++){let x=277+i*14,y=259+(i%2)*11;p.push('<circle cx="'+x+'" cy="'+y+'" r="4.5" fill="'+A+'" opacity=".75"/>');}
+  p.push('<path d="M278 337Q310 355 342 337M282 368Q310 385 338 368" stroke="'+A+'" stroke-width="3" stroke-opacity=".5" fill="none"/>');
+  if(selected.id==='crystal')for(let i=0;i<8;i++){let x=264+i*14;p.push('<path d="M'+x+' 298l'+(i%2?5:-5)+' -16l'+(i%2?5:-5)+' 16Z" fill="'+A+'" opacity=".52"/>')}
+  if(selected.id==='void')p.push('<ellipse cx="310" cy="150" rx="78" ry="69" stroke="'+A+'" stroke-width="1.5" stroke-opacity=".23" fill="none"/>');
+ }
+ if(v.k==='dragon'){
+  p.push('<path d="M265 208Q234 212 227 232L263 241M355 208Q385 212 393 232L357 241" fill="url(#shimmer)" stroke="'+A+'" stroke-width="3"/>');
+  for(let i=0;i<6;i++){
+   let x=271+i*13,y=306+(i%2)*8;
+   p.push('<path d="M'+x+' '+y+'l'+(i%2?5:-5)+' -13l'+(i%2?5:-5)+' 13" stroke="'+A+'" fill="none" stroke-width="3"/>');
+  }
+  p.push('<path d="M277 290L310 274L342 290L331 333L310 347L288 332Z" fill="url(#veil)" stroke="'+A+'" opacity=".8" stroke-width="4"/>');
+  p.push('<path d="M285 392L310 377L335 392L327 427L310 440L292 427Z" fill="url(#veil)" stroke="'+A+'" opacity=".65" stroke-width="3"/>');
+  if(selected.id==='ember')for(let i=0;i<5;i++)p.push('<path d="M'+(280+i*14)+' 455l8 -15l5 15Z" fill="#f6b86f" opacity=".75"/>');
+ }
+ if(v.k==='spirit'){
+  p.push('<path d="M283 117Q268 67 230 39M338 117Q361 67 395 39M257 83L226 86M265 72L278 31M365 74L354 29M376 59L412 66" stroke="'+A+'" stroke-opacity=".9" stroke-width="6" fill="none"/>');
+  for(const [x,y,angle] of [[228,52,-35],[277,48,15],[395,51,40],[363,45,-18],[241,91,60],[385,94,-35]])p.push('<ellipse cx="'+x+'" cy="'+y+'" rx="8" ry="16" transform="rotate('+angle+' '+x+' '+y+')" fill="'+C+'" stroke="'+A+'" stroke-width="2"/>');
+  for(let i=0;i<7;i++){const x=270+i*13,y=311+i%3*35;p.push('<path d="M'+x+' '+y+'q-13 -24 1 -37q13 13 -1 37" fill="url(#veil)" stroke="'+A+'" stroke-width="2" opacity=".8"/>')}
+  if(selected.id==='mushroom')p.push('<path d="M258 119Q309 45 361 119Q306 106 258 119" fill="url(#shimmer)" stroke="'+A+'" stroke-width="4"/>');
+ }
+ if(f.includes('glow')&&v.glow>0)for(let i=0;i<13;i++){const x=240+i*19%145,y=272+i*37%173;p.push('<circle cx="'+x+'" cy="'+y+'" r="'+(2+i%3)+'" fill="'+A+'" opacity="'+Math.min(.95,.3+v.glow/125)+'"/>')}
+ p.push('</g>');
+ return p.join('');
+}
+const oldRenderer=creature;
+creature=function(v){
+ const fragment=oldRenderer(v);
+ const enhanced=fragment.replace('</defs>','</defs>'+(scenery?sceneryArt(v):''));
+ const scaleLast=enhanced.lastIndexOf('</g>');
+ if(scaleLast===-1)return enhanced;
+ return enhanced.slice(0,scaleLast)+extras(v)+enhanced.slice(scaleLast);
+};
+const pastRender=render;
+render=function(sync=true){
+ defaults();
+ pastRender(sync);
+ const opt=$('ecotype');const current=opt.value;
+ const options=VARIANTS[s.k];
+ if(opt.dataset.type!==s.k){
+  opt.innerHTML=options.map(q=>'<option value="'+escAttr(q.id)+'">'+escAttr(q.title)+'</option>').join('');
+  opt.dataset.type=s.k;
+ }
+ opt.value=s.ecotype;
+ const q=variant(s);
+ $('speciesNote').textContent=q.trait;
+ $('fieldReport').innerHTML='<div class="legend">Полевые заметки · '+escAttr(q.title)+'</div><p>'+escAttr(q.trait)+'</p><strong>Среда: '+escAttr(ENVS[s.env])+'</strong><p>Иллюстрация сочетает выбранную анатомию с особенностями исходной расы. Изменения видны в PNG/SVG.</p>';
+ $('art').dataset.enhanced='true';
+ try{localStorage.setItem('atlas_draft_v03',JSON.stringify(s))}catch(e){}
+};
+$('ecotype').onchange=()=>chooseVariant($('ecotype').value);
+$('habitatToggle').onclick=()=>{
+ scenery=!scenery;
+ $('habitatToggle').textContent=scenery?'Пейзаж · ВКЛ':'Пейзаж · ВЫКЛ';
+ $('habitatToggle').classList.toggle('active',scenery);
+ $('habitatToggle').setAttribute('aria-pressed',String(scenery));
+ render(false);
+};
+$('species').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>render()));
+$('random').addEventListener('click',()=>{s.ecotype=defaultId(s.k);render()});
+$('reset').addEventListener('click',()=>{s.ecotype=defaultId(s.k);render()});
+try{
+ const draft=JSON.parse(localStorage.getItem('atlas_draft_v03')||'null');
+ if(valid(draft))s=clean(draft);
+}catch(e){}
 render();
 })();
 </script></body></html>
