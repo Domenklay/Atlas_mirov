@@ -33,7 +33,7 @@ function restoreCatalog(){
  // Recover the raw records from the original persistent store rather than
  // resaving those shortened records (which would destroy sprite selections).
  try{
-  const raw=JSON.parse(localStorage.getItem('atlas_catalog_v1')||'null');
+  const raw=JSON.parse(window.__AtlasCatalogBeforeStartup||localStorage.getItem('atlas_catalog_v1')||'null');
   if(!Array.isArray(raw))return false;
   const validRecords=raw.filter(valid).slice(0,100);
   if(validRecords.length===0)return false;
