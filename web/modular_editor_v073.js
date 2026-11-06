@@ -159,7 +159,7 @@ const panel=document.createElement('section');panel.className='section';panel.id
 panel.innerHTML='<div class="caps">07.3 · сборный персонаж</div>'+
  '<h3>Модульный 2D-конструктор</h3>'+
  '<p class="m73lead">Это настоящий прототип: туловище, голова, руки и нижняя часть тела — независимые слои с согласованными соединениями.</p>'+
- '<label class="m73toggle"><input id="m73active" type="checkbox"> Включить сборку из спрайтов</label>'+
+ '<label class="m73toggle"><input id="m73active" type="checkbox"> Включить векторную сборку</label>'+
  '<div id="m73controls"><label for="m73torso">Туловище</label><select id="m73torso"></select>'+
  '<label for="m73head">Голова</label><select id="m73head"></select>'+
  '<label for="m73arms">Руки и кисти</label><select id="m73arms"></select>'+
@@ -191,7 +191,7 @@ render=function(sync=true){
  normalizeState();oldRender(sync);
  input.checked=!!s.spriteMode;panel.classList.toggle('m73on',!!s.spriteMode);
  for(const [id,field] of selectors){const el=document.getElementById(id);el.value=s[field];el.disabled=!s.spriteMode}
- document.getElementById('m73status').textContent=s.spriteMode?(s.view==='front'?'Собрано из независимых деталей':'Вид сбоку/сзади: показана прежняя векторная модель'):'Исходный генератор активен — спрайты отключены.';
+ document.getElementById('m73status').textContent=s.spriteMode?(s.view==='front'?'Собрано из векторных частей':'Вид сбоку/сзади: показана прежняя векторная модель'):'Исходный генератор активен — спрайты отключены.';
 };
 if(!globalThis.AtlasTorsoAssets){
  const files=BODY.map(x=>x[0]);
