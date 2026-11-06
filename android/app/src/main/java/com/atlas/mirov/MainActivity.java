@@ -125,20 +125,7 @@ public final class MainActivity extends Activity {
                 result.write(buffer, 0, count);
             }
             String html = new String(result.toByteArray(), StandardCharsets.UTF_8);
-            // Resolve only bundled image assets into data URLs for the offline HTTPS WebView.
-            for (String variant : new String[]{"reef", "abyss", "lagoon"}) {
-                try (InputStream image = getAssets().open("mermaids/" + variant + ".webp");
-                     ByteArrayOutputStream bytes = new ByteArrayOutputStream()) {
-                    byte[] imageBuffer = new byte[8192];
-                    int imageCount;
-                    while ((imageCount = image.read(imageBuffer)) != -1) {
-                        bytes.write(imageBuffer, 0, imageCount);
-                    }
-                    String inline = "data:image/webp;base64,"
-                        + Base64.encodeToString(bytes.toByteArray(), Base64.NO_WRAP);
-                    html = html.replace("assets/mermaids/" + variant + ".webp", inline);
-                }
-            }
+            // v0.5.2 renders anatomy entirely as editable offline SVG; no image bundle is loaded.
             // The fixed HTTPS origin lets localStorage persist across application restarts.
             webView.loadDataWithBaseURL("https://atlas.local/", html, "text/html", "UTF-8", null);
         } catch (Exception error) {
