@@ -273,9 +273,329 @@ footer{color:var(--ui-muted);margin-top:5px}
  #toast{bottom:calc(87px + env(safe-area-inset-bottom));max-width:calc(100% - 28px);font-size:12px}
 }
 
+
+/* ╔════════════ ATLAS: ILLUMINATED BESTIARY / v0.5.4 ════════════╗
+   Ornament is procedural CSS + SVG; no pictures replace the editor. */
+:root{
+ --ui-page:#07141c;--ui-pane:#10232b;--ui-card:#152e35;--ui-raised:#24434a;
+ --ui-border:#6c6957;--ui-border-soft:#394e4f;--ui-ink:#f4eee0;--ui-muted:#c1baaa;
+ --ui-accent:#9fe6ce;--ui-accent-soft:#1f5150;--ui-gold:#e7c98d;--ui-gold-deep:#866947;
+ --ui-shadow:0 12px 35px #0008;--ui-etched:#d5af72;--ui-ambient:#42afa4;--ui-veil:#17373c
+}
+body[data-atelier-theme="violet"]{
+ --ui-page:#15101f;--ui-pane:#211a31;--ui-card:#30253e;--ui-raised:#433550;
+ --ui-border:#8b6786;--ui-border-soft:#574761;--ui-ink:#f9effa;--ui-muted:#d2c3d6;
+ --ui-accent:#e6c5ff;--ui-accent-soft:#513769;--ui-gold:#f1cda5;--ui-gold-deep:#9a6b79;
+ --ui-etched:#ddb5da;--ui-ambient:#b86be0;--ui-veil:#382646
+}
+body[data-atelier-theme="forest"]{
+ --ui-page:#101a18;--ui-pane:#1c302a;--ui-card:#254038;--ui-raised:#34574c;
+ --ui-border:#777b56;--ui-border-soft:#4b6054;--ui-ink:#f6efdf;--ui-muted:#d0c7ad;
+ --ui-accent:#c4e4ab;--ui-accent-soft:#365d42;--ui-gold:#f1ce8d;--ui-gold-deep:#96794c;
+ --ui-etched:#d6bd78;--ui-ambient:#85be6b;--ui-veil:#2b4739
+}
+html{background:var(--ui-page)}
+body{
+ background:
+ radial-gradient(ellipse 36% 35% at 15% 8%, color-mix(in srgb,var(--ui-ambient) 20%,transparent),transparent 85%),
+ radial-gradient(ellipse 40% 48% at 95% 92%,color-mix(in srgb,var(--ui-gold) 11%,transparent),transparent 82%),
+ radial-gradient(circle at 11px 17px,#e5cf9840 1px,transparent 1.6px) 0 0/78px 82px,
+ radial-gradient(circle at 32px 42px,#83cab329 1px,transparent 1.8px) 0 0/111px 94px,
+ var(--ui-page);
+ color:var(--ui-ink)
+}
+header{
+ background:
+ radial-gradient(ellipse 55% 180% at 60% -60%,color-mix(in srgb,var(--ui-ambient) 26%,transparent),transparent 92%),
+ linear-gradient(180deg,color-mix(in srgb,var(--ui-gold-deep) 19%,var(--ui-pane)),var(--ui-pane) 76%,#08151c);
+ border-bottom:2px solid var(--ui-gold-deep);
+ box-shadow:inset 0 -3px 0 #071116,0 3px 0 color-mix(in srgb,var(--ui-gold) 32%,transparent),0 10px 36px #0008;
+}
+header::before{
+ content:'';position:absolute;inset:7px 12px;pointer-events:none;
+ border-top:1px solid color-mix(in srgb,var(--ui-gold) 37%,transparent);
+ border-bottom:1px solid color-mix(in srgb,var(--ui-gold) 24%,transparent);
+ opacity:.75;
+}
+.logo{z-index:1;position:relative;gap:15px}
+.logo h1{
+ color:var(--ui-gold);font-family:Georgia,'Times New Roman',serif;
+ font-size:clamp(23px,2.1vw,30px);font-weight:600;letter-spacing:.035em;
+ text-shadow:0 2px 1px #0a1013,0 0 25px color-mix(in srgb,var(--ui-gold) 20%,transparent)
+}
+header small{color:var(--ui-accent);font-size:9px;letter-spacing:.20em}
+.mark{
+ width:56px;height:56px;flex:none;border-radius:50%;font-size:29px;
+ border:2px double var(--ui-gold);
+ color:var(--ui-gold);
+ background:
+ radial-gradient(circle at center,#294d4a 3%,#122a2c 48%,#091c24 75%);
+ box-shadow:inset 0 0 0 3px #0d232c,inset 0 0 0 4px color-mix(in srgb,var(--ui-gold) 45%,transparent),0 0 21px #0009,0 0 19px color-mix(in srgb,var(--ui-ambient) 33%,transparent)
+}
+#random,#uiTheme{
+ background:linear-gradient(165deg,var(--ui-raised),var(--ui-card) 60%,#152027);
+ border:1px solid var(--ui-gold-deep);
+ box-shadow:inset 0 1px 0 #ffffff25,0 5px 14px #0004;
+ color:var(--ui-gold)
+}
+#random::before{color:var(--ui-gold)}
+#uiTheme{font-size:20px;color:var(--ui-gold)}
+main{
+ position:relative;
+ background:transparent;
+ grid-template-columns:minmax(265px,310px) minmax(450px,1fr) minmax(280px,340px)
+}
+main>.panel{
+ background:
+ linear-gradient(115deg,color-mix(in srgb,var(--ui-gold) 7%,transparent),transparent 18%,transparent 80%,color-mix(in srgb,var(--ui-ambient) 9%,transparent)),
+ radial-gradient(circle at 30% 15%,color-mix(in srgb,var(--ui-ambient) 9%,transparent),transparent 55%),
+ var(--ui-pane);
+ border-right:1px solid var(--ui-gold-deep);
+ box-shadow:inset -4px 0 12px #0003;
+}
+main>.panel.right{
+ border-left:1px solid var(--ui-gold-deep);border-right:0;
+ box-shadow:inset 4px 0 12px #0003
+}
+.panel:not(.right)>.section,.panel.right>.section{
+ background:
+ radial-gradient(ellipse at 0 0,color-mix(in srgb,var(--ui-gold) 9%,transparent),transparent 62%),
+ linear-gradient(155deg,var(--ui-card),var(--ui-pane));
+ border:1px solid color-mix(in srgb,var(--ui-gold-deep) 75%,var(--ui-border));
+ box-shadow:inset 0 0 0 2px #07151c50,0 8px 18px #0004;
+ border-radius:9px;
+ padding:0;
+ position:relative;overflow:hidden;
+ margin:0 0 16px;
+}
+.panel.right>.section{padding:16px 13px 14px}
+.panel:not(.right)>.section::before,
+.panel.right>.section::before{
+ content:'❧';position:absolute;right:9px;top:2px;font-family:Georgia,serif;
+ font-size:23px;color:var(--ui-gold);opacity:.43;z-index:2;pointer-events:none
+}
+.panel.right>.section .caps{margin-bottom:9px}
+.panel.right h2{color:var(--ui-gold);text-shadow:0 1px 2px #0007}
+.panel.right h3{color:var(--ui-gold)}
+.ui-fold>summary{
+ min-height:64px;padding:14px 15px 14px 17px;
+ background:
+ linear-gradient(105deg,color-mix(in srgb,var(--ui-gold) 15%,var(--ui-raised)),var(--ui-pane) 87%);
+ border-bottom:1px solid transparent;
+ font-family:Georgia,'Times New Roman',serif;font-size:17px;font-weight:600;
+ color:#f6e6c9;
+ letter-spacing:.018em
+}
+.ui-fold[open]>summary{border-bottom-color:var(--ui-gold-deep);color:var(--ui-gold)}
+.ui-fold>summary::before{content:'✧';color:var(--ui-gold);font-size:20px;flex:none;text-shadow:0 0 10px color-mix(in srgb,var(--ui-gold) 45%,transparent)}
+.ui-fold>summary .fold-kicker{color:var(--ui-accent);font-family:system-ui,sans-serif;font-size:9px;letter-spacing:.1em}
+.ui-fold>summary::after{color:var(--ui-gold)}
+.ui-fold-body{
+ padding:9px 14px 18px;
+ background:
+ radial-gradient(ellipse at 60% 0,color-mix(in srgb,var(--ui-ambient) 13%,transparent),transparent 70%),
+ linear-gradient(180deg,var(--ui-pane),var(--ui-card))
+}
+.ui-fold-body label{color:#f1e1c8}
+.ui-fold-body select,.ui-fold-body input:not([type=range]):not([type=checkbox]){
+ border-color:color-mix(in srgb,var(--ui-gold-deep) 66%,var(--ui-border));
+ background:linear-gradient(180deg,#09192280,var(--ui-card));
+ border-radius:7px
+}
+.ui-fold-body select:focus,.ui-fold-body input:focus{border-color:var(--ui-gold)}
+.caps{color:var(--ui-gold);letter-spacing:.18em}
+.species{gap:9px}
+.species button{
+ min-height:65px;border:1px solid var(--ui-gold-deep);
+ border-radius:8px;
+ background:
+ radial-gradient(circle at 10% 25%,color-mix(in srgb,var(--ui-ambient) 24%,transparent),transparent 65%),
+ linear-gradient(130deg,var(--ui-raised),var(--ui-card));
+ box-shadow:inset 0 1px 0 color-mix(in srgb,var(--ui-gold) 23%,transparent),0 4px 11px #0004;
+ color:var(--ui-ink);
+ font-size:12px;font-weight:650;text-align:center
+}
+.species button.active{
+ background:
+ radial-gradient(circle at 50% -30%,color-mix(in srgb,var(--ui-accent) 42%,transparent),transparent 100%),
+ linear-gradient(125deg,var(--ui-raised),var(--ui-card));
+ border-color:var(--ui-gold);color:var(--ui-gold);
+ box-shadow:inset 0 0 0 1px var(--ui-gold-deep),0 0 17px color-mix(in srgb,var(--ui-ambient) 25%,transparent)
+}
+.species button:active{transform:scale(.96)}
+#speciesNote,#fieldReport,.notice,#v4field,.v5Chapter,.v5Fact,.stat{
+ border:1px solid color-mix(in srgb,var(--ui-gold-deep) 77%,var(--ui-border-soft));
+ border-radius:8px;
+ background:
+ radial-gradient(ellipse at 0 0,color-mix(in srgb,var(--ui-gold) 9%,transparent),transparent 65%),
+ linear-gradient(120deg,var(--ui-card),var(--ui-pane));
+ box-shadow:inset 0 1px 0 #ffffff14
+}
+#speciesNote{border-left:3px solid var(--ui-gold);color:var(--ui-ink)}
+#v4editor .ctrl label{color:#efdbb4}
+#v4editor output{color:var(--ui-gold)}
+input[type=range],input[type=checkbox]{accent-color:var(--ui-gold)}
+.pill,.checks label,#v5PlateMode{border-color:var(--ui-gold-deep);background:var(--ui-accent-soft);color:var(--ui-gold);border-radius:8px}
+.stagecol{
+ padding:21px clamp(18px,2.1vw,36px) 34px;
+ background:
+ radial-gradient(ellipse 70% 52% at 50% 31%,color-mix(in srgb,var(--ui-ambient) 17%,transparent),transparent 88%),
+ radial-gradient(circle at 84% 7%,color-mix(in srgb,var(--ui-gold) 9%,transparent),transparent 45%),
+ transparent
+}
+.stage-head{border-bottom:1px solid var(--ui-gold-deep);padding-bottom:14px;margin-bottom:6px}
+.stage-head .caps{color:var(--ui-gold);font-size:11px}
+.stage-head p{
+ color:#ffecc9;
+ font-family:Georgia,'Times New Roman',serif;
+ text-shadow:0 3px 2px #0009,0 0 26px color-mix(in srgb,var(--ui-gold) 18%,transparent)
+}
+#habitatToggle,#generation{border:1px solid var(--ui-gold-deep);background:var(--ui-card);color:var(--ui-gold)}
+#v5ModeBar{
+ border:1px solid var(--ui-gold-deep);border-radius:9px;
+ background:linear-gradient(150deg,var(--ui-raised),var(--ui-pane));
+ box-shadow:inset 0 1px 0 #ffffff2d,0 6px 12px #0004;
+ padding:6px
+}
+#v5ModeBar button{font-family:Georgia,serif;font-size:15px;font-weight:600;border-radius:5px}
+#v5ModeBar button[aria-pressed=true]{background:linear-gradient(160deg,var(--ui-accent-soft),var(--ui-raised));border-color:var(--ui-gold);color:var(--ui-gold);box-shadow:inset 0 0 0 1px var(--ui-gold-deep)}
+#v4views button,#v4tools button,.stagecol>.btnrow button{
+ border:1px solid var(--ui-gold-deep);
+ border-radius:8px;
+ color:var(--ui-ink);
+ background:linear-gradient(170deg,var(--ui-raised),var(--ui-pane));
+ box-shadow:inset 0 1px 0 #ffffff20,0 4px 11px #0003
+}
+#v4views button[aria-pressed=true],#v4mode[aria-pressed=true],#habitatToggle.active{
+ background:linear-gradient(140deg,var(--ui-accent-soft),var(--ui-raised));
+ border-color:var(--ui-gold);color:var(--ui-gold)
+}
+.stagecol>.btnrow #save{
+ background:linear-gradient(150deg,#f9db9e,var(--ui-gold) 52%,#caa36b);
+ border:1px solid #ffedc9;color:#332619;
+ box-shadow:inset 0 1px 0 #fff9d6,0 6px 17px #0007,0 0 18px color-mix(in srgb,var(--ui-gold) 15%,transparent);
+ text-shadow:0 1px 0 #ffecc7
+}
+.stagecol>.btnrow #save:hover{filter:brightness(1.06);border-color:#fff4d5}
+#stage{
+ position:relative;isolation:isolate;
+ border:2px solid var(--ui-gold);
+ border-radius:14px;
+ outline:1px solid var(--ui-gold-deep);
+ outline-offset:3px;
+ background:
+ radial-gradient(ellipse at 50% 24%,color-mix(in srgb,var(--ui-ambient) 30%,#173344),transparent 76%),
+ radial-gradient(ellipse at 50% 81%,color-mix(in srgb,var(--ui-gold) 10%,transparent),transparent 75%),
+ #091d2a;
+ box-shadow:
+ inset 0 0 0 6px #0c1c25,
+ inset 0 0 0 7px color-mix(in srgb,var(--ui-gold) 45%,transparent),
+ inset 0 0 65px #0008,
+ 0 0 0 7px #080e15,
+ 0 18px 38px #0009,
+ 0 0 30px color-mix(in srgb,var(--ui-ambient) 13%,transparent);
+ overflow:hidden
+}
+#stage[data-env="forest"]{background:radial-gradient(ellipse at 50% 36%,#35513b,#142d2a 68%,#101922)}
+#stage[data-env="abyss"]{background:radial-gradient(ellipse at 50% 35%,#19375a,#101a39 75%,#080e1e)}
+#stage[data-env="coast"]{background:radial-gradient(ellipse at 50% 35%,#275b64,#123641 66%,#0b1929)}
+#stage[data-env="sky"]{background:radial-gradient(ellipse at 50% 35%,#49687d,#264156 67%,#0b1829)}
+#stage[data-env="volcanic"]{background:radial-gradient(ellipse at 50% 35%,#653f44,#35232e 67%,#15131e)}
+#stage[data-env="exoplanet"]{background:radial-gradient(ellipse at 50% 35%,#534a76,#2c2849 67%,#101321)}
+#stage::before{
+ content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:
+ repeating-radial-gradient(circle at 49% 45%,transparent 0 73px,#f5dc8c13 74px 75px,transparent 76px 148px),
+ radial-gradient(circle at 30px 28px,#ffe5ad55 1px,transparent 2px) 0 0/96px 103px,
+ linear-gradient(#ffffff08 1px,transparent 1px) 0 0/48px 48px,
+ linear-gradient(90deg,#ffffff08 1px,transparent 1px) 0 0/48px 48px;
+ opacity:.49;
+ mask-image:radial-gradient(ellipse at center,black,transparent 98%);
+}
+#stage svg#art{position:relative;z-index:2}
+#stage::after{
+ content:'✦  АТЛАС ЖИВЫХ МИРОВ  ✦';
+ font-family:Georgia,serif;letter-spacing:.19em;color:var(--ui-gold);
+ font-size:10px;bottom:17px;right:17px;
+ text-shadow:0 2px 3px #000
+}
+.atlas-corner{
+ position:absolute;z-index:4;width:99px;height:99px;opacity:.83;
+ pointer-events:none;filter:drop-shadow(0 0 5px #030b0e7a)
+}
+.atlas-corner.top-left{top:7px;left:7px}
+.atlas-corner.top-right{top:7px;right:7px;transform:scaleX(-1)}
+.atlas-corner.bottom-left{bottom:7px;left:7px;transform:scaleY(-1)}
+.atlas-corner.bottom-right{bottom:7px;right:7px;transform:scale(-1)}
+.atlas-stage-compass{
+ position:absolute;top:24px;left:50%;transform:translateX(-50%);
+ color:var(--ui-gold);z-index:4;pointer-events:none;
+ font-size:16px;opacity:.83;letter-spacing:.28em
+}
+.atlas-stage-footer{
+ position:absolute;bottom:14px;left:20px;z-index:4;
+ color:var(--ui-gold);pointer-events:none;font-family:Georgia,serif;
+ font-size:10px;letter-spacing:.1em;text-shadow:0 2px 5px #000;
+}
+#v5ArtHint{color:var(--ui-muted);font-style:italic}
+.stat .big{color:var(--ui-gold);font-weight:500}
+#v5CardTitle{color:var(--ui-gold)}
+#v5Bio .v5Fact strong{color:var(--ui-ink)}
+#v5Actions button{border-color:var(--ui-gold-deep)}
+#uiTheme:hover,#random:hover,#v5ModeBar button:hover{border-color:var(--ui-gold);filter:brightness(1.07)}
+#mobileNav{border-color:var(--ui-gold-deep)}
+@media(min-width:691px){
+ main{height:calc(100dvh - 80px)}
+}
+@media(max-width:690px){
+ body{padding-bottom:calc(79px + env(safe-area-inset-bottom))}
+ header{height:76px;padding:10px 12px}
+ header::before{inset:6px 8px}
+ .logo{gap:10px}
+ .logo h1{font-size:19px;letter-spacing:0}
+ header small{font-size:7.5px;letter-spacing:.07em}
+ .mark{width:44px;height:44px;font-size:22px}
+ #random{width:40px;min-width:40px;height:41px}
+ #uiTheme{width:38px;min-width:38px;height:41px}
+ .stagecol{padding:18px 17px 29px}
+ .stage-head{flex-wrap:wrap;gap:8px;padding-bottom:12px}
+ .stage-head p{font-size:29px}
+ .stage-head .caps{font-size:10px}
+ #stage{
+  height:clamp(410px,55dvh,595px);min-height:410px;
+  border-radius:11px;outline-offset:2px;
+  box-shadow:inset 0 0 0 4px #091f29,inset 0 0 0 5px #987b50,0 0 0 5px #08121a,0 12px 26px #0009
+ }
+ .atlas-corner{width:66px;height:66px}
+ .atlas-stage-compass{top:13px;font-size:12px}
+ .atlas-stage-footer{font-size:9px;bottom:11px;left:12px}
+ #stage::after{font-size:8px;letter-spacing:.12em;bottom:12px;right:10px}
+ #v5ModeBar button{font-size:14px}
+ .panel,.panel.right{padding:15px 13px 28px!important;border:0!important}
+ .panel:not(.right)>.section{border-radius:9px}
+ .ui-fold>summary{font-size:16px;min-height:66px}
+ .ui-fold-body{padding:10px 13px 17px}
+ .species button{min-height:60px}
+ #mobileNav{
+  height:calc(79px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,var(--ui-pane),#081721);
+  border-top:2px solid var(--ui-gold-deep);padding-top:8px
+ }
+ #mobileNav button{border-radius:8px;font-family:Georgia,serif;font-size:12px;letter-spacing:.02em}
+ #mobileNav button[aria-selected=true]{
+  background:linear-gradient(150deg,#f6d89d,var(--ui-gold));
+  border-color:#f7e3b6;color:#2a2317;
+  box-shadow:0 0 15px color-mix(in srgb,var(--ui-gold) 21%,transparent),inset 0 1px 0 #ffffff65
+ }
+ body[data-atelier-theme="violet"] #mobileNav button[aria-selected=true]{color:#302038}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{transition:none!important;animation:none!important}
+}
+
 </style></head>
 <body>
-<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>БИОЛОГИЧЕСКАЯ ЛАБОРАТОРИЯ · v0.5.3</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
+<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>ИЛЛЮСТРИРОВАННЫЙ БЕСТИАРИЙ · v0.5.4</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
 <nav id="mobileNav" aria-label="Разделы конструктора"><button type="button" data-tab="preview" aria-selected="true">Существо</button><button type="button" data-tab="editor" aria-selected="false">Настройки</button><button type="button" data-tab="dossier" aria-selected="false">Досье</button></nav>
 <main>
 <aside class="panel">
@@ -1584,9 +1904,10 @@ document.getElementById('evolve').onclick=()=>{oldEvolve();try{localStorage.setI
  themeButton.type='button';themeButton.id='uiTheme';themeButton.title='Изменить цветовую тему';themeButton.setAttribute('aria-label','Изменить цветовую тему');
  const themeKey='atlas_ui_theme_v053';
  let theme='ocean';
- try{theme=localStorage.getItem(themeKey)==='violet'?'violet':'ocean'}catch(e){}
- function applyTheme(){document.body.setAttribute('data-atelier-theme',theme);themeButton.textContent=theme==='violet'?'◐':'◑';themeButton.title=theme==='violet'?'Переключить на морскую тему':'Переключить на аметистовую тему';}
- themeButton.addEventListener('click',()=>{theme=theme==='ocean'?'violet':'ocean';try{localStorage.setItem(themeKey,theme)}catch(e){}applyTheme()});
+ try{const saved=localStorage.getItem(themeKey);theme=['ocean','violet','forest'].includes(saved)?saved:'ocean'}catch(e){}
+ const themeNames={ocean:'Морская сокровищница',violet:'Аметистовая магия',forest:'Лесной фолиант'};
+ function applyTheme(){document.body.setAttribute('data-atelier-theme',theme);themeButton.textContent={ocean:'◈',violet:'✧',forest:'❧'}[theme];themeButton.title='Тема: '+themeNames[theme]+' — переключить';themeButton.setAttribute('aria-label',themeButton.title)}
+ themeButton.addEventListener('click',()=>{const themes=['ocean','violet','forest'];theme=themes[(themes.indexOf(theme)+1)%themes.length];try{localStorage.setItem(themeKey,theme)}catch(e){}applyTheme()});
  if(head){head.appendChild(themeButton);applyTheme()}
  // Organize the existing live form in unobtrusive, accessible collapsible groups.
  const titles=['Вид и происхождение','Окраска и размеры','Основная анатомия','Тонкие детали','Особые органы'];
@@ -1613,4 +1934,35 @@ document.getElementById('evolve').onclick=()=>{oldEvolve();try{localStorage.setI
  if(random)random.setAttribute('aria-label','Создать случайный вид');
 })();
 
+</script><script>
+(function(){
+'use strict';
+const st=document.getElementById('stage');
+if(st&&!st.querySelector('.atlas-corner')){
+ const art=st.querySelector('svg#art');
+ const svg='<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
+ '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+
+ '<path d="M4 94V17Q4 4 17 4H94"/>'+
+ '<path d="M12 72V22Q12 12 22 12H73"/>'+
+ '<path d="M4 50Q23 47 32 31Q45 11 63 19Q56 30 42 30Q33 47 19 57"/>'+
+ '<path d="M18 88Q17 59 34 53Q47 46 56 62Q41 68 29 63Q24 76 18 88"/>'+
+ '<path d="M21 27C23 17 37 13 46 19C41 27 32 31 21 27Z"/>'+
+ '<path d="M30 57C40 51 48 56 51 65C39 68 31 66 30 57Z"/>'+
+ '<path d="M12 44C14 35 23 31 30 34C27 44 20 50 12 44Z"/>'+
+ '<path d="M57 12Q69 5 81 12Q69 19 57 12Z"/>'+
+ '<path d="M8 8h4M8 8v4M73 5l3 3-3 3-3-3Z"/>'+
+ '</g><circle cx="31" cy="32" r="2" fill="currentColor"/><circle cx="19" cy="70" r="2" fill="currentColor"/></svg>';
+ for(const type of ['top-left','top-right','bottom-left','bottom-right']){
+  const el=document.createElement('div');
+  el.className='atlas-corner '+type;
+  el.setAttribute('aria-hidden','true');
+  el.style.color='var(--ui-gold)';
+  el.innerHTML=svg;
+  st.appendChild(el);
+ }
+ const compass=document.createElement('div');
+ compass.className='atlas-stage-compass';compass.textContent='✦  ✧  ✦';compass.setAttribute('aria-hidden','true');st.append(compass);
+ const note=document.createElement('div');note.className='atlas-stage-footer';note.textContent='SPECIMEN • COD. Ⅴ';note.setAttribute('aria-hidden','true');st.append(note);
+}
+})();
 </script></body></html>
