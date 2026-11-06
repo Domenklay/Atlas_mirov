@@ -23,14 +23,54 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 #toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);padding:13px 20px;background:#a9eddd;color:#10222b;border-radius:10px;font-weight:700;display:none;z-index:40}
 @media(max-width:1120px){main{grid-template-columns:minmax(220px,300px) minmax(350px,1fr)}.panel.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}}
 @media(max-width:690px){header{padding:13px}h1{font-size:19px}main{display:flex;flex-direction:column}.panel{order:2;border:0;border-top:1px solid var(--line)}.stagecol{order:1;padding:13px}.stage{min-height:410px}.stage-head p{font-size:23px}.panel.right{order:3}header small{font-size:8px}}
+
+/* v0.2: extended anatomical editor and phone navigation */
+#mobileNav{display:none}
+#morphControls{display:grid;grid-template-columns:1fr 1fr;gap:7px 10px}
+#morphControls>div{min-width:0}
+#morphControls label{margin-top:2px}
+#morphControls select{width:100%;font-size:12px;padding:10px 6px}
+#accent{width:100%;height:38px;cursor:pointer;border:1px solid #39566a;background:transparent;border-radius:9px}
+#adaptationHints{margin:12px 0 0;padding:0;list-style:none}
+#adaptationHints li{margin-top:8px;background:#27413c55;border-left:2px solid #6fae9d;border-radius:4px;padding:7px 9px;font-size:12px;color:#c5d8d2}
+#adaptationHints li.warn{background:#59472b3d;border-color:#cba16a;color:#e1caaa}
+#stageBadge{display:inline-block;font-size:11px;color:#98decf;border:1px solid #4d847b;padding:3px 8px;border-radius:100px}
+@media(max-width:690px){
+ #mobileNav{display:flex;position:sticky;top:0;z-index:25;gap:6px;padding:8px 11px;background:#0d1e2aeF;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+ #mobileNav button{flex:1;padding:11px 6px;border-radius:8px;font-weight:600;font-size:13px}
+ #mobileNav button[aria-selected=true]{background:#75d8bf;color:#102a2a;border-color:#75d8bf}
+ body[data-tab=preview] .panel,body[data-tab=editor] .stagecol,body[data-tab=editor] .panel.right,body[data-tab=dossier] .stagecol,body[data-tab=dossier] .panel:not(.right){display:none}
+ body[data-tab=preview] .stagecol,body[data-tab=editor] .panel:not(.right),body[data-tab=dossier] .panel.right{display:flex}
+ body[data-tab=editor] .panel:not(.right),body[data-tab=dossier] .panel.right{flex-direction:column;padding:20px 16px}
+ body[data-tab=preview] .stage{min-height:480px}
+ body[data-tab=preview] .stagecol{min-height:calc(100vh - 200px)}
+ .stage-head{flex-wrap:wrap}
+}
 </style></head>
 <body>
-<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
+<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии · v0.2</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
+<nav id="mobileNav" aria-label="Разделы конструктора"><button type="button" data-tab="preview" aria-selected="true">Существо</button><button type="button" data-tab="editor" aria-selected="false">Настройки</button><button type="button" data-tab="dossier" aria-selected="false">Досье</button></nav>
 <main>
 <aside class="panel">
 <section class="section"><div class="caps">01 · происхождение</div><h2>Создание вида</h2><div class="species" id="species"></div><label for="name">Название вида</label><input id="name" maxlength="48" autocomplete="off"><label for="env">Среда обитания</label><select id="env"></select><label for="ability">Основная способность</label><select id="ability"></select></section>
 <section class="section"><div class="caps">02 · морфология</div><h3>Строение тела</h3><label>Основной цвет</label><div class="row"><input id="color" type="color" value="#65aebe" aria-label="Цвет тела"><select id="eyes"><option value="standard">Обычные глаза</option><option value="large">Крупные глаза</option><option value="slit">Вертикальный зрачок</option><option value="blank">Светящиеся глаза</option></select></div><label for="size">Рост — <output id="sizeOut"></output></label><input id="size" type="range" min="60" max="190" step="5"><label for="build">Мускулатура — <output id="buildOut"></output></label><input id="build" type="range" min="0" max="100" step="5"><label for="armor">Защита кожи — <output id="armorOut"></output></label><input id="armor" type="range" min="0" max="100" step="5"><label for="glow">Биолюминесценция — <output id="glowOut"></output></label><input id="glow" type="range" min="0" max="100" step="5"></section>
-<section class="section"><div class="caps">03 · адаптации</div><h3>Дополнительные органы</h3><div class="checks" id="features"></div></section>
+
+<section class="section" id="morphSection">
+<div class="caps">03 · анатомический редактор</div>
+<h3>Форма и строение</h3>
+<p class="muted" style="margin-top:-5px;font-size:12px">Все изменения сразу отображаются на существе. Несовместимые органы возможны, но влияют на выживаемость.</p>
+<div id="morphControls">
+ <div><label for="mHead">Форма головы</label><select id="mHead"></select></div>
+ <div><label for="mEyes">Количество глаз</label><select id="mEyes"></select></div>
+ <div><label for="mSkin">Кожный покров</label><select id="mSkin"></select></div>
+ <div><label for="mTail">Хвост</label><select id="mTail"></select></div>
+ <div><label for="mWings">Крылья</label><select id="mWings"></select></div>
+ <div><label for="mArms">Руки</label><select id="mArms"></select></div>
+ <div><label for="mLegs">Ноги</label><select id="mLegs"></select></div>
+ <div><label for="mAccent">Дополнительный цвет</label><input type="color" id="mAccent" value="#e4caa4" aria-label="Дополнительный цвет"></div>
+</div>
+</section>
+<section class="section"><div class="caps">04 · адаптации</div><h3>Дополнительные органы</h3><div class="checks" id="features"></div></section>
 </aside>
 <section class="stagecol">
 <div class="stage-head"><div><div class="caps">Визуальный анализ</div><p id="stageName"></p></div><span class="pill" id="generation"></span></div>
@@ -125,4 +165,234 @@ function downloadText(content,name,mime){const url=URL.createObjectURL(new Blob(
 function exportPNG(){const b=new Blob([svgSource()],{type:'image/svg+xml'}),url=URL.createObjectURL(b),img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=1240;c.height=1560;c.getContext('2d').drawImage(img,0,0,1240,1560);URL.revokeObjectURL(url);c.toBlob(out=>{if(!out)return message('Ошибка изображения');const u=URL.createObjectURL(out);downloadUrl(u,fileName()+'.png');setTimeout(()=>URL.revokeObjectURL(u),6000);message('PNG подготовлен')},'image/png')};img.onerror=()=>{URL.revokeObjectURL(url);message('Экспорт PNG недоступен, используйте SVG')};img.src=url}
 function importJson(e){const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result),list=Array.isArray(x)?x:x.catalog;if(!Array.isArray(list))throw Error('Некорректный каталог');catalog=list.filter(valid).slice(0,100).map(clean);if(valid(x.selected))s=clean(x.selected);persist();render();message('Импортировано: '+catalog.length)}catch(err){message('Ошибка: '+err.message)}$('import').value=''};r.readAsText(f)}
 setup();
+</script><script>
+(function(){
+'use strict';
+const MORPH_OPTIONS={
+ head:[['oval','Овальная'],['wide','Широкая'],['long','Вытянутая'],['beak','Клюв'],['spike','Гребень']],
+ eyeCount:[['1','Один'],['2','Два'],['4','Четыре']],
+ skin:[['smooth','Гладкая'],['scales','Чешуя'],['spots','Пятнистая'],['stripes','Полосатая'],['bark','Древесная']],
+ tail:[['none','Без хвоста'],['fish','Рыбий'],['reptile','Рептилий'],['feather','Перьевой']],
+ wings:[['none','Без крыльев'],['membrane','Перепончатые'],['insect','Насекомые'],['feather','Перьевые']],
+ arms:[['0','Нет'],['2','Две'],['4','Четыре']],
+ legs:[['0','Нет'],['2','Две'],['4','Четыре']]
+};
+const MORPH_BINDINGS={
+ mHead:'head',mEyes:'eyeCount',mSkin:'skin',mTail:'tail',mWings:'wings',
+ mArms:'arms',mLegs:'legs',mAccent:'accent'
+};
+const MORPH_PRESET={
+ mermaid:{head:'oval',eyeCount:2,skin:'scales',tail:'fish',wings:'none',arms:2,legs:0,accent:'#c9f5e9'},
+ fairy:{head:'oval',eyeCount:2,skin:'smooth',tail:'none',wings:'insect',arms:2,legs:2,accent:'#fad5e6'},
+ alien:{head:'wide',eyeCount:4,skin:'spots',tail:'none',wings:'none',arms:2,legs:2,accent:'#d2eb9b'},
+ dragon:{head:'spike',eyeCount:2,skin:'scales',tail:'reptile',wings:'membrane',arms:2,legs:2,accent:'#eab982'},
+ spirit:{head:'long',eyeCount:2,skin:'bark',tail:'feather',wings:'none',arms:2,legs:2,accent:'#c4e6a4'}
+};
+const baseClean=clean,baseRender=render,baseFitness=fitness;
+function morphDefaults(k){return {...MORPH_PRESET[k||'mermaid']}}
+function supplement(v){
+ const defaults=morphDefaults(v.k);
+ for(const k of Object.keys(defaults)){
+  if(v[k]===undefined||v[k]===null||v[k]==='')v[k]=defaults[k]
+ }
+ return v
+}
+clean=function(o){
+ const c=supplement(baseClean(o));
+ for(const k of ['head','skin','tail','wings']){
+  if(MORPH_OPTIONS[k].every(entry=>entry[0]!==String(o[k])))c[k]=MORPH_PRESET[c.k][k];
+  else c[k]=o[k]
+ }
+ for(const k of ['eyeCount','arms','legs']){
+  const val=Number(o[k]);
+  c[k]=MORPH_OPTIONS[k].some(entry=>Number(entry[0])===val)?val:MORPH_PRESET[c.k][k]
+ }
+ c.accent=/^#[a-fA-F0-9]{6}$/.test(o.accent)?o.accent:MORPH_PRESET[c.k].accent;
+ return c
+};
+fitness=function(){
+ let n=baseFitness();
+ if(s.env==='abyss'&&s.skin==='bark')n-=12;
+ if(s.env==='sky'&&s.wings==='none')n-=15;
+ if(s.env==='sky'&&s.wings!=='none'&&s.build>80)n-=15;
+ if(s.env==='volcanic'&&s.skin==='smooth'&&s.armor<55)n-=12;
+ if(s.env==='forest'&&s.skin==='bark')n+=12;
+ if(s.env==='coast'||s.env==='abyss'){
+  if(s.tail==='fish')n+=10;
+  if(s.legs===4)n-=7;
+ }else if(s.tail==='fish')n-=12;
+ if(s.arms===4&&s.env==='abyss')n-=5;
+ if(s.legs===0&&s.tail==='none'&&s.wings==='none')n-=18;
+ return clamp(n,5,100)
+};
+function fmt(v){return Number(v).toFixed(2)}
+function newArt(v){
+ supplement(v);
+ const c=safeColor(v.color),a=safeColor(v.accent),z=0.82+(v.size-60)*0.0028;
+ let p=[];
+ const push=t=>p.push(t);
+ push('<defs>');
+ push('<radialGradient id="body" cx="38%" cy="28%" r="83%"><stop stop-color="#eafff5" stop-opacity=".62"/><stop offset=".22" stop-color="'+c+'"/><stop offset=".74" stop-color="'+c+'"/><stop offset="1" stop-color="#08242f"/></radialGradient>');
+ push('<linearGradient id="shimmer" x1="0" x2="1" y1="0" y2="1"><stop stop-color="'+a+'" stop-opacity=".98"/><stop offset=".47" stop-color="'+c+'"/><stop offset="1" stop-color="'+a+'" stop-opacity=".47"/></linearGradient>');
+ push('<linearGradient id="veil" x1="0" x2="1" y1="0" y2="1"><stop stop-color="'+a+'" stop-opacity=".72"/><stop offset="1" stop-color="'+c+'" stop-opacity=".16"/></linearGradient>');
+ push('<radialGradient id="aura"><stop stop-color="'+a+'" stop-opacity=".37"/><stop offset="1" stop-color="'+a+'" stop-opacity="0"/></radialGradient>');
+ push('<clipPath id="skinClip"><path d="M263 262Q310 251 357 262Q382 310 365 374Q346 421 362 457Q310 474 258 457Q275 418 255 377Q239 314 263 262Z"/></clipPath>');
+ push('</defs>');
+ push('<circle cx="310" cy="382" r="275" fill="none" stroke="'+a+'" stroke-opacity=".12" stroke-dasharray="2 12" stroke-width="2"/>');
+ push('<circle cx="310" cy="382" r="213" fill="none" stroke="'+a+'" stroke-opacity=".08"/>');
+ for(let i=0;i<20;i++){const x=70+(i*149)%490,y=125+(i*83)%565,rad=1+(i%3);push('<circle cx="'+x+'" cy="'+y+'" r="'+rad+'" fill="'+a+'" opacity=".2"/>')}
+ if(v.glow>0)push('<ellipse cx="310" cy="375" rx="250" ry="315" fill="url(#aura)" opacity="'+fmt(v.glow/100)+'"/>');
+ push('<g transform="translate(310 380) scale('+fmt(z)+') translate(-310 -380)">');
+ // Wings are behind the torso and can be independent of the base species.
+ if(v.wings!=='none'){
+   const wingFill=v.wings==='feather'?'url(#shimmer)':'url(#veil)';
+   if(v.wings==='insect'){
+    push('<path d="M275 293C194 120 109 110 102 190C101 282 200 320 262 356C155 336 97 384 142 461C182 507 265 429 290 358Z" fill="'+wingFill+'" stroke="'+a+'" stroke-width="4"/>');
+    push('<path d="M345 293C426 120 511 110 518 190C519 282 420 320 358 356C465 336 523 384 478 461C438 507 355 429 330 358Z" fill="'+wingFill+'" stroke="'+a+'" stroke-width="4"/>');
+    push('<path d="M281 316L124 180M279 351L154 441M339 316L496 180M341 351L466 441" stroke="#d8fff7" stroke-width="2" stroke-opacity=".5"/>');
+   }else if(v.wings==='membrane'){
+    push('<path d="M265 295L226 180L144 111L158 236L70 263L194 317L135 409L271 367Z" fill="'+wingFill+'" stroke="'+a+'" stroke-width="4"/>');
+    push('<path d="M355 295L394 180L476 111L462 236L550 263L426 317L485 409L349 367Z" fill="'+wingFill+'" stroke="'+a+'" stroke-width="4"/>');
+    push('<path d="M265 319L144 111M263 344L70 263M355 319L476 111M357 344L550 263" stroke="#dffff5" stroke-opacity=".3" stroke-width="3"/>');
+   }else{
+    for(let j=0;j<8;j++){
+     let y=200+j*26,xx=255-j*8;
+     push('<path d="M'+xx+' '+(260+j*10)+'Q'+(xx-150)+' '+(y-95)+' '+(110+j*10)+' '+(y-30)+'Q'+(155+j*4)+' '+(y+70)+' 267 372Z" fill="'+(j%2?'url(#shimmer)':'url(#veil)')+'" stroke="'+a+'" stroke-opacity=".7"/>');
+     push('<path d="M'+(620-xx)+' '+(260+j*10)+'Q'+(620-(xx-150))+' '+(y-95)+' '+(620-(110+j*10))+' '+(y-30)+'Q'+(620-(155+j*4))+' '+(y+70)+' 353 372Z" fill="'+(j%2?'url(#shimmer)':'url(#veil)')+'" stroke="'+a+'" stroke-opacity=".7"/>')
+    }
+   }
+ }
+ // Lower anatomy: organic tail or legs.
+ if(v.tail==='fish'){
+  push('<path d="M277 445Q250 526 291 610L311 673L344 607Q369 528 341 444Z" fill="url(#body)" stroke="#153745" stroke-width="7"/>');
+  push('<path d="M312 648Q262 690 171 712Q242 767 310 711Q377 767 449 711Q350 686 312 648Z" fill="url(#shimmer)" stroke="'+a+'" stroke-width="5"/>');
+  push('<path d="M311 671L303 732M311 671L229 724M312 671L397 726" stroke="#defff4" stroke-opacity=".5" stroke-width="3"/>');
+ }else{
+  if(v.tail==='reptile')push('<path d="M327 454Q448 498 448 586Q455 649 504 660Q445 697 419 635Q411 551 312 494Z" fill="url(#shimmer)" stroke="#153745" stroke-width="5"/>');
+  if(v.tail==='feather')for(let i=0;i<5;i++)push('<path d="M318 460Q'+(425+i*11)+' 490 '+(390+i*12)+' '+(625+i*14)+'Q'+(350+i*7)+' '+(530+i*7)+' 310 488Z" fill="url(#veil)" stroke="'+a+'" stroke-width="2"/>');
+  if(v.legs===2){
+   push('<path d="M266 450Q253 521 252 641Q268 665 284 647L311 515Q334 570 342 644Q360 665 373 640Q371 535 351 449Z" fill="url(#body)" stroke="#183644" stroke-width="6"/>');
+   push('<path d="M249 633Q234 661 232 670Q253 682 282 666L285 632M339 633L337 666Q367 682 389 670Q385 658 372 632" fill="url(#shimmer)" stroke="#183644" stroke-width="4"/>');
+  }else if(v.legs===4){
+   for(const x of [255,283,338,365])push('<path d="M'+x+' 450Q'+(x-14)+' 515 '+(x-18)+' 635Q'+x+' 656 '+(x+13)+' 633L'+(x+15)+' 490Z" fill="url(#body)" stroke="#153745" stroke-width="5"/>');
+  }else push('<path d="M268 454Q310 508 352 454Z" fill="url(#shimmer)" stroke="#153745" stroke-width="4"/>');
+ }
+ // Up to four arms.
+ for(let i=0;i<v.arms/2;i++){
+  const yy=279+i*68;
+  const startL=258-i*9,startR=362+i*9;
+  push('<path d="M'+startL+' '+yy+'Q'+(207-i*19)+' '+(yy+38)+' '+(183-i*15)+' '+(yy+126)+'Q'+(190-i*15)+' '+(yy+145)+' '+(207-i*14)+' '+(yy+131)+'L'+(260-i*8)+' '+(yy+45)+'Z" fill="url(#body)" stroke="#153745" stroke-width="5"/>');
+  push('<path d="M'+startR+' '+yy+'Q'+(413+i*19)+' '+(yy+38)+' '+(437+i*15)+' '+(yy+126)+'Q'+(430+i*15)+' '+(yy+145)+' '+(413+i*14)+' '+(yy+131)+'L'+(360+i*8)+' '+(yy+45)+'Z" fill="url(#body)" stroke="#153745" stroke-width="5"/>')
+ }
+ // Torso and texture.
+ push('<path d="M263 262Q310 251 357 262Q382 310 365 374Q346 421 362 457Q310 474 258 457Q275 418 255 377Q239 314 263 262Z" fill="url(#body)" stroke="#153745" stroke-width="6"/>');
+ if(v.skin!=='smooth'){
+  push('<g clip-path="url(#skinClip)">');
+  for(let row=0;row<9;row++)for(let col=0;col<5;col++){
+   let x=256+col*24+(row%2)*12,y=281+row*21;
+   if(v.skin==='scales')push('<path d="M'+x+' '+y+'q11 16 22 0" stroke="'+a+'" fill="none" stroke-opacity=".66" stroke-width="2.5"/>');
+   if(v.skin==='spots'&&(row+col)%2===0)push('<ellipse cx="'+x+'" cy="'+y+'" rx="'+(4+col%3)+'" ry="'+(5+row%3)+'" fill="'+a+'" opacity=".57"/>');
+   if(v.skin==='stripes'&&col%2===0)push('<path d="M'+x+' '+y+'q-10 20 3 32" stroke="'+a+'" stroke-width="7" stroke-linecap="round" opacity=".44" fill="none"/>');
+   if(v.skin==='bark'&&col%2===0)push('<path d="M'+x+' '+y+'q10 22 0 39m-6-22-7-9" stroke="'+a+'" stroke-width="3" stroke-linecap="round" opacity=".52" fill="none"/>')
+  }
+  push('</g>')
+ }
+ if(v.features.includes('fins'))push('<path d="M258 328Q211 319 185 277Q194 353 259 374M362 328Q410 314 434 276Q424 355 362 374" fill="url(#veil)" stroke="'+a+'" stroke-width="3"/>');
+ // Neck and species-specific head shape.
+ push('<path d="M295 267L295 220L325 220L325 266Z" fill="url(#body)" stroke="#173441" stroke-width="5"/>');
+ const heads={
+  oval:'M310 97C258 94 253 142 269 194Q284 224 310 228Q336 224 351 194C367 142 361 94 310 97Z',
+  wide:'M310 99Q251 85 242 144Q239 191 280 220Q310 235 340 220Q381 191 378 144Q369 85 310 99Z',
+  long:'M310 72Q275 81 265 130Q259 179 283 229Q310 255 337 229Q361 179 355 130Q345 81 310 72Z',
+  beak:'M310 96Q266 96 265 154Q258 195 298 224L310 254L322 224Q362 195 355 154Q354 96 310 96Z',
+  spike:'M309 88L270 125L245 174L267 188L276 214Q310 235 344 214L353 188L375 174L348 125Z'
+ };
+ push('<path d="'+heads[v.head]+'" fill="url(#body)" stroke="#11313c" stroke-width="6" stroke-linejoin="round"/>');
+ if(v.head==='beak')push('<path d="M306 186Q338 199 313 248L306 257L300 219Z" fill="url(#shimmer)" stroke="#163742" stroke-width="3"/>');
+ if(v.head==='spike')push('<path d="M286 110L273 55L305 93L320 52L331 101L360 57L341 130" fill="url(#shimmer)" stroke="#173a45" stroke-width="4"/>');
+ if(v.features.includes('horns'))push('<path d="M279 125Q233 88 234 41Q268 47 293 104M341 105Q368 49 385 41Q389 91 342 125" fill="url(#shimmer)" stroke="'+a+'" stroke-width="5"/>');
+ if(v.features.includes('gills'))push('<path d="M264 173l-18 12m19-2-18 13m20-2-18 13M356 173l18 12m-19-2 18 13m-20-2 18 13" fill="none" stroke="'+a+'" stroke-width="4" stroke-linecap="round"/>');
+ const xs=v.eyeCount===1?[310]:v.eyeCount===4?[278,299,321,342]:[290,330];
+ for(let i=0;i<xs.length;i++){
+  let x=xs[i],y=156+(v.eyeCount===4?(i%2)*16:0),rx=v.eyeCount===4?8:(v.eyes==='large'?16:11),ry=v.eyes==='slit'?17:rx;
+  push('<ellipse cx="'+x+'" cy="'+y+'" rx="'+rx+'" ry="'+ry+'" fill="'+(v.eyes==='blank'?a:'#e4fff1')+'" stroke="#102d39" stroke-width="2"/>');
+  if(v.eyes!=='blank')push('<ellipse cx="'+x+'" cy="'+y+'" rx="'+(v.eyes==='slit'?2.5:4.5)+'" ry="'+(v.eyes==='slit'?13:5.5)+'" fill="#102b38"/>')
+ }
+ push('<path d="M294 202Q310 215 326 202" stroke="#1e3f42" stroke-width="3" stroke-linecap="round" fill="none"/>');
+ if(v.features.includes('glow')||v.glow>65)for(let i=0;i<26;i++){
+  const x=274+(i*17)%80,y=287+(i*29)%156;
+  push('<circle cx="'+x+'" cy="'+y+'" r="'+(2+i%4)+'" fill="'+a+'" opacity="'+fmt(.1+.9*v.glow/100)+'"/>')
+ }
+ push('</g>');return p.join('')
+}
+creature=newArt;
+function hints(){
+ let list=[];
+ if((s.env==='coast'||s.env==='abyss')&&!s.features.includes('gills'))list.push(['В воде нет жабр: дыхание ограничивает погружения.',true]);
+ if(s.env==='sky'&&s.wings==='none')list.push(['Для устойчивого полёта необходимо подобрать крылья.',true]);
+ if(s.env==='sky'&&s.build>80)list.push(['Высокая масса тела усложняет полёт.',true]);
+ if(s.env==='volcanic'&&s.skin==='smooth'&&s.armor<55)list.push(['Тонкий гладкий покров плохо защищает от жара.',true]);
+ if(s.tail==='fish'&&s.env!=='coast'&&s.env!=='abyss')list.push(['Рыбий хвост плохо подходит для сухопутного передвижения.',true]);
+ if(s.legs===0&&s.tail==='none'&&s.wings==='none')list.push(['Не выбран орган движения: вид почти неподвижен.',true]);
+ if(s.env==='abyss'&&s.glow>=50)list.push(['Биолюминесценция помогает в глубине.',false]);
+ if(s.env==='forest'&&s.skin==='bark')list.push(['Древесный покров обеспечивает природную маскировку.',false]);
+ if(!list.length)list.push(['Морфология соответствует выбранной среде в рамках игровой модели.',false]);
+ return list
+}
+const section=document.createElement('div');
+section.id='adaptationInfo';
+section.innerHTML='<div class="caps">Экологический отчёт</div><ul id="adaptationHints"></ul>';
+$('description').parentNode.append(section);
+for(const [id,key] of Object.entries(MORPH_BINDINGS)){
+ const input=$(id);
+ if(key==='accent'){
+  input.addEventListener('input',()=>{s.accent=input.value;render(false)});
+  continue
+ }
+ input.innerHTML=MORPH_OPTIONS[key].map(([value,label])=>'<option value="'+value+'">'+label+'</option>').join('');
+ input.addEventListener('change',()=>{s[key]=['eyeCount','arms','legs'].includes(key)?Number(input.value):input.value;render(false)})
+}
+render=function(sync=true){
+ supplement(s);
+ baseRender(sync);
+ for(const [id,key] of Object.entries(MORPH_BINDINGS))$(id).value=String(s[key]);
+ const root=$('adaptationHints');
+ root.replaceChildren();
+ for(const [hint,warn] of hints()){
+  const li=document.createElement('li');li.className=warn?'warn':'';li.textContent=hint;root.append(li)
+ }
+ try{localStorage.setItem('atlas_draft_v02',JSON.stringify(s))}catch(e){}
+};
+const morphAgain=()=>{
+ s=supplement(s);
+ render()
+};
+$('species').querySelectorAll('button').forEach(b=>b.addEventListener('click',morphAgain));
+$('random').addEventListener('click',morphAgain);
+$('reset').addEventListener('click',morphAgain);
+const evolveBefore=$('evolve').onclick;
+$('evolve').onclick=()=>{
+ evolveBefore();
+ const entries=['head','skin','tail','wings','eyeCount'];
+ const key=entries[Math.floor(Math.random()*entries.length)];
+ const options=MORPH_OPTIONS[key].map(x=>key==='eyeCount'?Number(x[0]):x[0]);
+ let idx=options.indexOf(s[key]);
+ s[key]=options[(idx+1+Math.floor(Math.random()*(options.length-1)))%options.length];
+ render();
+ message('Поколение '+s.generation+': изменился признак «'+({head:'форма головы',skin:'кожный покров',tail:'хвост',wings:'крылья',eyeCount:'количество глаз'}[key])+'»')
+};
+$('json').onclick=()=>downloadText(JSON.stringify({version:2,catalog,selected:s},null,2),'atlas_catalog.json','application/json');
+$('stageName').title='Интерактивная визуализация вида';
+document.body.dataset.tab='preview';
+$('mobileNav').querySelectorAll('button').forEach(btn=>btn.onclick=()=>{
+ document.body.dataset.tab=btn.dataset.tab;
+ $('mobileNav').querySelectorAll('button').forEach(b=>b.setAttribute('aria-selected',String(b===btn)));
+ window.scrollTo({top:0,behavior:'instant'})
+});
+try{
+ const draft=JSON.parse(localStorage.getItem('atlas_draft_v02')||'null');
+ if(valid(draft))s=clean(draft);else s=supplement(s);
+}catch(e){s=supplement(s)}
+render();
+})();
 </script></body></html>
