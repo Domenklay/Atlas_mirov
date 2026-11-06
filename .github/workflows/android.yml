@@ -38,7 +38,18 @@ jobs:
       - name: Bundle offline application
         run: |
           mkdir -p android/app/src/main/assets
-          cp web/index.html android/app/src/main/assets/index.html
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64
+          html = Path("web/index.html").read_text(encoding="utf-8")
+          icon = Path("android/app/src/main/res/drawable-nodpi/ic_launcher_art.webp").read_bytes()
+          data_uri = "data:image/webp;base64," + base64.b64encode(icon).decode("ascii")
+          old_logo = '<span class="mark">✧</span>'
+          new_logo = '<span class="mark"><img alt="" src="' + data_uri + '" style="height:100%;width:100%;object-fit:cover;border-radius:50%;display:block"></span>'
+          if old_logo not in html:
+              raise SystemExit("Missing logo placeholder in HTML")
+          Path("android/app/src/main/assets/index.html").write_text(html.replace(old_logo,new_logo,1),encoding="utf-8")
+          PY
 
       - name: Build APK
         working-directory: android
