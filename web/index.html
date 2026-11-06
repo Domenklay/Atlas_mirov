@@ -112,9 +112,170 @@ footer{font-size:11px;color:#879fab;text-align:center;padding:7px}
 .stage svg{filter:drop-shadow(0 18px 13px #05131a99)}
 #art{overflow:visible}
 .v52-note{font-size:11px;color:#a0c9c4;letter-spacing:.01em}
+
+/* ═══ Atlas Atelier · UI v0.5.3 (pure CSS, no external assets) ═══ */
+:root{
+ --ui-page:#07141e;--ui-pane:#0c1c27;--ui-card:#142934;--ui-raised:#1c3541;
+ --ui-border:#294653;--ui-border-soft:#213b47;--ui-ink:#edf6f3;--ui-muted:#92b1b7;
+ --ui-accent:#92e2ce;--ui-accent-soft:#173e3c;--ui-gold:#ceb58c;--ui-shadow:0 14px 35px #00000030;
+ --bg:var(--ui-page);--text:var(--ui-ink);--muted:var(--ui-muted);--accent:var(--ui-accent)
+}
+body[data-atelier-theme="violet"]{
+ --ui-page:#120e22;--ui-pane:#1a172c;--ui-card:#28223a;--ui-raised:#352c4a;
+ --ui-border:#4b4062;--ui-border-soft:#382f4d;--ui-ink:#f5effb;--ui-muted:#b8aacd;
+ --ui-accent:#cbb4f8;--ui-accent-soft:#403156;--ui-gold:#e1c4a3;
+}
+*{scrollbar-width:thin;scrollbar-color:var(--ui-border) transparent}
+html{background:var(--ui-page)}
+body{background:var(--ui-page);color:var(--ui-ink);font-size:13px;line-height:1.5;letter-spacing:.005em}
+button,select,input,textarea{font-family:inherit}
+button{transition:background .16s ease,border-color .16s ease,transform .16s ease;color:var(--ui-ink);background:var(--ui-card);border:1px solid var(--ui-border);border-radius:11px}
+button:hover{background:var(--ui-raised);border-color:var(--ui-accent)}
+button:active{transform:scale(.988)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--ui-accent);outline-offset:2px}
+button.primary{background:var(--ui-accent);border-color:var(--ui-accent);color:#092329;box-shadow:0 6px 18px #0002}
+button.primary:hover{background:#b6f3e3;border-color:#b6f3e3}
+body[data-atelier-theme="violet"] button.primary:hover{background:#e0d4ff;border-color:#e0d4ff}
+header{height:80px;position:relative;z-index:31;padding:13px 25px;background:var(--ui-pane);border-bottom:1px solid var(--ui-border-soft);box-shadow:0 2px 22px #0002}
+.logo{gap:12px}.mark{font-family:Georgia,serif;color:var(--ui-accent);border:1px solid var(--ui-border);border-radius:14px;font-size:26px;width:50px;height:50px;background:linear-gradient(145deg,var(--ui-card),var(--ui-pane))}
+.logo h1{font-size:25px;line-height:1.05;letter-spacing:.015em;font-weight:500}
+header small{display:block;margin-top:5px;color:var(--ui-muted);font-weight:700;letter-spacing:.16em;font-size:9px}
+#random{margin-left:auto;padding:10px 16px;min-width:130px;background:var(--ui-card);border:1px solid var(--ui-border)}
+#random:before{content:'✦';color:var(--ui-accent);font-size:15px;margin-right:7px}
+#uiTheme{min-width:44px;width:44px;height:42px;padding:6px;display:grid;place-items:center;margin-left:6px;flex:none;font-size:18px;color:var(--ui-accent)}
+main{max-width:none;margin:0;min-height:0;height:calc(100dvh - 80px);overflow:hidden;grid-template-columns:minmax(265px,310px) minmax(440px,1fr) minmax(270px,320px);background:var(--ui-page)}
+.panel,.panel.right{background:var(--ui-pane);padding:20px 18px;border:0;min-width:0;overflow-y:auto;max-height:100%;overscroll-behavior:contain}
+.panel{border-right:1px solid var(--ui-border-soft)}.panel.right{border-left:1px solid var(--ui-border-soft)}
+.section{padding:0 0 15px;margin:0 0 19px;border-bottom:1px solid var(--ui-border-soft)}
+.section:last-child{margin-bottom:0;padding-bottom:0;border:0}
+h2,h3,.v5Header,#v5CardTitle{font-family:Georgia,'Times New Roman',serif;font-weight:500;letter-spacing:.015em;color:var(--ui-ink)}
+h2{font-size:24px}h3{font-size:20px}
+.caps{font-size:10px;letter-spacing:.17em;color:var(--ui-accent);font-weight:750}
+label{color:#d5e5e5;font-size:12px}
+body[data-atelier-theme="violet"] label{color:#dfd5ec}
+input:not([type=checkbox]):not([type=range]),select{color:var(--ui-ink);background:var(--ui-card);border:1px solid var(--ui-border);border-radius:11px;min-height:43px;padding:10px 12px}
+input[type=color]{background:var(--ui-card)!important;padding:4px!important;cursor:pointer;min-height:43px;border-radius:11px}
+input[type=range],input[type=checkbox]{accent-color:var(--ui-accent)}
+button[aria-pressed=true],.species button.active, #v5ModeBar button[aria-pressed=true],#v4views button[aria-pressed=true],#v4mode[aria-pressed=true],#habitatToggle.active{background:var(--ui-accent-soft);color:var(--ui-accent);border-color:var(--ui-accent)}
+.species{grid-template-columns:1fr 1fr;gap:8px}
+.species button{font-size:12px;border:1px solid var(--ui-border);min-height:52px;padding:10px 8px;background:var(--ui-card)}
+.species button.active{font-weight:700;box-shadow:inset 0 0 0 1px #ffffff11}
+.species button:hover{border-color:var(--ui-accent)}
+#speciesNote,.notice,.stat,#fieldReport,#v4field,#v5Bio .v5Fact,.v5Chapter,#v4insights li{border:1px solid var(--ui-border-soft);background:var(--ui-card);color:var(--ui-ink);border-radius:12px}
+#speciesNote{font-size:12px;line-height:1.55;padding:11px;margin:10px 0 16px;color:#b9d8d4}
+body[data-atelier-theme="violet"] #speciesNote{color:#ddd1e8}
+.v5Fact span,.stat .muted{color:var(--ui-muted)}
+.pill{background:var(--ui-accent-soft);color:var(--ui-accent);border:1px solid var(--ui-border);font-size:11px}
+.stagecol{overflow-y:auto;overscroll-behavior:contain;max-height:100%;min-width:0;padding:21px clamp(18px,2.3vw,34px) 28px;gap:10px;background:radial-gradient(ellipse 85% 62% at 49% 22%,#13313a70,transparent 78%),var(--ui-page)}
+body[data-atelier-theme="violet"] .stagecol{background:radial-gradient(ellipse 85% 62% at 49% 22%,#3c255875,transparent 78%),var(--ui-page)}
+.stage-head{margin-bottom:7px;gap:10px;align-items:center}
+.stage-head p{font-size:clamp(27px,3vw,36px);line-height:1.22;letter-spacing:.012em;color:var(--ui-ink)}
+.stage-head .caps{margin-bottom:4px}
+#habitatToggle{font-size:11px;min-height:32px;padding:6px 10px;border-radius:100px;white-space:nowrap}
+#generation{font-size:11px;white-space:nowrap;padding:6px 10px}
+#v5ModeBar{order:1;display:flex;gap:5px;padding:5px;background:var(--ui-pane);border:1px solid var(--ui-border-soft);border-radius:14px;margin:0 0 5px}
+#v5ModeBar button{min-height:39px;background:transparent;border:1px solid transparent;border-radius:10px;font-weight:650}
+#v5ModeBar button[aria-pressed=true]{color:var(--ui-accent);background:var(--ui-accent-soft);border-color:var(--ui-border)}
+#v5ArtHint{order:5;background:transparent;border:0;padding:0 2px;margin:3px 0 4px;color:var(--ui-muted);font-size:11px}
+#v4views{order:3;display:flex;gap:6px;margin:2px 0 0}
+#v4views button{min-height:42px;border-radius:10px;font-size:12px;padding:9px 8px}
+#v4tools{order:4;margin:1px 0 5px;gap:8px}
+#v4tools button{border-radius:9px}
+#v4zoom{font-variant-numeric:tabular-nums;color:var(--ui-muted);min-width:40px;text-align:center}
+#stage{order:2;height:clamp(480px,65vh,710px);min-height:0;flex:0 0 auto;border-radius:23px;border:1px solid var(--ui-border);box-shadow:var(--ui-shadow),inset 0 0 80px #0003;isolation:isolate;background:radial-gradient(circle at 50% 33%,#1d4550,#102e3b 56%,#071a29 100%)}
+body[data-atelier-theme="violet"] #stage{background:radial-gradient(circle at 50% 33%,#453759,#241e39 64%,#141426 100%)}
+#stage:before{content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;background-image:linear-gradient(#ffffff07 1px,transparent 1px),linear-gradient(90deg,#ffffff07 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(ellipse at center,black,transparent 85%);opacity:.38}
+#stage:after{content:'АТЛАС  /  ОБРАЗЕЦ';right:18px;bottom:16px;color:#ffffff65;font-size:9px;letter-spacing:.18em}
+#stage svg{width:100%;height:100%;max-height:none;max-width:620px;display:block;z-index:1;filter:drop-shadow(0 15px 12px #0314208c)}
+.stagecol>.btnrow,.stagecol>#v4export,.stagecol>footer{order:6}
+.stagecol>.btnrow{gap:8px}
+.stagecol>.btnrow button{min-height:44px;font-size:12px;font-weight:600}
+#save{font-weight:800;font-size:13px}
+#v4export{font-size:12px;color:var(--ui-muted);margin-top:5px}
+footer{color:var(--ui-muted);margin-top:5px}
+.panel.right .section{padding-bottom:16px;margin-bottom:16px}
+.panel.right h2{margin-bottom:14px}
+.stat{padding:16px}.stat .big{color:var(--ui-accent);font:34px Georgia,serif}
+.stat p{color:var(--ui-muted)}.stat strong{color:var(--ui-ink)}
+#v5Bio{gap:8px}.v5Fact{padding:12px}
+#v5PlateMode{background:var(--ui-accent-soft);color:var(--ui-accent);border-color:var(--ui-border)}
+.v5Chapter{padding:14px}.v5Chapter p{color:var(--ui-muted)}
+#v4field strong,.legend{color:var(--ui-accent)}
+.saved{background:var(--ui-card);border:1px solid var(--ui-border);border-radius:12px}
+/* Native collapsible editor sections. Existing form controls keep their ids and listeners. */
+.panel:not(.right)>.section{padding:0;border:1px solid var(--ui-border-soft);border-radius:14px;margin:0 0 11px;overflow:hidden;background:var(--ui-pane)}
+.ui-fold{margin:0}
+.ui-fold>summary{cursor:pointer;display:flex;gap:12px;align-items:center;justify-content:space-between;min-height:58px;list-style:none;padding:14px 15px;color:var(--ui-ink);font-size:15px;font-weight:750;background:linear-gradient(120deg,var(--ui-card),var(--ui-pane));user-select:none}
+.ui-fold>summary::-webkit-details-marker{display:none}
+.ui-fold>summary::after{content:'⌄';font-weight:400;font-size:19px;color:var(--ui-muted);transition:transform .18s ease;transform:rotate(-90deg)}
+.ui-fold[open]>summary::after{transform:rotate(0deg);color:var(--ui-accent)}
+.ui-fold>summary .fold-kicker{font-size:9px;color:var(--ui-accent);font-weight:800;letter-spacing:.14em;margin-right:3px}
+.ui-fold-body{padding:0 14px 17px;background:var(--ui-pane);border-top:1px solid var(--ui-border-soft)}
+.ui-fold-body>h2,.ui-fold-body>h3{display:none}
+.ui-fold-body>.caps{display:none}
+.ui-fold-body>.tiny,.ui-fold-body>.muted:first-of-type{color:var(--ui-muted)}
+#v4editor .ctrl{gap:8px 10px}
+#v4editor select,#morphControls select{background:var(--ui-card);color:var(--ui-ink);border:1px solid var(--ui-border);min-height:42px;font-size:12px}
+#v4editor output{color:var(--ui-accent)}
+#v4reset{background:transparent;border:1px solid var(--ui-border);color:var(--ui-muted)}
+#v4reset:hover{color:var(--ui-ink)}
+.checks label{background:var(--ui-card);border:1px solid var(--ui-border-soft);border-radius:10px;color:var(--ui-ink);min-height:38px}
+#toast{background:var(--ui-accent);color:#092329;border-radius:13px;box-shadow:0 10px 35px #0006;bottom:28px}
+@media (min-width:1300px){main{grid-template-columns:310px minmax(530px,1fr) 325px}}
+@media (min-width:691px) and (max-width:1130px){main{grid-template-columns:275px minmax(390px,1fr)}.panel.right{grid-column:1/-1;max-height:none;overflow:visible;border:0;border-top:1px solid var(--ui-border)}main{height:auto;overflow:visible}.panel,.stagecol{max-height:none;overflow:visible}}
+@media (max-width:690px){
+ body{padding-bottom:calc(75px + env(safe-area-inset-bottom));background:var(--ui-page)}
+ header{height:70px;position:sticky;top:0;z-index:51;padding:10px 13px}
+ .logo{gap:9px;min-width:0}.mark{width:40px;height:40px;font-size:23px;border-radius:11px;flex:none}
+ .logo h1{font-size:19px;white-space:nowrap;letter-spacing:-.01em}
+ header small{margin-top:3px;font-size:8px;letter-spacing:.08em;white-space:nowrap}
+ #random{font-size:0;min-width:40px;width:42px;height:42px;padding:4px;flex:none;margin-left:auto}
+ #random:before{font-size:20px;margin:0}
+ #uiTheme{width:40px;min-width:40px;height:42px;margin-left:0;font-size:16px}
+ #mobileNav{position:fixed;top:auto;bottom:0;left:0;right:0;z-index:60;display:flex;padding:8px 9px calc(8px + env(safe-area-inset-bottom));height:calc(75px + env(safe-area-inset-bottom));gap:6px;background:color-mix(in srgb,var(--ui-pane) 93%,transparent);border:0;border-top:1px solid var(--ui-border);box-shadow:0 -14px 35px #0007;backdrop-filter:blur(20px)}
+ #mobileNav button{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;border:1px solid transparent;background:transparent;color:var(--ui-muted);font-size:11px;font-weight:650;border-radius:12px;min-width:0;padding:5px 2px}
+ #mobileNav .navicon{width:21px;height:21px;display:block;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+ #mobileNav button[aria-selected=true]{color:#092e30;background:var(--ui-accent);border-color:var(--ui-accent)}
+ body[data-atelier-theme="violet"] #mobileNav button[aria-selected=true]{color:#1b1431}
+ main{display:flex;flex-direction:column;height:auto;min-height:calc(100dvh - 145px);overflow:visible}
+ .panel,.panel.right,.stagecol{max-height:none;overflow:visible}
+ .stagecol{padding:17px 13px 26px;order:1;gap:10px;background:var(--ui-page)}
+ .panel{order:2;padding:15px 13px 28px!important;border:0!important;border-top:1px solid var(--ui-border-soft)!important}
+ .panel.right{order:3}
+ body[data-tab=preview] .panel,body[data-tab=editor] .stagecol,body[data-tab=editor] .panel.right,body[data-tab=dossier] .stagecol,body[data-tab=dossier] .panel:not(.right){display:none!important}
+ body[data-tab=preview] .stagecol,body[data-tab=editor] .panel:not(.right),body[data-tab=dossier] .panel.right{display:flex!important;flex-direction:column!important}
+ .stage-head{margin-bottom:3px;gap:6px}.stage-head p{font-size:29px;line-height:1.2}
+ .stage-head .caps{font-size:9px}
+ #generation{font-size:10px;padding:5px 8px}
+ #habitatToggle{font-size:10px;min-height:30px;padding:5px 9px}
+ #v5ModeBar{margin:1px 0 0}
+ #v5ModeBar button{font-size:12px;min-height:37px}
+ #stage{height:clamp(400px,53dvh,575px);min-height:400px;flex:0 0 auto;border-radius:20px;box-shadow:0 10px 25px #0004}
+ #stage svg{max-width:100%;height:100%;width:100%}
+ #v4views{margin:0;gap:6px}
+ #v4views button{min-height:42px}
+ #v4tools{margin:0;gap:5px;justify-content:space-between}
+ #v4tools .zooms{gap:5px}
+ #v4tools button{padding:8px 9px;min-height:39px;font-size:11px}
+ #v4zoom{font-size:11px;min-width:32px}
+ #v5ArtHint{font-size:11px;margin:0}
+ .stagecol>.btnrow:has(#save){display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+ .stagecol>.btnrow:has(#save) #save{grid-column:1/-1;min-height:49px}
+ .stagecol>.btnrow:has(#save) #evolve,.stagecol>.btnrow:has(#save) #reset{min-height:43px}
+ .stagecol>.btnrow:has(#png){display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ .stagecol>.btnrow:has(#png) button{min-height:43px}
+ #v4export{font-size:11px}
+ .panel:not(.right)>.section{background:var(--ui-pane);border-radius:14px}
+ .ui-fold>summary{min-height:61px;font-size:14px}
+ .ui-fold-body{padding:0 13px 15px}
+ .species button{min-height:50px}
+ .panel.right .section{margin-bottom:16px}
+ #toast{bottom:calc(87px + env(safe-area-inset-bottom));max-width:calc(100% - 28px);font-size:12px}
+}
+
 </style></head>
 <body>
-<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>Лаборатория фантастической биологии · v0.5.2</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
+<header><div class="logo"><span class="mark">✧</span><div><h1>Атлас живых миров</h1><small>БИОЛОГИЧЕСКАЯ ЛАБОРАТОРИЯ · v0.5.3</small></div></div><button id="random" title="Создать случайный вид">Случайный вид</button></header>
 <nav id="mobileNav" aria-label="Разделы конструктора"><button type="button" data-tab="preview" aria-selected="true">Существо</button><button type="button" data-tab="editor" aria-selected="false">Настройки</button><button type="button" data-tab="dossier" aria-selected="false">Досье</button></nav>
 <main>
 <aside class="panel">
@@ -1403,4 +1564,53 @@ document.getElementById('save').onclick=()=>{oldSave();try{localStorage.setItem(
 const oldEvolve=document.getElementById('evolve').onclick;
 document.getElementById('evolve').onclick=()=>{oldEvolve();try{localStorage.setItem('atlas_draft_v052',JSON.stringify(s))}catch(e){}};
 })();
+</script><script>
+
+(function(){
+ 'use strict';
+ const icon={
+  preview:'<svg class="navicon" viewBox="0 0 24 24"><path d="M12 3c4 4 6 7 6 10a6 6 0 0 1-12 0c0-3 2-6 6-10Z"/><path d="M8 15c.6 2 2 3 4 3"/></svg>',
+  editor:'<svg class="navicon" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="2.5" fill="var(--ui-pane)"/><circle cx="16" cy="17" r="2.5" fill="var(--ui-pane)"/></svg>',
+  dossier:'<svg class="navicon" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4Z"/><path d="M9 9h6M9 13h6"/></svg>'
+ };
+ const nav=document.getElementById('mobileNav');
+ if(nav){nav.querySelectorAll('button[data-tab]').forEach(b=>{
+  const label={preview:'Существо',editor:'Редактор',dossier:'Досье'}[b.dataset.tab];
+  b.innerHTML=(icon[b.dataset.tab]||'')+'<span>'+label+'</span>';
+  b.setAttribute('aria-label',label);
+ });}
+ const head=document.querySelector('header');
+ const themeButton=document.createElement('button');
+ themeButton.type='button';themeButton.id='uiTheme';themeButton.title='Изменить цветовую тему';themeButton.setAttribute('aria-label','Изменить цветовую тему');
+ const themeKey='atlas_ui_theme_v053';
+ let theme='ocean';
+ try{theme=localStorage.getItem(themeKey)==='violet'?'violet':'ocean'}catch(e){}
+ function applyTheme(){document.body.setAttribute('data-atelier-theme',theme);themeButton.textContent=theme==='violet'?'◐':'◑';themeButton.title=theme==='violet'?'Переключить на морскую тему':'Переключить на аметистовую тему';}
+ themeButton.addEventListener('click',()=>{theme=theme==='ocean'?'violet':'ocean';try{localStorage.setItem(themeKey,theme)}catch(e){}applyTheme()});
+ if(head){head.appendChild(themeButton);applyTheme()}
+ // Organize the existing live form in unobtrusive, accessible collapsible groups.
+ const titles=['Вид и происхождение','Окраска и размеры','Основная анатомия','Тонкие детали','Особые органы'];
+ const sections=[...document.querySelectorAll('main > .panel:not(.right) > section.section')];
+ const statesKey='atlas_editor_folds_v053';
+ let stored={};try{stored=JSON.parse(localStorage.getItem(statesKey)||'{}')||{}}catch(e){}
+ sections.forEach((section,i)=>{
+  const detail=document.createElement('details');detail.className='ui-fold';
+  detail.open=Object.hasOwn(stored,i)?!!stored[i]:(i===0);
+  const summary=document.createElement('summary');
+  const lead=document.createElement('span');lead.innerHTML='<span class="fold-kicker">'+String(i+1).padStart(2,'0')+' /</span> '+(titles[i]||'Дополнительные параметры');
+  summary.appendChild(lead);
+  const body=document.createElement('div');body.className='ui-fold-body';
+  while(section.firstChild)body.appendChild(section.firstChild);
+  detail.append(summary,body);section.appendChild(detail);
+  detail.addEventListener('toggle',()=>{
+   try{stored[i]=detail.open;localStorage.setItem(statesKey,JSON.stringify(stored))}catch(e){}
+  });
+ });
+ // Show a brief accessible status when the user saves without changing the core save implementation.
+ const save=document.getElementById('save');
+ if(save)save.title='Сохранить текущую анатомию в коллекцию';
+ const random=document.getElementById('random');
+ if(random)random.setAttribute('aria-label','Создать случайный вид');
+})();
+
 </script></body></html>
