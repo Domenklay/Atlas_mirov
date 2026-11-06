@@ -76,8 +76,14 @@ jobs:
           if set(sprites) != expected:
               raise SystemExit("Wrong modular torso asset set")
           module = Path("web/modular_editor_v073.js").read_text(encoding="utf-8")
-          embedded = "<script>window.AtlasTorsoAssets=" + json.dumps(sprites, ensure_ascii=False) + ";</script>"
+          manifest = json.loads(Path("web/sprites/manifest_v080.json").read_text(encoding="utf-8"))
+          embedded = "<script>window.AtlasTorsoAssets=" + json.dumps(sprites, ensure_ascii=False) + ";window.AtlasTorsoManifest=" + json.dumps(manifest, ensure_ascii=False) + ";</script>"
           html = html.replace(torso_tag, embedded + "<script>\n" + module + "\n</script>", 1)
+          foundation_tag = '<script src="modular_foundation_v074.js"></script>'
+          if foundation_tag not in html:
+              raise SystemExit("Missing modular foundation")
+          foundation_js = Path("web/modular_foundation_v074.js").read_text(encoding="utf-8")
+          html = html.replace(foundation_tag, "<script>\n" + foundation_js + "\n</script>", 1)
           # Preserve the standalone sprite assets and their manifest in the APK too.
           import shutil
           shutil.copytree("web/sprites", "android/app/src/main/assets/sprites", dirs_exist_ok=True)
