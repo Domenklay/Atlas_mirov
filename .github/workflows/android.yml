@@ -64,6 +64,23 @@ jobs:
               raise SystemExit('Missing anatomy shapes script')
           shapes_js = Path("web/anatomy_shapes_v072.js").read_text(encoding="utf-8")
           html = html.replace(shape_tag, "<script>\n" + shapes_js + "\n</script>", 1)
+          # Bundle genuine transparent SVG torso assets inside the HTML:
+          # Android WebView does not permit extra file access.
+          import json
+          torso_tag = '<script src="modular_editor_v073.js"></script>'
+          if torso_tag not in html:
+              raise SystemExit("Missing modular sprite module")
+          sprites = {p.stem.removeprefix("torso_"): p.read_text(encoding="utf-8")
+                     for p in sorted(Path("web/sprites").glob("torso_*.svg"))}
+          expected = {"humanoid","aquatic","fae","draconic","alien","arboreal"}
+          if set(sprites) != expected:
+              raise SystemExit("Wrong modular torso asset set")
+          module = Path("web/modular_editor_v073.js").read_text(encoding="utf-8")
+          embedded = "<script>window.AtlasTorsoAssets=" + json.dumps(sprites, ensure_ascii=False) + ";</script>"
+          html = html.replace(torso_tag, embedded + "<script>\n" + module + "\n</script>", 1)
+          # Preserve the standalone sprite assets and their manifest in the APK too.
+          import shutil
+          shutil.copytree("web/sprites", "android/app/src/main/assets/sprites", dirs_exist_ok=True)
           Path("android/app/src/main/assets/index.html").write_text(html,encoding="utf-8")
           PY
 
