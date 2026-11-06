@@ -37,8 +37,9 @@ jobs:
 
       - name: Bundle offline application
         run: |
-          mkdir -p android/app/src/main/assets
+          mkdir -p android/app/src/main/assets/mermaids
           cp web/index.html android/app/src/main/assets/index.html
+          cp web/assets/mermaids/*.webp android/app/src/main/assets/mermaids/
 
       - name: Build APK
         working-directory: android
