@@ -102,10 +102,11 @@ function joints(){
  for(const sign of [-1,1]){
   const elbow=310+sign*95;
   const wrist=310+sign*145;
-  out+='<ellipse cx="'+elbow+'" cy="385" rx="11" ry="13" fill="url(#paint75join)" opacity=".93"/>';
-  out+='<path d="M'+(elbow-10)+' 381Q'+elbow+' 372 '+(elbow+10)+' 381" fill="none" stroke="#e0c894" stroke-width="3" opacity=".82"/>';
-  out+='<ellipse cx="'+wrist+'" cy="485" rx="8" ry="12" fill="url(#paint75join)" opacity=".89"/>';
-  out+='<path d="M'+(wrist-7)+' 479Q'+wrist+' 474 '+(wrist+7)+' 479" stroke="#d1b17d" fill="none" stroke-width="2.5" opacity=".84"/>';
+  // Narrow anatomical junctions, not spherical puppet joints.
+  out+='<path d="M'+(elbow-8)+' 374Q'+elbow+' 369 '+(elbow+8)+' 374L'+(elbow+9)+' 396Q'+elbow+' 400 '+(elbow-9)+' 396Z" fill="url(#paint75join)" opacity=".79"/>';
+  out+='<path d="M'+(elbow-8)+' 386Q'+elbow+' 381 '+(elbow+8)+' 386" fill="none" stroke="#d9b985" stroke-width="2" opacity=".63"/>';
+  out+='<path d="M'+(wrist-6)+' 475Q'+wrist+' 471 '+(wrist+6)+' 475L'+(wrist+6)+' 490Q'+wrist+' 494 '+(wrist-6)+' 490Z" fill="url(#paint75join)" opacity=".8"/>';
+  out+='<path d="M'+(wrist-5)+' 481Q'+wrist+' 479 '+(wrist+5)+' 481" stroke="#d2bb8b" fill="none" stroke-width="1.7" opacity=".69"/>';
  }
  return out
 }
