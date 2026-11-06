@@ -165,7 +165,10 @@ function inherit(a,b){
  offspring.accent=blendColor(a.accent,b.accent);
  offspring.v7sources.color='AB';offspring.v7sources.accent='AB';
  if(k==='custom')offspring.ecotype='blank';
- else if(!VARIANTS[k]?.some(x=>x.id===offspring.ecotype))offspring.ecotype=VARIANTS[k]?.[0]?.id||'blank';
+ else {
+  const ecotypes={mermaid:['reef','abyss','lagoon'],fairy:['moth','bee','cloud'],alien:['crystal','dune','void'],dragon:['ember','frost','moss'],spirit:['oak','mushroom','willow']};
+  if(!ecotypes[k]?.includes(offspring.ecotype))offspring.ecotype=ecotypes[k]?.[0]||'blank';
+ }
  offspring.view='front';offspring.v4species=k;
  if(offspring.tail==='fish'||offspring.tail==='serpent')offspring.legs=0;
  if(offspring.wings==='none')offspring.features=offspring.features.filter(f=>f!=='wings');
@@ -197,6 +200,8 @@ btn.onclick=()=>{
  parentsUI();status.textContent='Потомок '+child.name+' сохранён. Открой вкладку «Существо».';
  message('Потомок создан и сохранён')
 };
+const exportButton=$('json');
+exportButton.onclick=()=>downloadText(JSON.stringify({version:7,format:'atlas-living-worlds',catalog,selected:s},null,2),'atlas_catalog_v07.json','application/json');
 const renderBefore=render;
 render=function(sync=true){renderBefore(sync);parentsUI();familyUI()};
 render();
