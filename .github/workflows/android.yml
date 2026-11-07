@@ -94,6 +94,11 @@ jobs:
               raise SystemExit('Missing refined vector renderer')
           refine_js = Path('web/vector_refine_v077.js').read_text(encoding='utf-8')
           html = html.replace(refine_tag, '<script>\n' + refine_js + '\n</script>', 1)
+          orthographic_tag = '<script src="vector_orthographic_v078.js"></script>'
+          if orthographic_tag not in html:
+              raise SystemExit('Missing 3-view SVG module')
+          orthographic_js = Path('web/vector_orthographic_v078.js').read_text(encoding='utf-8')
+          html = html.replace(orthographic_tag, '<script>\n' + orthographic_js + '\n</script>', 1)
           # Preserve the standalone sprite assets and their manifest in the APK too.
           import shutil
           dest = Path("android/app/src/main/assets/sprites")
