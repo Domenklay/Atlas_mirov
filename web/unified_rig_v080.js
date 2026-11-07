@@ -1,4 +1,4 @@
-/* Atlas Living Worlds 0.8.2 — unified procedural 3D landmark rig / 2D SVG renderer.
+/* Atlas Living Worlds 0.8.3 — unified procedural 3D landmark rig / 2D SVG renderer.
  * One skeleton for front / side / back. All artwork is SVG; no bitmaps or
  * third-party rendering dependencies. Compatible with catalog v0.6–v0.7.9.
  */
@@ -46,7 +46,7 @@ function rig(v){
  const col=SKINS[v.spriteTorso]||SKINS.humanoid;
  const colors=v.spriteCustomColor?[safeColor(v.color||col[0]),safeColor(v.accent||col[1]),col[2]]:col;
  const headType=v.spriteHead||'elven';
- const headCenter={x:0,y:183-neck*.32,z:2};
+ const headCenter={x:0,y:193-neck*.30,z:2};
  const neckJoint={x:0,y:250-neck*.3,z:0};
  const shoulderY=292+neck*.10,hipY=470;
  const marks={
@@ -272,115 +272,133 @@ function arm(m,sign,pair){
 }
 function fish(m){
  const c=m.colors,side=m.view==='side',back=m.view==='back';
- const x=side?332:310,tip=side?{x:358,y:694}:{x:310,y:693};
- const hip={x:side?332:310,y:466},mid={x:side?356:309,y:598};
- const span=m.hip*.90,body=[hip,mid,tip];
- let o='<g data-v80-part="fish-tail">';
- o+=sPath(tube(body,[span,span*.53,4]),'url(#v80skin)',c[2],3.6);
- // Tail-fin is split into two independently curved lobes, no rectangle edges.
+ const hip={x:side?332:310,y:466};
+ const points=side?[
+   hip,{x:343,y:513},{x:363,y:569},{x:368,y:624},{x:360,y:692}
+ ]:[
+   hip,{x:316,y:515},{x:308,y:575},{x:311,y:628},{x:312,y:690}
+ ];
+ const base=m.hip*(side?1.02:1.10);
+ const widths=[base,base*.92,base*.69,base*.36,6];
+ const tip=points[4];
+ let out='<g data-v80-part="fish-tail" data-v83-tail="curved">';
+ out+=sPath(tube(points,widths),'url(#v80skin)',c[2],3.0);
+ out+=ln('M'+xy({x:points[0].x-3,y:points[0].y+7})+'Q'+xy({x:points[1].x-7,y:points[1].y+15})+' '+xy({x:points[3].x-3,y:points[3].y+16}),c[1],2.1,.25);
+ // Left and right lobes are drawn with curved, asymmetrical membranes.
  for(const sign of [-1,1]){
-  const dir=side?sign:back?-sign:sign;
-  const finEnd={x:tip.x+dir*(side?108:144),y:728+(sign>0?9:-7)};
-  o+=sPath('M'+xy(tip)+' Q'+F(tip.x+dir*61)+' '+F(tip.y-9)+' '+xy(finEnd)+
-    ' Q'+F(tip.x+dir*114)+' '+F(tip.y+74)+' '+F(tip.x+dir*25)+' '+F(tip.y+55)+' Q'+F(tip.x+dir*11)+' '+F(tip.y+29)+' '+xy(tip)+'Z','url(#v80fin)',c[1],2.5,.92);
-  for(let i=0;i<6;i++)o+=ln('M'+xy(tip)+'Q'+F(tip.x+dir*(51+i*9))+' '+F(tip.y+18+i*4)+' '+F(tip.x+dir*(103+i*6))+' '+F(tip.y+36+i*3),c[1],1.2,.38)
+   const dir=side?sign:(back?-sign:sign);
+   const spread=side?113:140;
+   const tx=tip.x+dir*spread,ty=724+(sign===1?6:-10);
+   const fin='M'+xy(tip)+
+     ' Q'+F(tip.x+dir*49)+' '+F(tip.y-21)+' '+F(tx)+' '+F(ty)+
+     ' Q'+F(tx+dir*8)+' '+F(ty+17)+' '+F(tx-dir*26)+' '+F(ty+34)+
+     ' Q'+F(tip.x+dir*43)+' '+F(tip.y+57)+' '+F(tip.x+dir*10)+' '+F(tip.y+30)+
+     ' Q'+F(tip.x+dir*3)+' '+F(tip.y+14)+' '+xy(tip)+'Z';
+   out+=sPath(fin,'url(#v80fin)',c[1],2.5,.9);
+   for(let i=0;i<8;i++){
+     const t=(i+.2)/8;
+     out+=ln('M'+xy(tip)+' Q'+F(tip.x+dir*(25+55*t))+' '+F(tip.y+17+8*t)+' '+F(tip.x+dir*(spread*(.60+.40*t)))+' '+F(ty+4+20*t),c[1],1,.40)
+   }
  }
- // Distinct scale rows follow a tapering fish tail, with configurable detail.
- for(let row=0;row<Math.round(5+m.detail*13);row++){
-  let y=482+row*11.2,k=1-row/(18+.5);
-  for(let j=-2;j<=2;j++){
-   const px=(side?338:310)+(j+(row%2)*.5)*Math.max(4,13*k);
-   o+=ln('M'+F(px-7*k)+' '+F(y)+'q'+F(7*k)+' 11 '+F(14*k)+' 0',c[1],1,.24+m.detail*.29)
-  }
+ const rows=Math.round(8+m.detail*12);
+ for(let r=0;r<rows;r++){
+   const y=485+r*9.4;
+   let t=(y-466)/224;
+   const pos=points[Math.min(4,Math.floor(t*4))],width=base*(1-.83*t);
+   const cen=side?335+25*t:310+2*Math.sin(t*7);
+   for(let j=-2;j<=2;j++){
+     const xx=cen+j*Math.max(4,12*(1-t))+(r%2)*5;
+     if(Math.abs(xx-cen)>width*.93)continue;
+     out+=ln('M'+F(xx-6)+' '+F(y)+'q6 9 12 0',c[1],1.0,.26+m.detail*.21)
+   }
  }
- return o+'</g>'
+ return out+'</g>'
 }
 function torso(m){
- const c=m.colors,side=m.view==='side',sw=side?m.depth*1.0:m.sw,wa=side?m.depth*.71:m.wa,hip=side?m.depth*.88:m.hip,cx=310;
- const race=m.race,collar=race==='draconic'?1.1:race==='fae'?.82:1;
- const upper=sw*collar;
- const shape='M'+F(cx-upper*.67)+' 279Q310 '+(race==='arboreal'?266:271)+' '+F(cx+upper*.67)+' 279'+
- 'Q'+F(cx+sw*1.11)+' 287 '+F(cx+sw*1.16)+' 313'+
- 'Q'+F(cx+sw*1.06)+' 343 '+F(cx+wa*.96)+' 365'+
- 'Q'+F(cx+wa*.79)+' 393 '+F(cx+wa*.99)+' 419'+
- 'Q'+F(cx+hip*1.09)+' 446 '+F(cx+hip)+' 474'+
- 'Q310 497 '+F(cx-hip)+' 474'+
- 'Q'+F(cx-hip*1.09)+' 447 '+F(cx-wa*.99)+' 419'+
- 'Q'+F(cx-wa*.79)+' 393 '+F(cx-wa*.96)+' 365'+
- 'Q'+F(cx-sw*1.06)+' 343 '+F(cx-sw*1.16)+' 313'+
- 'Q'+F(cx-sw*1.11)+' 287 '+F(cx-upper*.67)+' 279Z';
- const cut='v81bodyclip';
- let o='<g data-v80-part="torso" data-v81-anatomy="sculpted">'+sPath(shape,'url(#v80skin)',c[2],3.7);
- o+='<defs><clipPath id="'+cut+'"><path d="'+shape+'"/></clipPath></defs><g clip-path="url(#'+cut+')">';
- // Shoulder caps, collarbones and ribcage taper into the waist.
+ const c=m.colors,side=m.view==='side',cx=310,race=m.race;
+ const sw=(side?m.depth*.96:m.sw)*(race==='draconic'?1.12:race==='fae'?.92:1);
+ const wa=(side?m.depth*.73:m.wa)*(race==='aquatic'?.88:1);
+ const hip=(side?m.depth*.86:m.hip)*(race==='humanoid'?1.05:1);
+ const n=race==='draconic'?23:race==='fae'?14:18;
+ const rib=sw*(race==='draconic'?1.01:race==='alien'?.96:1);
+ const pt=(a,y)=>F(cx+a)+' '+F(y);
+ const d='M'+pt(-n,264)+
+  ' C'+pt(-sw*.47,270)+' '+pt(-rib*.98,281)+' '+pt(-rib*1.13,307)+
+  ' C'+pt(-rib*1.23,327)+' '+pt(-rib*.94,348)+' '+pt(-rib*.81,359)+
+  ' C'+pt(-wa*1.01,377)+' '+pt(-wa*.93,408)+' '+pt(-wa,427)+
+  ' C'+pt(-hip*1.13,447)+' '+pt(-hip*1.04,464)+' '+pt(-hip*.78,480)+
+  ' Q'+pt(0,499)+' '+pt(hip*.78,480)+
+  ' C'+pt(hip*1.04,464)+' '+pt(hip*1.13,447)+' '+pt(wa,427)+
+  ' C'+pt(wa*.93,408)+' '+pt(wa*1.01,377)+' '+pt(rib*.81,359)+
+  ' C'+pt(rib*.94,348)+' '+pt(rib*1.23,327)+' '+pt(rib*1.13,307)+
+  ' C'+pt(rib*.98,281)+' '+pt(sw*.47,270)+' '+pt(n,264)+
+  ' Q'+pt(0,276)+' '+pt(-n,264)+'Z';
+ let o='<g data-v80-part="torso" data-v83-silhouette="organic">'+sPath(d,'url(#v80skin)',c[2],3.1);
+ o+='<defs><clipPath id="v83bodyclip"><path d="'+d+'"/></clipPath></defs><g clip-path="url(#v83bodyclip)">';
+ // Mid-tones describe muscle and bone masses without detached geometric panels.
  for(const sign of [-1,1]){
-  o+=sPath('M'+F(cx+sign*upper*.55)+' 286Q'+F(cx+sign*sw*1.15)+' 283 '+F(cx+sign*sw*1.1)+' 321Q'+F(cx+sign*sw*.88)+' 342 '+F(cx+sign*sw*.55)+' 329Z','url(#v80edge)',c[1],1.7,.44);
-  o+=ln('M'+F(cx+sign*upper*.18)+' 291Q'+F(cx+sign*sw*.67)+' 308 '+F(cx+sign*sw*.80)+' 324',c[1],2.1,.55);
-  o+=ln('M'+F(cx+sign*sw*.84)+' 344Q'+F(cx+sign*wa*.70)+' 365 '+F(cx+sign*wa*.83)+' 392',c[2],1.6,.23);
-  o+=ln('M'+F(cx+sign*wa*.52)+' 406Q'+F(cx+sign*wa*.66)+' 428 '+F(cx+sign*hip*.74)+' 452',c[1],1.55,.3);
+   o+=sPath('M'+pt(sign*sw*.28,284)+
+      ' C'+pt(sign*sw*.75,281)+' '+pt(sign*sw*1.18,297)+' '+pt(sign*sw*.92,329)+
+      ' Q'+pt(sign*sw*.63,350)+' '+pt(sign*sw*.22,335)+
+      ' Q'+pt(sign*sw*.46,308)+' '+pt(sign*sw*.28,284)+'Z','url(#v80edge)',c[1],.8,.18);
+   o+=ln('M'+pt(sign*sw*.20,289)+'Q'+pt(sign*sw*.62,304)+' '+pt(sign*sw*.83,324),c[1],2.2,.48);
+   o+=ln('M'+pt(sign*sw*.87,344)+'Q'+pt(sign*wa*.70,375)+' '+pt(sign*wa*.76,396),c[2],1.4,.23);
+   o+=ln('M'+pt(sign*wa*.56,410)+'Q'+pt(sign*wa*.70,431)+' '+pt(sign*hip*.71,460),c[1],1.45,.25);
  }
- if(!side&&m.view==='front'){
-  // Pectoral/collarbone volumes share the same origin in the skeleton.
+ if(m.view==='front'){
+  o+=sPath('M'+pt(-sw*.70,320)+'Q'+pt(0,351)+' '+pt(sw*.70,320)+
+    ' Q'+pt(sw*.40,362)+' '+pt(0,363)+'Q'+pt(-sw*.40,362)+' '+pt(-sw*.70,320)+'Z','url(#v80fin)',c[1],1,.10);
   for(const sign of [-1,1]){
-   o+=sPath('M'+F(cx+sign*sw*.2)+' 317Q'+F(cx+sign*sw*.73)+' 326 '+F(cx+sign*sw*.72)+' 351Q'+F(cx+sign*sw*.31)+' 357 '+F(cx+sign*9)+' 350Z','url(#v80edge)',c[1],1.0,.21);
-   o+=ln('M'+F(cx+sign*sw*.69)+' 350Q'+F(cx+sign*sw*.53)+' 370 '+F(cx+sign*wa*.6)+' 389',c[2],1.25,.25);
-   o+=ln('M'+F(cx+sign*wa*.37)+' 391Q'+F(cx+sign*wa*.45)+' 422 '+F(cx+sign*wa*.58)+' 438',c[1],1.3,.28);
+    o+=ln('M'+pt(sign*sw*.75,340)+'Q'+pt(sign*sw*.41,356)+' '+pt(sign*wa*.64,378),c[1],1.55,.27);
+    o+=ln('M'+pt(sign*wa*.35,390)+'Q'+pt(sign*wa*.46,420)+' '+pt(sign*wa*.58,434),c[2],1.3,.22);
   }
-  o+=ln('M310 329Q304 351 310 375Q314 398 310 416',c[1],1.95,.29);
-  o+=ln('M'+F(cx-sw*.68)+' 332Q310 349 '+F(cx+sw*.68)+' 332',c[2],1.5,.20);
-  o+=ln('M'+F(cx-hip*.76)+' 451Q310 467 '+F(cx+hip*.76)+' 451',c[1],1.6,.34);
+  o+=ln('M'+pt(0,345)+'Q'+pt(-4,373)+' '+pt(0,408)+'Q'+pt(3,420)+' '+pt(0,435),c[1],1.7,.28);
+  o+=ln('M'+pt(-hip*.66,457)+'Q'+pt(0,467)+' '+pt(hip*.66,457),c[1],1.4,.34);
  }else if(m.view==='back'){
-  // Back muscles, scapulae and spine: do not paint a front chest on the rear view.
   for(const sign of [-1,1]){
-   o+=sPath('M'+F(cx+sign*sw*.30)+' 308Q'+F(cx+sign*sw*.90)+' 326 '+F(cx+sign*sw*.76)+' 365Q'+F(cx+sign*wa*.30)+' 379 '+F(cx+sign*7)+' 348Z','url(#v80edge)',c[1],1.5,.18);
-   o+=ln('M'+F(cx+sign*sw*.61)+' 323Q'+F(cx+sign*wa*.80)+' 355 '+F(cx+sign*wa*.48)+' 393',c[1],1.6,.39);
-   o+=ln('M'+F(cx+sign*wa*.32)+' 399Q'+F(cx+sign*hip*.66)+' 433 '+F(cx+sign*hip*.79)+' 460',c[2],1.55,.32);
+   o+=sPath('M'+pt(sign*sw*.32,300)+'Q'+pt(sign*sw*.88,326)+' '+pt(sign*sw*.73,367)+
+     'Q'+pt(sign*wa*.31,381)+' '+pt(sign*7,342)+'Z','url(#v80edge)',c[1],.85,.18);
+   o+=ln('M'+pt(sign*sw*.75,329)+'Q'+pt(sign*wa*.79,363)+' '+pt(sign*wa*.51,390),c[1],1.6,.35);
+   o+=ln('M'+pt(sign*wa*.28,405)+'Q'+pt(sign*hip*.53,438)+' '+pt(sign*hip*.70,461),c[2],1.4,.25);
   }
-  o+=ln('M310 306Q306 358 310 396Q311 425 310 450',c[2],1.6,.36);
+  o+=ln('M'+pt(0,316)+'Q'+pt(-2,380)+' '+pt(0,447),c[2],1.55,.39);
  }else{
-  o+=ln('M'+F(cx-sw*.53)+' 304Q'+F(cx+sw*.92)+' 321 '+F(cx+sw*.65)+' 358',c[1],2.3,.43);
-  o+=ln('M'+F(cx-sw*.8)+' 320Q'+F(cx-sw*.85)+' 400 '+F(cx-wa*.4)+' 456',c[2],2,.36)
+  o+=ln('M'+pt(-rib*.69,305)+'Q'+pt(rib*1.0,326)+' '+pt(rib*.70,365),c[1],2.1,.42);
+  o+=ln('M'+pt(-rib*.65,324)+'Q'+pt(-rib*.71,402)+' '+pt(-wa*.51,454),c[2],1.6,.36);
  }
- if(race==='aquatic'||m.skin==='scales'||race==='draconic'){
-  for(let row=0;row<Math.round(5+m.detail*11);row++){
-   const y=309+row*11.2;
-   for(let j=-4;j<=4;j++){
-    const span=(side?12:14),x=cx+j*span+(row%2)*span*.5;
-    o+=sPath('M'+F(x-7)+' '+F(y)+'q7 11 14 0q-7 3 -14 0Z','url(#v80fin)',c[1],.8,.20+m.detail*.27)
-   }
+ if(race==='aquatic'||race==='draconic'||m.skin==='scales'){
+  // Staggered small scales vary with material and lie inside the actual torso.
+  for(let row=0;row<Math.round(6+m.detail*9);row++)for(let j=-4;j<=4;j++){
+    const x=cx+j*(side?12:13)+(row%2)*6.5,y=311+row*12;
+    o+=ln('M'+F(x-6)+' '+F(y)+'q6 10 12 0',c[1],1,.22+m.detail*.17);
   }
   if(race==='draconic'){
-   for(let row=0;row<5;row++){
-    const y=306+row*28,dx=Math.max(12,26-row*3);
-    o+=sPath('M'+F(cx-dx)+' '+y+'Q310 '+F(y-17)+' '+F(cx+dx)+' '+y+'Q310 '+F(y+13)+' '+F(cx-dx)+' '+y+'Z','url(#v80edge)',c[1],1.65,.49)
+   for(let row=0;row<5;row++){const y=306+row*27,k=26-row*3;
+    o+=sPath('M'+pt(-k,y)+'Q'+pt(0,y-13)+' '+pt(k,y)+'Q'+pt(0,y+14)+' '+pt(-k,y)+'Z','url(#v80edge)',c[1],1.2,.39)
    }
   }
  }else if(race==='arboreal'||m.skin==='bark'){
-  for(let j=0;j<Math.round(18+m.detail*15);j++){
-   const x=270+(j*23)%82,y=280+(j*31)%185;
-   o+=ln('M'+x+' '+y+'q'+(j%2?8:-6)+' 26 '+(j%3?5:-5)+' 42',c[2],1.6,.40);
-   if(j%4===0)o+=sPath('M'+x+' '+y+'q14 -15 24 -8q-7 14 -24 8Z','url(#v80fin)',c[1],1,.68)
+  for(let j=0;j<Math.round(14+13*m.detail);j++){
+   const x=268+(j*23)%84,y=290+(j*31)%162;
+   o+=ln('M'+x+' '+y+'q'+(j%2?9:-5)+' 19 '+(j%3?3:-7)+' 33',c[2],1.35,.35)
   }
  }else if(race==='alien'){
-  for(let j=0;j<21;j++){
-   const x=280+(j*23)%65,y=294+(j*17)%154;
-   o+=sPath('M'+x+' '+y+'l5 -10l6 10l-6 12Z','url(#v80fin)',c[1],1,.22+m.detail*.31);
+  for(let j=0;j<19;j++){
+   const x=281+(j*17)%57,y=301+(j*29)%148;
+   o+=sPath('M'+x+' '+y+'l4 -9l5 9l-5 10Z','url(#v80fin)',c[1],.85,.30)
   }
  }else if(race==='fae'){
-  for(let j=0;j<27;j++){
-   const x=278+(j*17)%62,y=302+(j*31)%143;
-   o+=circle(x,y,1.4+(j%3)*.7,'url(#v80shine)',.65);
-   if(j%5===0)o+=sPath('M'+x+' '+y+'q14 -14 20 -7q-9 12 -20 7Z','url(#v80fin)',c[1],1,.56)
+  for(let j=0;j<22;j++){const x=279+(j*17)%59,y=309+(j*31)%139;
+   o+=circle(x,y,1.5+j%3*.4,'url(#v80shine)',.55)
   }
- }else for(let j=0;j<5;j++)o+=ln('M'+F(cx-20+j*9)+' '+(382+j%2*18)+'q6 11 13 0',c[1],1,.2);
+ }
  o+='</g>';
- // Optional gills and shoulder fins are outside the clip.
  if(race==='aquatic'||(m.v.features||[]).includes('gills')){
-  for(const sign of [-1,1]){
-   const x=cx+sign*sw*.95;
-   o+=sPath('M'+F(x)+' 311Q'+F(x+sign*35)+' 298 '+F(x+sign*44)+' 347L'+F(x+sign*3)+' 338Z','url(#v80fin)',c[1],1.9,.78);
-   for(let k=0;k<4;k++)o+=ln('M'+F(x+sign*5)+' '+(314+k*6)+'l'+F(sign*(21+k*3))+' '+(9+k*3),c[1],1.1,.54)
-  }
+   for(const sign of [-1,1]){
+    const x=cx+sign*rib*.88;
+    o+=sPath('M'+F(x)+' 304Q'+F(x+sign*26)+' 293 '+F(x+sign*41)+' 322Q'+F(x+sign*26)+' 351 '+F(x+sign*5)+' 350Z','url(#v80fin)',c[1],1.5,.67);
+    for(let k=0;k<4;k++)o+=ln('M'+F(x+sign*8)+' '+(311+k*8)+'l'+F(sign*(15+k*2))+' '+(4+k*2),c[1],1.0,.47)
+   }
  }
  return o+'</g>'
 }
@@ -570,7 +588,7 @@ if(note)note.textContent='Единый каркас для трёх ракурс
 const title=document.querySelector('#modular73 h3');
 if(title)title.textContent='Анатомический конструктор 2D';
 const badge=document.querySelector('.atlas76status');
-if(badge)badge.textContent='SVG-анатомия · естественные пропорции · v0.8.2';
+if(badge)badge.textContent='SVG-анатомия · пластичные силуэты · v0.8.3';
 render=function(sync=true){
  oldRender(sync);
  fitView();
@@ -592,7 +610,7 @@ svgSource=function(){
  return generated.replace('<g data-v80-fit="true">','<g data-v80-fit="true" transform="'+esc(tr)+'">');
 };
 render();
-window.AtlasRig080={version:'0.8.2',getModel:()=>rig(s),getFit:()=>{
+window.AtlasRig080={version:'0.8.3',getModel:()=>rig(s),getFit:()=>{
  const g=document.querySelector('[data-v80-fit]');return g?{fitted:g.dataset.fitted,nominal:Number(g.dataset.nominal),actual:Number(g.dataset.actual)}:null},
  render:()=>render(false)};
 })();
