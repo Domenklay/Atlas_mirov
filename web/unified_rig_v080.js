@@ -62,7 +62,7 @@ function rig(v){
   const pose=v.vectorPose==='swim'?-35:v.vectorPose==='display'?39:8;
   const ex=x+sign*(v.spriteTorso==='draconic'?45:34+pose*.38)*armLen;
   const ey=y+(pose<0?49:91)*armLen;
-  const wx=ex+sign*(15+(pose>20?20:0))*armLen, wy=ey+(pose<0?80:97)*armLen;
+  const wx=ex+sign*(15+(pose>20?20:0))*armLen, wy=ey+(pose<0?80:v.view==='side'&&sign>0?76:97)*armLen;
   marks['shoulder'+key]={x,y,z};
   marks['elbow'+key]={x:ex,y:ey,z:z+sign*(v.vectorPose==='display'?33:v.vectorPose==='swim'?17:24)+(pair?sign*7:0)};
   marks['wrist'+key]={x:wx,y:wy,z:z+sign*(v.vectorPose==='display'?65:v.vectorPose==='swim'?21:54)+(pair?sign*9:0)};
@@ -471,6 +471,16 @@ function head(m){
     'Q'+F(x+sign*62)+' '+F(y-28)+' '+F(x+sign*91)+' '+F(y-14)+
     'Q'+F(x+sign*43)+' '+F(y+19)+' '+F(x)+' '+F(y+22)+'Z','url(#v80fin)',c[1],2,.84);
    for(let k=0;k<4;k++)o+=ln('M'+F(x)+' '+F(y-22+k*9)+'Q'+F(x+sign*30)+' '+F(y-46+k*12)+' '+F(x+sign*(66-k*3))+' '+F(y-72+k*20),c[1],1.3,.4)
+  }else if(m.race==='alien'){
+   // No elf ear: compact, curved sensory folds behind the wide cranium.
+   o+=sPath('M'+F(x)+' '+F(y-20)+'Q'+F(x+sign*18)+' '+F(y-40)+' '+F(x+sign*32)+' '+F(y-37)+
+      'Q'+F(x+sign*31)+' '+F(y+3)+' '+F(x+sign*8)+' '+F(y+12)+'Z','url(#v80edge)',c[2],2.0,.83);
+   o+=ln('M'+F(x+sign*10)+' '+F(y-15)+'Q'+F(x+sign*26)+' '+F(y-24)+' '+F(x+sign*24)+' '+F(y+2),c[1],1.3,.43)
+  }else if(m.race==='arboreal'){
+   // A leaf-like organic pinna rather than an enormous pointed fantasy ear.
+   o+=sPath('M'+F(x)+' '+F(y-22)+'Q'+F(x+sign*23)+' '+F(y-61)+' '+F(x+sign*47)+' '+F(y-66)+
+      'Q'+F(x+sign*42)+' '+F(y-7)+' '+F(x+sign*7)+' '+F(y+16)+'Z','url(#v80fin)',c[2],1.9,.87);
+   o+=ln('M'+F(x+sign*5)+' '+F(y-5)+'Q'+F(x+sign*30)+' '+F(y-35)+' '+F(x+sign*39)+' '+F(y-52),c[1],1.4,.52)
   }else{
    o+=sPath('M'+F(x)+' '+F(y-34)+'Q'+F(x+sign*41)+' '+F(y-82)+' '+F(x+sign*(m.race==='fae'?94:70))+' '+F(y-122)+
     'Q'+F(x+sign*62)+' '+F(y+14)+' '+F(x)+' '+F(y+23)+'Z','url(#v80edge)',c[2],2.1,.94);
