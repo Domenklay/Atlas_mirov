@@ -351,8 +351,10 @@ function head(m){
 }
 function neck(m){
  const p=project(m,m.marks.neck),head=project(m,m.marks.head);
- return '<g data-v80-part="neck">'+sPath(tube([{x:p.x,y:head.y+68},{x:p.x,y:p.y+32}],[m.race==='draconic'?28:18,m.race==='draconic'?32:25]),'url(#v80edge)',m.colors[2],2.3)+
- ln('M'+F(p.x-4)+' '+F(head.y+71)+'Q'+F(p.x-4)+' '+F(p.y+3)+' '+F(p.x-6)+' '+F(p.y+20),m.colors[1],1.4,.26)+'</g>'
+ const width=m.race==='draconic'?[23,27,33]:m.race==='fae'?[12,16,24]:[15,20,28];
+ return '<g data-v80-part="neck">'+
+ sPath(tube([{x:p.x,y:head.y+58},{x:p.x,y:p.y+14},{x:p.x,y:p.y+67}],width),'url(#v80skin)',m.colors[2],1.9)+
+ ln('M'+F(p.x-5)+' '+F(head.y+70)+'Q'+F(p.x-8)+' '+F(p.y+3)+' '+F(p.x-6)+' '+F(p.y+38),m.colors[1],1.5,.24)+'</g>'
 }
 function sketch(m){
  const body=[];
