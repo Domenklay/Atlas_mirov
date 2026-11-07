@@ -46,7 +46,7 @@ function rig(v){
  const col=SKINS[v.spriteTorso]||SKINS.humanoid;
  const colors=v.spriteCustomColor?[safeColor(v.color||col[0]),safeColor(v.accent||col[1]),col[2]]:col;
  const headType=v.spriteHead||'elven';
- const headCenter={x:0,y:164-neck*.38,z:2};
+ const headCenter={x:0,y:183-neck*.32,z:2};
  const neckJoint={x:0,y:250-neck*.3,z:0};
  const shoulderY=295+neck*.1,hipY=471,elbowY=392, wristY=493, kneeY=567, ankleY=669;
  const marks={
