@@ -89,6 +89,11 @@ jobs:
               raise SystemExit('Missing procedural vector renderer')
           vector_js = Path('web/vector_creatures_v076.js').read_text(encoding='utf-8')
           html = html.replace(vector_tag, '<script>\n' + vector_js + '\n</script>', 1)
+          refine_tag = '<script src="vector_refine_v077.js"></script>'
+          if refine_tag not in html:
+              raise SystemExit('Missing refined vector renderer')
+          refine_js = Path('web/vector_refine_v077.js').read_text(encoding='utf-8')
+          html = html.replace(refine_tag, '<script>\n' + refine_js + '\n</script>', 1)
           # Preserve the standalone sprite assets and their manifest in the APK too.
           import shutil
           dest = Path("android/app/src/main/assets/sprites")
