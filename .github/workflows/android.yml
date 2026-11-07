@@ -104,6 +104,11 @@ jobs:
               raise SystemExit('Missing v0.7.9 shared-anatomy module')
           rig_js = Path('web/vector_anatomy_v079.js').read_text(encoding='utf-8')
           html = html.replace(rig_tag, '<script>\n' + rig_js + '\n</script>', 1)
+          unified_tag = '<script src="unified_rig_v080.js"></script>'
+          if unified_tag not in html:
+              raise SystemExit('Missing unified v0.8.0 SVG renderer')
+          unified_js = Path('web/unified_rig_v080.js').read_text(encoding='utf-8')
+          html = html.replace(unified_tag, '<script>\n' + unified_js + '\n</script>', 1)
           # Preserve the standalone sprite assets and their manifest in the APK too.
           import shutil
           dest = Path("android/app/src/main/assets/sprites")
