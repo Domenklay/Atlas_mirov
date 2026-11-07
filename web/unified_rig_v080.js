@@ -395,7 +395,7 @@ function fitView(){
   // then fit down, never crop horns, wings or extra limbs.
   const availW=620-2*38,availH=780-2*32;
   const safety=Math.min(1,availW/(b.width*m.zoom),availH/(b.height*m.zoom));
-  const scale=F(m.zoom*safety);
+  const scale=Math.floor(m.zoom*safety*1000)/1000;
   const tx=F(b.x+b.width/2),ty=F(b.y+b.height/2);
   fit.setAttribute('transform','translate(310 388) scale('+scale+') translate('+(-tx)+' '+(-ty)+')');
   fit.dataset.nominal=String(m.zoom);
