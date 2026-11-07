@@ -319,10 +319,24 @@ function torso(m){
   o+=ln('M'+F(cx+sign*sw*.84)+' 344Q'+F(cx+sign*wa*.70)+' 365 '+F(cx+sign*wa*.83)+' 392',c[2],1.6,.23);
   o+=ln('M'+F(cx+sign*wa*.52)+' 406Q'+F(cx+sign*wa*.66)+' 428 '+F(cx+sign*hip*.74)+' 452',c[1],1.55,.3);
  }
- if(!side){
-  o+=ln('M310 316Q307 345 310 373Q316 393 310 410',c[1],2.1,.35);
-  o+=ln('M'+F(cx-sw*.62)+' 330Q310 347 '+F(cx+sw*.62)+' 330',c[2],1.5,.23);
-  o+=ln('M'+F(cx-hip*.72)+' 454Q310 465 '+F(cx+hip*.72)+' 454',c[1],1.65,.36);
+ if(!side&&m.view==='front'){
+  // Pectoral/collarbone volumes share the same origin in the skeleton.
+  for(const sign of [-1,1]){
+   o+=sPath('M'+F(cx+sign*sw*.2)+' 317Q'+F(cx+sign*sw*.73)+' 326 '+F(cx+sign*sw*.72)+' 351Q'+F(cx+sign*sw*.31)+' 357 '+F(cx+sign*9)+' 350Z','url(#v80edge)',c[1],1.0,.21);
+   o+=ln('M'+F(cx+sign*sw*.69)+' 350Q'+F(cx+sign*sw*.53)+' 370 '+F(cx+sign*wa*.6)+' 389',c[2],1.25,.25);
+   o+=ln('M'+F(cx+sign*wa*.37)+' 391Q'+F(cx+sign*wa*.45)+' 422 '+F(cx+sign*wa*.58)+' 438',c[1],1.3,.28);
+  }
+  o+=ln('M310 329Q304 351 310 375Q314 398 310 416',c[1],1.95,.29);
+  o+=ln('M'+F(cx-sw*.68)+' 332Q310 349 '+F(cx+sw*.68)+' 332',c[2],1.5,.20);
+  o+=ln('M'+F(cx-hip*.76)+' 451Q310 467 '+F(cx+hip*.76)+' 451',c[1],1.6,.34);
+ }else if(m.view==='back'){
+  // Back muscles, scapulae and spine: do not paint a front chest on the rear view.
+  for(const sign of [-1,1]){
+   o+=sPath('M'+F(cx+sign*sw*.30)+' 308Q'+F(cx+sign*sw*.90)+' 326 '+F(cx+sign*sw*.76)+' 365Q'+F(cx+sign*wa*.30)+' 379 '+F(cx+sign*7)+' 348Z','url(#v80edge)',c[1],1.5,.18);
+   o+=ln('M'+F(cx+sign*sw*.61)+' 323Q'+F(cx+sign*wa*.80)+' 355 '+F(cx+sign*wa*.48)+' 393',c[1],1.6,.39);
+   o+=ln('M'+F(cx+sign*wa*.32)+' 399Q'+F(cx+sign*hip*.66)+' 433 '+F(cx+sign*hip*.79)+' 460',c[2],1.55,.32);
+  }
+  o+=ln('M310 306Q306 358 310 396Q311 425 310 450',c[2],1.6,.36);
  }else{
   o+=ln('M'+F(cx-sw*.53)+' 304Q'+F(cx+sw*.92)+' 321 '+F(cx+sw*.65)+' 358',c[1],2.3,.43);
   o+=ln('M'+F(cx-sw*.8)+' 320Q'+F(cx-sw*.85)+' 400 '+F(cx-wa*.4)+' 456',c[2],2,.36)
