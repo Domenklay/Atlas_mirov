@@ -1,4 +1,4 @@
-/* Atlas Living Worlds 0.8.3 — unified procedural 3D landmark rig / 2D SVG renderer.
+/* Atlas Living Worlds 0.8.4 — unified procedural 3D landmark rig / 2D SVG renderer.
  * One skeleton for front / side / back. All artwork is SVG; no bitmaps or
  * third-party rendering dependencies. Compatible with catalog v0.6–v0.7.9.
  */
@@ -58,15 +58,15 @@ function rig(v){
   const key=(sign<0?'left':'right')+pair;
   const y=shoulderY+pair*62;
   const x=sign*(sw-(pair?sw*.22:0));
-  const z=sign*depth*.87 + (pair?sign*8:0);
+  const z=sign*depth*.96 + (pair?sign*12:0);
   const pose=v.vectorPose==='swim'?-35:v.vectorPose==='display'?39:8;
   const ex=x+sign*(v.spriteTorso==='draconic'?45:34+pose*.38)*armLen;
   const ey=y+(pose<0?49:91)*armLen;
   const wx=ex+sign*(15+(pose>20?20:0))*armLen, wy=ey+(pose<0?80:97)*armLen;
   marks['shoulder'+key]={x,y,z};
-  marks['elbow'+key]={x:ex,y:ey,z:z+(sign*11)};
-  marks['wrist'+key]={x:wx,y:wy,z:z+(sign*17)};
-  marks['finger'+key]={x:wx+sign*4,y:wy+33*armLen,z:z+(sign*18)}
+  marks['elbow'+key]={x:ex,y:ey,z:z+sign*(v.vectorPose==='display'?33:v.vectorPose==='swim'?17:24)+(pair?sign*7:0)};
+  marks['wrist'+key]={x:wx,y:wy,z:z+sign*(v.vectorPose==='display'?65:v.vectorPose==='swim'?21:54)+(pair?sign*9:0)};
+  marks['finger'+key]={x:wx+sign*4,y:wy+33*armLen,z:z+sign*(v.vectorPose==='display'?73:v.vectorPose==='swim'?25:61)+(pair?sign*9:0)}
  }
  for(let i=0;i<legs;i++){
   const positions=legs===4?[-.95,-.31,.31,.95]:[-.53,.53];
@@ -330,7 +330,18 @@ function torso(m){
  const n=race==='draconic'?23:race==='fae'?14:18;
  const rib=sw*(race==='draconic'?1.01:race==='alien'?.96:1);
  const pt=(a,y)=>F(cx+a)+' '+F(y);
- const d='M'+pt(-n,264)+
+ const d=side?
+  'M'+pt(-n,265)+
+  ' C'+pt(-rib*.72,267)+' '+pt(-rib*.97,287)+' '+pt(-rib*.98,313)+
+  ' C'+pt(-rib*.97,340)+' '+pt(-rib*.88,358)+' '+pt(-wa*.77,391)+
+  ' C'+pt(-wa*.81,423)+' '+pt(-hip*1.10,461)+' '+pt(-hip*.96,480)+
+  ' Q'+pt(-hip*.38,492)+' '+pt(hip*.50,483)+
+  ' C'+pt(hip*.94,471)+' '+pt(wa*.98,444)+' '+pt(wa*1.02,418)+
+  ' C'+pt(wa*.87,394)+' '+pt(wa*.82,377)+' '+pt(rib*.89,355)+
+  ' C'+pt(rib*1.14,347)+' '+pt(rib*1.32,330)+' '+pt(rib*1.16,311)+
+  ' C'+pt(rib*1.08,286)+' '+pt(sw*.52,269)+' '+pt(n,265)+
+  ' Q'+pt(0,275)+' '+pt(-n,265)+'Z'
+ : 'M'+pt(-n,264)+
   ' C'+pt(-sw*.47,270)+' '+pt(-rib*.98,281)+' '+pt(-rib*1.13,307)+
   ' C'+pt(-rib*1.23,327)+' '+pt(-rib*.94,348)+' '+pt(-rib*.81,359)+
   ' C'+pt(-wa*1.01,377)+' '+pt(-wa*.93,408)+' '+pt(-wa,427)+
@@ -371,8 +382,15 @@ function torso(m){
   }
   o+=ln('M'+pt(0,316)+'Q'+pt(-2,380)+' '+pt(0,447),c[2],1.55,.39);
  }else{
-  o+=ln('M'+pt(-rib*.69,305)+'Q'+pt(rib*1.0,326)+' '+pt(rib*.70,365),c[1],2.1,.42);
-  o+=ln('M'+pt(-rib*.65,324)+'Q'+pt(-rib*.71,402)+' '+pt(-wa*.51,454),c[2],1.6,.36);
+  // Profile: convex sternum in front, lumbar curve behind, round abdominal volume.
+  o+=sPath('M'+pt(rib*.11,300)+' Q'+pt(rib*1.19,290)+' '+pt(rib*1.17,326)+
+   ' Q'+pt(rib*.95,358)+' '+pt(rib*.42,362)+
+   ' Q'+pt(rib*.75,325)+' '+pt(rib*.11,300)+'Z','url(#v80edge)',c[1],1.3,.19);
+  o+=ln('M'+pt(-rib*.73,300)+'Q'+pt(-rib*1.03,353)+' '+pt(-wa*.72,403)+
+    ' Q'+pt(-hip*.95,457)+' '+pt(-hip*.73,472),c[2],2.4,.36);
+  o+=ln('M'+pt(rib*.55,310)+'Q'+pt(rib*1.18,331)+' '+pt(rib*.80,363)+
+    ' Q'+pt(wa*.93,387)+' '+pt(wa*.96,418),c[1],2.25,.45);
+  o+=ln('M'+pt(wa*.80,420)+'Q'+pt(wa*.88,451)+' '+pt(hip*.57,475),c[2],1.7,.28);
  }
  if(race==='aquatic'||race==='draconic'||m.skin==='scales'){
   // Staggered small scales vary with material and lie inside the actual torso.
@@ -596,7 +614,7 @@ if(note)note.textContent='Единый каркас для трёх ракурс
 const title=document.querySelector('#modular73 h3');
 if(title)title.textContent='Анатомический конструктор 2D';
 const badge=document.querySelector('.atlas76status');
-if(badge)badge.textContent='SVG-анатомия · пластичные силуэты · v0.8.3';
+if(badge)badge.textContent='SVG-анатомия · объёмный профиль · v0.8.4';
 render=function(sync=true){
  oldRender(sync);
  fitView();
@@ -618,7 +636,7 @@ svgSource=function(){
  return generated.replace('<g data-v80-fit="true">','<g data-v80-fit="true" transform="'+esc(tr)+'">');
 };
 render();
-window.AtlasRig080={version:'0.8.3',getModel:()=>rig(s),getFit:()=>{
+window.AtlasRig080={version:'0.8.4',getModel:()=>rig(s),getFit:()=>{
  const g=document.querySelector('[data-v80-fit]');return g?{fitted:g.dataset.fitted,nominal:Number(g.dataset.nominal),actual:Number(g.dataset.actual)}:null},
  render:()=>render(false)};
 })();
