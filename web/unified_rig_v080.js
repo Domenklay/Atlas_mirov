@@ -1,4 +1,4 @@
-/* Atlas Living Worlds 0.8.1 — unified procedural 3D landmark rig / 2D SVG renderer.
+/* Atlas Living Worlds 0.8.2 — unified procedural 3D landmark rig / 2D SVG renderer.
  * One skeleton for front / side / back. All artwork is SVG; no bitmaps or
  * third-party rendering dependencies. Compatible with catalog v0.6–v0.7.9.
  */
@@ -33,10 +33,10 @@ function rig(v){
  const race=RACES[v.spriteTorso]||RACES.humanoid;
  const body=N(v.build,0,100,45);
  const bulk=1+(body-45)/340;
- const sw=50*race.shoulder*N(v.shoulderWidth,65,145,100)/100*bulk;
- const hw=54*race.head*N(v.headWidth,65,145,100)/100;
+ const sw=53*race.shoulder*N(v.shoulderWidth,65,145,100)/100*bulk;
+ const hw=47*race.head*N(v.headWidth,65,145,100)/100;
  const wa=37*race.waist*N(v.waistWidth,65,145,100)/100*(1+(body-45)/650);
- const hip=wa*1.12;
+ const hip=wa*(v.spriteTorso==='draconic'?1.12:v.spriteTorso==='fae'?1.04:1.19);
  const depth=43*race.depth*(.92+body/640);
  const neck=17*race.neck+N(v.neckLen,0,65,18)*.26;
  const legLen=race.leg, armLen=N(v.armLength,65,140,100)/100;
@@ -48,7 +48,7 @@ function rig(v){
  const headType=v.spriteHead||'elven';
  const headCenter={x:0,y:183-neck*.32,z:2};
  const neckJoint={x:0,y:250-neck*.3,z:0};
- const shoulderY=295+neck*.1,hipY=471,elbowY=392, wristY=493, kneeY=567, ankleY=669;
+ const shoulderY=292+neck*.10,hipY=470;
  const marks={
   head:headCenter,neck:neckJoint,chest:{x:0,y:323,z:0},waist:{x:0,y:404,z:0},pelvis:{x:0,y:hipY,z:0},
   leftShoulder:{x:-sw,y:shoulderY,z:0},rightShoulder:{x:sw,y:shoulderY,z:0},
@@ -60,9 +60,9 @@ function rig(v){
   const x=sign*(sw-(pair?sw*.22:0));
   const z=sign*depth*.87 + (pair?sign*8:0);
   const pose=v.vectorPose==='swim'?-35:v.vectorPose==='display'?39:8;
-  const ex=x+sign*(40+pose*.38)*armLen;
-  const ey=y+(pose<0?47:91)*armLen;
-  const wx=ex+sign*(19+(pose>20?17:0))*armLen, wy=ey+(pose<0?77:97)*armLen;
+  const ex=x+sign*(v.spriteTorso==='draconic'?45:34+pose*.38)*armLen;
+  const ey=y+(pose<0?49:91)*armLen;
+  const wx=ex+sign*(15+(pose>20?20:0))*armLen, wy=ey+(pose<0?80:97)*armLen;
   marks['shoulder'+key]={x,y,z};
   marks['elbow'+key]={x:ex,y:ey,z:z+(sign*11)};
   marks['wrist'+key]={x:wx,y:wy,z:z+(sign*17)};
@@ -75,9 +75,9 @@ function rig(v){
   const z=legs===4?(i%2===0?-17:17):i===0?-11:11;
   const lift=(i%2)*4,step=legLen;
   marks['hip'+i]={x,y:hipY,z};
-  marks['knee'+i]={x:x*1.16,y:hipY+98*step+lift,z:z+((i%2)?8:-5)};
-  marks['ankle'+i]={x:x*1.22,y:hipY+192*step+lift,z:z+5};
-  marks['foot'+i]={x:x*1.28,y:hipY+220*step+lift,z:z+17}
+  marks['knee'+i]={x:x*(v.spriteTorso==='draconic'?1.27:1.12),y:hipY+99*step+lift,z:z+((i%2)?8:-5)};
+  marks['ankle'+i]={x:x*(v.spriteTorso==='draconic'?1.30:1.16),y:hipY+191*step+lift,z:z+5};
+  marks['foot'+i]={x:x*(v.spriteTorso==='draconic'?1.48:1.26),y:hipY+222*step+lift,z:z+17}
  }
  return {view,sw,wa,hip,depth,hw,neck,armLen,legLen,arms,legs,tail,colors,headType,marks,
          detail:N(v.detailLevel,0,100,85)/100,zoom:N(v.size,60,190,110)/110,
@@ -167,21 +167,55 @@ function otherTail(m){
 }
 function leg(m,i){
  if(m.tail)return '';
- const M=m.marks,hip=project(m,M['hip'+i]),knee=project(m,M['knee'+i]),ankle=project(m,M['ankle'+i]),foot=project(m,M['foot'+i]);
- const far=m.view==='side'&&i%2===0;
- const bone=[hip,knee,ankle],type=m.v.feet||'feet',race=m.race;
- const thick=race==='draconic'?18:race==='fae'?11:race==='arboreal'?17:14;
- let o='<g data-v80-part="leg" data-index="'+i+'" opacity="'+(far?.71:1)+'">';
- o+=sPath(tube(bone,[thick*1.3,thick*.79,thick*.62]),'url(#v80skin)',m.colors[2],2.5);
- o+=ln('M'+xy(hip)+' Q'+F(knee.x-10)+' '+F(knee.y-34)+' '+xy(ankle),m.colors[1],1.5,.32);
- if(type==='hooves'||race==='arboreal'){
-  o+=sPath('M'+F(ankle.x-10)+' '+F(ankle.y-2)+'Q'+F(foot.x-20)+' '+F(foot.y+14)+' '+F(foot.x-18)+' '+F(foot.y+16)+'L'+F(foot.x+19)+' '+F(foot.y+16)+'Q'+F(foot.x+18)+' '+F(foot.y-6)+' '+F(ankle.x+10)+' '+F(ankle.y-2)+'Z','url(#v80edge)',m.colors[2],2.5)
+ const M=m.marks,c=m.colors,hip=project(m,M['hip'+i]),knee=project(m,M['knee'+i]),ankle=project(m,M['ankle'+i]),foot=project(m,M['foot'+i]);
+ const race=m.race,kind=m.v.feet||'feet',far=m.view==='side'&&i%2===0;
+ const b=(race==='draconic'?19:race==='fae'?11:race==='arboreal'?17:race==='alien'?12:15);
+ // Raised quadriceps, true tapered patella, thicker calf and narrow ankle.
+ const femur={x:hip.x+(knee.x-hip.x)*.47,y:hip.y+(knee.y-hip.y)*.47};
+ const calf={x:knee.x+(ankle.x-knee.x)*.45,y:knee.y+(ankle.y-knee.y)*.45};
+ const bone=[hip,femur,knee,calf,ankle];
+ const outline=tube(bone,[b*1.37,b*1.14,b*.77,b*.96,b*.56]);
+ let out='<g data-v80-part="leg" data-index="'+i+'" data-v82-anatomy="organic" opacity="'+(far?.77:1)+'">';
+ out+=sPath(outline,'url(#v80skin)',c[2],2.6);
+ // Shading follows the underlying joint instead of an isolated circular knee.
+ const normal=norm(hip,knee),n2=norm(knee,ankle);
+ out+=ln('M'+xy({x:hip.x+normal.x*b*.4,y:hip.y+normal.y*b*.4})+
+   ' Q'+F(femur.x+normal.x*b*.65)+' '+F(femur.y+normal.y*b*.65)+
+   ' '+F(knee.x+normal.x*b*.28)+' '+F(knee.y+normal.y*b*.28),c[1],2.1,.37);
+ out+=ln('M'+F(knee.x+n2.x*b*.34)+' '+F(knee.y+n2.y*b*.34)+
+   ' Q'+F(calf.x+n2.x*b*.58)+' '+F(calf.y+n2.y*b*.58)+' '+xy(ankle),c[1],1.6,.40);
+ out+=ln('M'+F(knee.x-n2.x*b*.18)+' '+F(knee.y-n2.y*b*.18)+
+   ' Q'+F(knee.x-2)+' '+F(knee.y+8)+' '+F(knee.x+n2.x*b*.17)+' '+F(knee.y+n2.y*b*.20),c[2],1.2,.30);
+ if(race==='draconic'){
+  // Digitigrade lower limb: hock and taloned toes, still anchored to the same ankle and foot.
+  const hock={x:ankle.x+(foot.x-ankle.x)*.5,y:ankle.y+4};
+  out+=sPath(tube([ankle,hock,foot],[b*.62,b*.50,b*.38]),'url(#v80edge)',c[2],1.7);
+  for(let t=-1;t<=1;t++){
+   const x=foot.x+t*10,y=foot.y+2;
+   out+=sPath('M'+F(x-5)+' '+F(y-3)+'Q'+F(x+4)+' '+F(y-3)+' '+F(x+11)+' '+F(y+5)+'L'+F(x+3)+' '+F(y+15)+'Z','#efe6c8',c[2],1.1,.98)
+  }
+ }else if(kind==='hooves'||race==='arboreal'){
+  out+=sPath('M'+F(ankle.x-9)+' '+F(ankle.y-6)+'Q'+F(foot.x-21)+' '+F(foot.y+3)+' '+F(foot.x-20)+' '+F(foot.y+13)+
+   'Q'+F(foot.x)+' '+F(foot.y+17)+' '+F(foot.x+20)+' '+F(foot.y+13)+
+   'Q'+F(foot.x+20)+' '+F(foot.y-1)+' '+F(ankle.x+9)+' '+F(ankle.y-6)+'Z','url(#v80edge)',c[2],2.4);
+  out+=ln('M'+F(foot.x)+' '+F(foot.y+1)+'v13',c[1],1.7,.55)
  }else{
-  o+=sPath('M'+F(ankle.x-9)+' '+F(ankle.y-4)+'Q'+F(foot.x-24)+' '+F(foot.y-5)+' '+F(foot.x-29)+' '+F(foot.y+6)+'Q'+F(foot.x-10)+' '+F(foot.y+15)+' '+F(foot.x+20)+' '+F(foot.y+6)+'Q'+F(foot.x+25)+' '+F(foot.y-5)+' '+F(ankle.x+9)+' '+F(ankle.y-4)+'Z','url(#v80skin)',m.colors[2],2.1);
-  if(type==='webbed')o+=sPath('M'+F(foot.x-27)+' '+F(foot.y+3)+'Q'+F(foot.x-39)+' '+F(foot.y+24)+' '+F(foot.x+29)+' '+F(foot.y+16)+'L'+F(foot.x+20)+' '+F(foot.y+3)+'Z','url(#v80fin)',m.colors[1],1.8,.77);
-  if(type==='claws')for(let j=-1;j<2;j++)o+=sPath('M'+F(foot.x+j*15)+' '+F(foot.y+8)+'l8 12l-10 -3Z','#f4f6dd',m.colors[2],1,.8)
+  // A curved heel, instep, metatarsals and separate toes.
+  out+=sPath('M'+F(ankle.x-9)+' '+F(ankle.y-3)+'Q'+F(ankle.x-14)+' '+F(ankle.y+15)+' '+F(foot.x-25)+' '+F(foot.y+3)+
+   'Q'+F(foot.x-31)+' '+F(foot.y+10)+' '+F(foot.x-21)+' '+F(foot.y+16)+
+   'Q'+F(foot.x+5)+' '+F(foot.y+20)+' '+F(foot.x+26)+' '+F(foot.y+10)+
+   'Q'+F(foot.x+25)+' '+F(foot.y-3)+' '+F(ankle.x+11)+' '+F(ankle.y-3)+'Z','url(#v80skin)',c[2],2.1);
+  for(let j=0;j<4;j++){
+   const x=foot.x-18+j*11,y=foot.y+13+(j===0?1:0);
+   out+=ln('M'+F(x-3)+' '+F(y-8)+'Q'+F(x+2)+' '+F(y-3)+' '+F(x+5)+' '+F(y),c[1],1.45,.48);
+   if(kind==='claws')out+=sPath('M'+F(x+2)+' '+F(y)+'l7 11l-10 -3Z','#f3f7df',c[2],.8,.86)
+  }
+  if(kind==='webbed'){
+   out+=sPath('M'+F(foot.x-25)+' '+F(foot.y+5)+'Q'+F(foot.x-38)+' '+F(foot.y+25)+' '+F(foot.x+30)+' '+F(foot.y+17)+'L'+F(foot.x+21)+' '+F(foot.y+4)+'Z','url(#v80fin)',c[1],1.7,.78);
+   for(let j=-2;j<=2;j++)out+=ln('M'+F(foot.x)+' '+F(foot.y+3)+'L'+F(foot.x+j*12)+' '+F(foot.y+17+Math.abs(j)*2),c[1],1.1,.42)
+  }
  }
- return o+'</g>'
+ return out+'</g>'
 }
 function arm(m,sign,pair){
  const M=m.marks,key=(sign<0?'left':'right')+pair;
@@ -522,7 +556,7 @@ if(note)note.textContent='Единый каркас для трёх ракурс
 const title=document.querySelector('#modular73 h3');
 if(title)title.textContent='Анатомический конструктор 2D';
 const badge=document.querySelector('.atlas76status');
-if(badge)badge.textContent='SVG-анатомия · художественные формы · v0.8.1';
+if(badge)badge.textContent='SVG-анатомия · естественные пропорции · v0.8.2';
 render=function(sync=true){
  oldRender(sync);
  fitView();
@@ -544,7 +578,7 @@ svgSource=function(){
  return generated.replace('<g data-v80-fit="true">','<g data-v80-fit="true" transform="'+esc(tr)+'">');
 };
 render();
-window.AtlasRig080={version:'0.8.1',getModel:()=>rig(s),getFit:()=>{
+window.AtlasRig080={version:'0.8.2',getModel:()=>rig(s),getFit:()=>{
  const g=document.querySelector('[data-v80-fit]');return g?{fitted:g.dataset.fitted,nominal:Number(g.dataset.nominal),actual:Number(g.dataset.actual)}:null},
  render:()=>render(false)};
 })();
