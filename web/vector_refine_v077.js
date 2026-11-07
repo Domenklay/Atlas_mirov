@@ -272,6 +272,23 @@ if(box){
  const oldR=render;
  render=function(sync=true){oldR(sync);control.value=s.vectorPose||'natural';try{localStorage.setItem('atlas_draft_v077',JSON.stringify(s))}catch(e){}};
 }
+function restoreLineagePose(){
+ try{
+  const raw=JSON.parse(window.__AtlasCatalogBeforeStartup||'null');
+  if(!Array.isArray(raw))return;
+  const byId=new Map(raw.filter(x=>x&&typeof x.id==='string').map(x=>[x.id,x]));
+  let changed=false;
+  catalog=catalog.map((record,index)=>{
+   const source=byId.get(record.id)||raw[index];
+   if(!source||!['natural','display','swim'].includes(source.vectorPose))return record;
+   if(record.vectorPose===source.vectorPose)return record;
+   changed=true;
+   return clean({...record,vectorPose:source.vectorPose});
+  });
+  if(changed)persist();
+ }catch(e){}
+}
+restoreLineagePose();
 try{
  const draft=JSON.parse(localStorage.getItem('atlas_draft_v077')||'null');
  if(draft&&valid(draft))s=clean(draft)
