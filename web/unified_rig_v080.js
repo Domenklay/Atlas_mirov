@@ -432,6 +432,17 @@ render=function(sync=true){
   status.textContent='Каркас v0.8 · '+m.arms+' рук · '+(m.tail?'рыбий хвост':m.legs+' ног')+' · '+({front:'спереди',side:'сбоку',back:'сзади'}[m.view]||'спереди');
  }
 };
+// The legacy export creates creature(s) again, without the live fit transform.
+ // Preserve the on-screen fit in BOTH SVG and the PNG exporter that calls svgSource().
+const previousSvgSource=svgSource;
+svgSource=function(){
+ const generated=previousSvgSource();
+ if(!s?.spriteMode)return generated;
+ fitView();
+ const tr=document.querySelector('#art [data-v80-fit]')?.getAttribute('transform');
+ if(!tr)return generated;
+ return generated.replace('<g data-v80-fit="true">','<g data-v80-fit="true" transform="'+esc(tr)+'">');
+};
 render();
 window.AtlasRig080={version:'0.8.0',getModel:()=>rig(s),getFit:()=>{
  const g=document.querySelector('[data-v80-fit]');return g?{fitted:g.dataset.fitted,nominal:Number(g.dataset.nominal),actual:Number(g.dataset.actual)}:null},
