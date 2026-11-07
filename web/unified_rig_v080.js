@@ -250,23 +250,28 @@ function arm(m,sign,pair){
  const v={x:finger.x-wrist.x,y:finger.y-wrist.y},len=Math.max(2,Math.hypot(v.x,v.y));
  const along={x:v.x/len,y:v.y/len},across={x:-along.y,y:along.x};
  const at=(u,t)=>({x:wrist.x+along.x*u+across.x*t,y:wrist.y+along.y*u+across.y*t});
- const palm0=at(0,0),knuckle=at(len*.6,0);
+ const palm0=at(0,0),knuckle=at(len*.60,0);
  if(u==='pincers'){
   out+=sPath('M'+xy(at(-2,-rad*.6))+'Q'+xy(at(len*.4,-rad*1.4))+' '+xy(at(len+15,-rad*.75))+
    'Q'+xy(at(len-2,0))+' '+xy(at(len+14,rad*.85))+' Q'+xy(at(len*.34,rad*1.3))+' '+xy(at(-2,rad*.6))+'Z','url(#v80edge)',c[2],2.1)
  }else{
-  out+=sPath(tube([palm0,knuckle,at(len*.79,0)],[rad*.61,rad*.70,rad*.48]),'url(#v80edge)',c[2],1.55);
+  // Palm, four fully outlined tapered fingers and a thumb. No disembodied line strokes.
+  out+=sPath(tube([palm0,at(len*.34,0),knuckle],[rad*.60,rad*.73,rad*.72]),'url(#v80edge)',c[2],1.45);
   for(let i=0;i<4;i++){
-   const spread=(i-1.5)*rad*.24,tip=at(len+(i===1||i===2?7:1),spread*.92);
-   const root=at(len*.56,spread);
-   out+=ln('M'+xy(root)+' Q'+xy(at(len*.89,spread*1.1))+' '+xy(tip),c[1],2.4,.70);
-   if(u==='claws'||m.race==='draconic'){
-    const x=tip.x+along.x*8,y=tip.y+along.y*8;
-    out+=sPath('M'+xy({x:tip.x-2,y:tip.y})+'L'+F(x)+' '+F(y)+'L'+xy({x:tip.x+3,y:tip.y+1})+'Z','#f6f7dd',c[2],.75,.9)
-   }
+    const gap=rad*.30,offset=(i-1.5)*gap;
+    const root=at(len*.55,offset),mid=at(len*.84,offset*1.12);
+    const length= i===0?len*.96 : i===1?len*1.23 : i===2?len*1.20:len*.89;
+    const tip=at(length,offset*1.23),radius=2.8*(rad/15);
+    out+=sPath(tube([root,mid,tip],[radius*1.20,radius,radius*.55]),'url(#v80skin)',c[2],.72,.99);
+    out+=ln('M'+xy(mid)+'Q'+xy(at(length-.5,offset*1.23-radius*.32))+' '+xy(tip),c[1],.75,.45);
+    if(u==='claws'||m.race==='draconic'){
+      const outer=at(length+9,offset*1.24);
+      out+=sPath('M'+xy(at(length-2,offset-2))+'L'+xy(outer)+'L'+xy(at(length+1,offset+2))+'Z','#f2edd8',c[2],.7,.95)
+    }
   }
-  const thumb=at(len*.38,-rad*.89),thumbTip=at(len*.82,-rad*1.20);
-  out+=ln('M'+xy(at(len*.22,-rad*.39))+' Q'+xy(thumb)+' '+xy(thumbTip),c[1],2.8,.63)
+  const thumbRoot=at(len*.18,-rad*.62),thumbMid=at(len*.45,-rad*1.06),thumbTip=at(len*.69,-rad*1.19);
+  out+=sPath(tube([thumbRoot,thumbMid,thumbTip],[rad*.26,rad*.25,rad*.14]),'url(#v80skin)',c[2],.8);
+  out+=ln('M'+xy(thumbRoot)+'Q'+xy(thumbMid)+' '+xy(thumbTip),c[1],.9,.48)
  }
  return out+'</g>'
 }
@@ -405,7 +410,7 @@ function torso(m){
 function head(m){
  const c=m.colors,side=m.view==='side',back=m.view==='back';
  const center=project(m,m.marks.head),cx=center.x,cy=center.y;
- const w=m.hw*(side?.91:1),h=m.race==='alien'?89:m.race==='draconic'?91:m.race==='fae'?76:81;
+ const w=m.hw*(side?.91:1),h=m.race==='alien'?85:m.race==='draconic'?86:m.race==='fae'?70:76;
  const top=cy-h,chin=cy+h*.81,dragon=m.headType==='dragon',aquatic=m.headType==='aquatic'||m.race==='aquatic';
  let contour;
  if(side){
@@ -420,8 +425,8 @@ function head(m){
   const wide=m.race==='alien'?1.12:m.race==='fae'?.86:1;
   contour='M'+F(cx)+' '+F(top)+'Q'+F(cx-w*wide*.8)+' '+F(top-6)+' '+F(cx-w*wide)+' '+F(cy-28)+
    'Q'+F(cx-w*wide*1.05)+' '+F(cy+6)+' '+F(cx-w*.69)+' '+F(cy+38)+
-   'Q'+F(cx-w*.43)+' '+F(chin-12)+' '+F(cx)+' '+F(chin)+
-   'Q'+F(cx+w*.43)+' '+F(chin-12)+' '+F(cx+w*.69)+' '+F(cy+38)+
+   'Q'+F(cx-w*.33)+' '+F(chin-3)+' '+F(cx)+' '+F(chin-4)+
+   'Q'+F(cx+w*.33)+' '+F(chin-3)+' '+F(cx+w*.69)+' '+F(cy+38)+
    'Q'+F(cx+w*wide*1.05)+' '+F(cy+6)+' '+F(cx+w*wide)+' '+F(cy-28)+
    'Q'+F(cx+w*wide*.8)+' '+F(top-6)+' '+F(cx)+' '+F(top)+'Z'
  }
