@@ -99,6 +99,11 @@ jobs:
               raise SystemExit('Missing 3-view SVG module')
           orthographic_js = Path('web/vector_orthographic_v078.js').read_text(encoding='utf-8')
           html = html.replace(orthographic_tag, '<script>\n' + orthographic_js + '\n</script>', 1)
+          rig_tag = '<script src="vector_anatomy_v079.js"></script>'
+          if rig_tag not in html:
+              raise SystemExit('Missing v0.7.9 shared-anatomy module')
+          rig_js = Path('web/vector_anatomy_v079.js').read_text(encoding='utf-8')
+          html = html.replace(rig_tag, '<script>\n' + rig_js + '\n</script>', 1)
           # Preserve the standalone sprite assets and their manifest in the APK too.
           import shutil
           dest = Path("android/app/src/main/assets/sprites")
