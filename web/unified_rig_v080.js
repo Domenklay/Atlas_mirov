@@ -41,7 +41,7 @@ function rig(v){
  const neck=17*race.neck+N(v.neckLen,0,65,18)*.26;
  const legLen=race.leg, armLen=N(v.armLength,65,140,100)/100;
  const arms=[0,2,4].includes(+v.arms)?+v.arms:2,legs=[0,2,4].includes(+v.legs)?+v.legs:2;
- const tail=v.spriteLower==='tail'||(v.k==='mermaid'&&v.tail==='fish');
+ const tail=v.spriteLower==='tail';
  const view=['front','side','back'].includes(v.view)?v.view:'front';
  const col=SKINS[v.spriteTorso]||SKINS.humanoid;
  const colors=v.spriteCustomColor?[safeColor(v.color||col[0]),safeColor(v.accent||col[1]),col[2]]:col;
@@ -58,15 +58,15 @@ function rig(v){
   const key=(sign<0?'left':'right')+pair;
   const y=shoulderY+pair*62;
   const x=sign*(sw-(pair?sw*.22:0));
-  const z=(sign>0?1:-1)*(pair?7:0);
+  const z=sign*depth*.87 + (pair?sign*8:0);
   const pose=v.vectorPose==='swim'?-35:v.vectorPose==='display'?39:8;
   const ex=x+sign*(40+pose*.38)*armLen;
   const ey=y+(pose<0?47:91)*armLen;
   const wx=ex+sign*(19+(pose>20?17:0))*armLen, wy=ey+(pose<0?77:97)*armLen;
   marks['shoulder'+key]={x,y,z};
-  marks['elbow'+key]={x:ex,y:ey,z:z+(sign*7)};
-  marks['wrist'+key]={x:wx,y:wy,z:z+4};
-  marks['finger'+key]={x:wx+sign*4,y:wy+33*armLen,z:z+4}
+  marks['elbow'+key]={x:ex,y:ey,z:z+(sign*11)};
+  marks['wrist'+key]={x:wx,y:wy,z:z+(sign*17)};
+  marks['finger'+key]={x:wx+sign*4,y:wy+33*armLen,z:z+(sign*18)}
  }
  for(let i=0;i<legs;i++){
   const positions=legs===4?[-.95,-.31,.31,.95]:[-.53,.53];
@@ -362,8 +362,10 @@ function sketch(m){
  body.push(otherTail(m));
  if(m.tail)body.push(fish(m));
  for(let i=0;i<m.legs;i++)body.push(leg(m,i));
- for(let j=0;j<m.arms/2;j++)body.push(arm(m,-1,j),arm(m,1,j));
- body.push(neck(m),torso(m),head(m));
+ for(let j=0;j<m.arms/2;j++)body.push(arm(m,-1,j));
+ body.push(neck(m),torso(m));
+ for(let j=0;j<m.arms/2;j++)body.push(arm(m,1,j));
+ body.push(head(m));
  if(document.getElementById('m74anchors')?.checked){
   body.push('<g data-v80-debug="anchors">');
   for(const [key,p] of Object.entries(m.marks)){let xy0=project(m,p);body.push(circle(xy0.x,xy0.y,3.4,'#ffdc89',.86))}
