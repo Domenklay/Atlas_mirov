@@ -286,8 +286,9 @@ function fish(m){
  const base=m.hip*(side?1.02:1.10);
  const widths=[base,base*.92,base*.69,base*.36,6];
  const tip=points[4];
- let out='<g data-v80-part="fish-tail" data-v83-tail="curved">';
- out+=sPath(tube(points,widths),'url(#v80skin)',c[2],3.0);
+ const tailOutline=tube(points,widths);
+ let out='<g data-v80-part="fish-tail" data-v83-tail="curved"><defs><clipPath id="v83TailClip"><path d="'+tailOutline+'"/></clipPath></defs>';
+ out+=sPath(tailOutline,'url(#v80skin)',c[2],3.0);
  out+=ln('M'+xy({x:points[0].x-3,y:points[0].y+7})+'Q'+xy({x:points[1].x-7,y:points[1].y+15})+' '+xy({x:points[3].x-3,y:points[3].y+16}),c[1],2.1,.25);
  // Left and right lobes are drawn with curved, asymmetrical membranes.
  for(const sign of [-1,1]){
@@ -305,6 +306,7 @@ function fish(m){
      out+=ln('M'+xy(tip)+' Q'+F(tip.x+dir*(25+55*t))+' '+F(tip.y+17+8*t)+' '+F(tip.x+dir*(spread*(.60+.40*t)))+' '+F(ty+4+20*t),c[1],1,.40)
    }
  }
+ out+='<g clip-path="url(#v83TailClip)">';
  const rows=Math.round(8+m.detail*12);
  for(let r=0;r<rows;r++){
    const y=485+r*9.4;
@@ -317,6 +319,7 @@ function fish(m){
      out+=ln('M'+F(xx-6)+' '+F(y)+'q6 9 12 0',c[1],1.0,.26+m.detail*.21)
    }
  }
+ out+='</g>';
  return out+'</g>'
 }
 function torso(m){
