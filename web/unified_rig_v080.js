@@ -435,19 +435,29 @@ function head(m){
  const top=cy-h,chin=cy+h*.81,dragon=m.headType==='dragon',aquatic=m.headType==='aquatic'||m.race==='aquatic';
  let contour;
  if(side){
-  const nose=dragon?23:m.race==='alien'?18:10;
-  contour='M'+F(cx-29)+' '+F(top+14)+'Q'+F(cx-2)+' '+F(top-10)+' '+F(cx+29)+' '+F(top+3)+
-   'Q'+F(cx+w*.78)+' '+F(top+33)+' '+F(cx+w*.77)+' '+F(cy-28)+
-   'Q'+F(cx+w*.84+nose)+' '+F(cy-15)+' '+F(cx+w*.87+nose)+' '+F(cy-4)+
-   'L'+F(cx+w*.66)+' '+F(cy+22)+'Q'+F(cx+w*.81)+' '+F(cy+41)+' '+F(cx+w*.37)+' '+F(chin-4)+
-   'Q'+F(cx-13)+' '+F(chin+7)+' '+F(cx-33)+' '+F(cy+37)+
-   'Q'+F(cx-w*.78)+' '+F(cy-36)+' '+F(cx-29)+' '+F(top+14)+'Z';
+  const type=m.headType,kind=m.race;
+  // Five anatomical profiles instead of a mirrored frontal oval.
+  const brow=type==='dragon'||kind==='draconic'?1.15:kind==='alien'?1.24:kind==='fae'?.80:1;
+  const skull=kind==='alien'?1.17:kind==='arboreal'?1.08:kind==='fae'?.86:1;
+  const muzzle=type==='dragon'||kind==='draconic'?29:kind==='alien'?4:kind==='fae'?5:kind==='arboreal'?15:12;
+  const jaw=kind==='draconic'?w*.62:kind==='alien'?w*.28:kind==='fae'?w*.27:w*.40;
+  contour='M'+F(cx-31*skull)+' '+F(top+15)+
+   ' C'+F(cx-34*skull)+' '+F(top-4)+' '+F(cx+13)+' '+F(top-12)+' '+F(cx+w*.45)+' '+F(top+4)+
+   ' Q'+F(cx+w*.94*brow)+' '+F(top+26)+' '+F(cx+w*.95*brow)+' '+F(cy-24)+
+   ' Q'+F(cx+w*.89*brow+muzzle)+' '+F(cy-16)+' '+F(cx+w*.89*brow+muzzle)+' '+F(cy-3)+
+   ' L'+F(cx+w*.64+muzzle*.22)+' '+F(cy+17)+
+   ' Q'+F(cx+w*.91+muzzle*.12)+' '+F(cy+33)+' '+F(cx+jaw)+' '+F(cy+42)+
+   ' Q'+F(cx+jaw*.69)+' '+F(chin+1)+' '+F(cx-10)+' '+F(chin-1)+
+   ' Q'+F(cx-w*.65)+' '+F(cy+37)+' '+F(cx-w*.81)+' '+F(cy-12)+
+   ' Q'+F(cx-w*.81)+' '+F(cy-49)+' '+F(cx-31*skull)+' '+F(top+15)+'Z';
+  // Profile normals orient cranial details toward the facing (right) direction.
+  // A draconic muzzle is long, the fae nose is short and the alien skull domed.
  }else{
-  const wide=m.race==='alien'?1.12:m.race==='fae'?.86:1;
+  const wide=m.race==='alien'?1.19:m.race==='fae'?.82:m.race==='aquatic'?1.04:m.race==='draconic'?1.12:1;
   contour='M'+F(cx)+' '+F(top)+'Q'+F(cx-w*wide*.8)+' '+F(top-6)+' '+F(cx-w*wide)+' '+F(cy-28)+
    'Q'+F(cx-w*wide*1.05)+' '+F(cy+6)+' '+F(cx-w*.69)+' '+F(cy+38)+
-   'Q'+F(cx-w*.33)+' '+F(chin-3)+' '+F(cx)+' '+F(chin-4)+
-   'Q'+F(cx+w*.33)+' '+F(chin-3)+' '+F(cx+w*.69)+' '+F(cy+38)+
+   'Q'+F(cx-w*(m.race==='draconic'?.58:m.race==='alien'?.25:.35))+' '+F(chin-5)+' '+F(cx)+' '+F(chin-4)+
+   'Q'+F(cx+w*(m.race==='draconic'?.58:m.race==='alien'?.25:.35))+' '+F(chin-5)+' '+F(cx+w*.69)+' '+F(cy+38)+
    'Q'+F(cx+w*wide*1.05)+' '+F(cy+6)+' '+F(cx+w*wide)+' '+F(cy-28)+
    'Q'+F(cx+w*wide*.8)+' '+F(top-6)+' '+F(cx)+' '+F(top)+'Z'
  }
@@ -516,6 +526,22 @@ function head(m){
    const x=cx+(j-2)*w*.31,y=top+17+(j%2)*6;
    o+=sPath('M'+F(x-10)+' '+F(y)+'Q'+F(x)+' '+F(y+15)+' '+F(x+10)+' '+F(y)+'Q'+F(x)+' '+F(y+4)+' '+F(x-10)+' '+F(y)+'Z','url(#v80fin)',c[1],1,.40);
   }
+ }
+ if(m.race==='alien'){
+  for(let k=0;k<7;k++){
+   const p=k-3;
+   o+=ellipse(cx+p*w*.20,top+24+Math.abs(p)*3,2.8,3.5,'url(#v80shine)',.55);
+  }
+ }
+ if(m.race==='fae'){
+  for(const sign of [-1,1])if(!side||sign===1)for(let k=0;k<5;k++){
+   const x=cx+sign*w*(.47+k*.075);
+   o+=circle(x,cy-43+k*8,1.5,'url(#v80shine)',.67)
+  }
+ }
+ if(m.race==='aquatic'&&side)for(let k=0;k<5;k++){
+  const x=cx-w*.59,y=cy-4+k*10;
+  o+=ln('M'+F(x)+' '+F(y)+'q-7 8 -10 15',c[1],1.5,.55)
  }
  if(m.race==='arboreal')for(let i=0;i<11;i++){
   const x=cx-w*.5+(i*17)%(w),y=top+20+(i*29)%120;
