@@ -1,4 +1,4 @@
-/* Atlas Living Worlds 0.8.0 — unified procedural 3D landmark rig / 2D SVG renderer.
+/* Atlas Living Worlds 0.8.1 — unified procedural 3D landmark rig / 2D SVG renderer.
  * One skeleton for front / side / back. All artwork is SVG; no bitmaps or
  * third-party rendering dependencies. Compatible with catalog v0.6–v0.7.9.
  */
@@ -93,7 +93,7 @@ function pt(x,y,z=0){return {x,y,z}}
 const xy=p=>F(p.x)+' '+F(p.y);
 function defs(m){
  const [main,light,dark]=m.colors;
- return '<defs id="v80-defs">'+
+ return '<defs id="v80-defs"><radialGradient id="v81iris"><stop stop-color="#ffffff"/><stop offset=".14" stop-color="#afd9d2"/><stop offset=".50" stop-color="'+light+'"/><stop offset=".92" stop-color="'+dark+'"/></radialGradient>'+
  '<radialGradient id="v80skin" cx="34%" cy="19%" r="87%"><stop stop-color="#ffffff" stop-opacity=".88"/><stop offset=".13" stop-color="'+light+'"/><stop offset=".42" stop-color="'+main+'"/><stop offset=".82" stop-color="'+main+'"/><stop offset="1" stop-color="'+dark+'"/></radialGradient>'+
  '<linearGradient id="v80edge" x1="0%" y1="0%" x2="85%" y2="100%"><stop stop-color="'+light+'"/><stop offset=".28" stop-color="'+main+'"/><stop offset=".72" stop-color="'+main+'"/><stop offset="1" stop-color="'+dark+'"/></linearGradient>'+
  '<linearGradient id="v80fin" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="'+light+'" stop-opacity=".8"/><stop offset=".52" stop-color="'+main+'" stop-opacity=".46"/><stop offset="1" stop-color="'+light+'" stop-opacity=".18"/></linearGradient>'+
@@ -185,32 +185,56 @@ function leg(m,i){
 }
 function arm(m,sign,pair){
  const M=m.marks,key=(sign<0?'left':'right')+pair;
- const upper=project(m,M['shoulder'+key]),elbow=project(m,M['elbow'+key]),wrist=project(m,M['wrist'+key]),finger=project(m,M['finger'+key]);
- const hard=m.v.spriteArms==='strong',thin=m.race==='fae';
- const rad=(hard?19:thin?10:14)*(pair===1?.83:1);
+ const shoulder=project(m,M['shoulder'+key]),elbow=project(m,M['elbow'+key]),wrist=project(m,M['wrist'+key]),finger=project(m,M['finger'+key]);
+ const c=m.colors,hard=m.v.spriteArms==='strong',thin=m.race==='fae',other=m.race==='draconic';
+ const rad=(hard?21:thin?11:other?19:15)*(pair===1?.82:1);
  const far=m.view==='side'&&sign<0;
- let o='<g data-v80-part="arm" data-index="'+(pair*2+(sign>0?1:0))+'" opacity="'+(far?.77:1)+'">';
- o+=sPath(tube([upper,elbow,wrist],[rad*1.22,rad*.87,rad*.64]),'url(#v80skin)',m.colors[2],2.9);
- o+=ln('M'+xy(upper)+' Q'+F(elbow.x-4)+' '+F(elbow.y-25)+' '+xy(wrist),m.colors[1],1.7,.36);
- const u=m.v.hands;
- const fin=m.v.spriteArms==='finned'||u==='webbed';
- if(fin){
-  const tip={x:(elbow.x+wrist.x)/2+sign*(m.view==='side'?17:34),y:(elbow.y+wrist.y)/2+29};
-  o+=sPath('M'+xy(elbow)+' Q'+F(tip.x+sign*7)+' '+F(tip.y-19)+' '+xy(tip)+' L'+xy(wrist)+'Z','url(#v80fin)',m.colors[1],2,.75);
-  for(let k=0;k<4;k++)o+=ln('M'+xy(elbow)+'L'+F(tip.x-sign*k*6)+' '+F(tip.y-k*6),m.colors[1],1,.3)
- }
- if(u==='pincers'){
-  o+=sPath('M'+F(wrist.x-10)+' '+F(wrist.y)+'Q'+F(finger.x-28)+' '+F(finger.y+8)+' '+F(finger.x+6)+' '+F(finger.y+10)+'Q'+F(finger.x+25)+' '+F(finger.y)+' '+F(finger.x+4)+' '+F(finger.y-14)+'Q'+F(finger.x+28)+' '+F(finger.y-30)+' '+F(wrist.x+9)+' '+F(wrist.y)+'Z','url(#v80edge)',m.colors[2],2.5)
- }else{
-  const palm={x:(wrist.x+finger.x)/2,y:(wrist.y+finger.y)/2};
-  o+=sPath(tube([wrist,palm,finger],[rad*.68,rad*.65,rad*.4]),'url(#v80edge)',m.colors[2],1.7);
-  for(let k=-1;k<=2;k++){
-   const x=finger.x+k*4,y=finger.y+(k===0?6:0);
-   o+=ln('M'+F(wrist.x+k*3)+' '+F(wrist.y+12)+' Q'+F(x+3)+' '+F(y-10)+' '+F(x)+' '+F(y+5),m.colors[1],1.4,.59);
-   if(u==='claws')o+=sPath('M'+F(x-2)+' '+F(y+2)+'l5 11l-7 -4Z','#eff9e8',m.colors[2],.8,.8)
+ const dir=sign*(m.view==='back'?-1:1);
+ let out='<g data-v80-part="arm" data-index="'+(pair*2+(sign>0?1:0))+'" opacity="'+(far?.72:1)+'">';
+ // Deltoid, biceps, forearm, palm and fingers share one curved silhouette.
+ const biceps={x:shoulder.x+(elbow.x-shoulder.x)*.52,y:shoulder.y+(elbow.y-shoulder.y)*.52};
+ const ext={x:elbow.x+(wrist.x-elbow.x)*.56,y:elbow.y+(wrist.y-elbow.y)*.56};
+ const sweep=norm(shoulder,elbow),bend=norm(elbow,wrist);
+ const mid={x:elbow.x,y:elbow.y};
+ out+=sPath(tube([shoulder,biceps,mid,ext,wrist],[rad*1.38,rad*1.06,rad*.78,rad*.90,rad*.53]),'url(#v80skin)',c[2],2.8);
+ // Anatomical volumes and tapered highlight, not circular elbow joints.
+ out+=ln('M'+xy({x:shoulder.x+sweep.x*rad*.38,y:shoulder.y+sweep.y*rad*.38})+' Q'+F(biceps.x+sweep.x*rad*.48)+' '+F(biceps.y+sweep.y*rad*.48)+' '+xy({x:elbow.x+bend.x*rad*.33,y:elbow.y+bend.y*rad*.33}),c[1],2.35,.44);
+ out+=ln('M'+F(elbow.x+bend.x*rad*.4)+' '+F(elbow.y+bend.y*rad*.4)+' Q'+F(ext.x+bend.x*rad*.60)+' '+F(ext.y+bend.y*rad*.60)+' '+xy(wrist),c[1],1.7,.36);
+ if(m.race==='draconic'){
+  for(let k=0;k<3;k++){
+   const x=biceps.x+(ext.x-biceps.x)*(k+1)/4,y=biceps.y+(ext.y-biceps.y)*(k+1)/4;
+   out+=sPath('M'+F(x-7*dir)+' '+F(y-7)+'q'+F(dir*6)+' -14 '+F(dir*17)+' -23q'+F(dir*2)+' 19 '+F(-dir*11)+' 31Z','url(#v80edge)',c[1],1.2,.63)
   }
  }
- return o+'</g>'
+ const u=m.v.hands||'standard',finned=m.v.spriteArms==='finned'||u==='webbed';
+ if(finned){
+  const tip={x:ext.x+dir*(m.view==='side'?18:42),y:ext.y+15};
+  out+=sPath('M'+xy(elbow)+' Q'+F(tip.x+dir*11)+' '+F(tip.y-17)+' '+xy(tip)+' Q'+F(wrist.x+dir*18)+' '+F(wrist.y-14)+' '+xy(wrist)+'Z','url(#v80fin)',c[1],1.7,.79);
+  for(let k=0;k<6;k++)out+=ln('M'+xy(elbow)+'Q'+F(ext.x+dir*(18+k*7))+' '+F(ext.y-5+k*4)+' '+F(tip.x-dir*k*4)+' '+F(tip.y+k*2),c[1],1.1,.36)
+ }
+ // Hand axis is defined by the wrist and finger anchor so poses remain editable.
+ const v={x:finger.x-wrist.x,y:finger.y-wrist.y},len=Math.max(2,Math.hypot(v.x,v.y));
+ const along={x:v.x/len,y:v.y/len},across={x:-along.y,y:along.x};
+ const at=(u,t)=>({x:wrist.x+along.x*u+across.x*t,y:wrist.y+along.y*u+across.y*t});
+ const palm0=at(0,0),knuckle=at(len*.6,0);
+ if(u==='pincers'){
+  out+=sPath('M'+xy(at(-2,-rad*.6))+'Q'+xy(at(len*.4,-rad*1.4))+' '+xy(at(len+15,-rad*.75))+
+   'Q'+xy(at(len-2,0))+' '+xy(at(len+14,rad*.85))+' Q'+xy(at(len*.34,rad*1.3))+' '+xy(at(-2,rad*.6))+'Z','url(#v80edge)',c[2],2.1)
+ }else{
+  out+=sPath(tube([palm0,knuckle,at(len*.79,0)],[rad*.61,rad*.70,rad*.48]),'url(#v80edge)',c[2],1.55);
+  for(let i=0;i<4;i++){
+   const spread=(i-1.5)*rad*.24,tip=at(len+(i===1||i===2?7:1),spread*.92);
+   const root=at(len*.56,spread);
+   out+=ln('M'+xy(root)+' Q'+xy(at(len*.89,spread*1.1))+' '+xy(tip),c[1],2.4,.70);
+   if(u==='claws'||m.race==='draconic'){
+    const x=tip.x+along.x*8,y=tip.y+along.y*8;
+    out+=sPath('M'+xy({x:tip.x-2,y:tip.y})+'L'+F(x)+' '+F(y)+'L'+xy({x:tip.x+3,y:tip.y+1})+'Z','#f6f7dd',c[2],.75,.9)
+   }
+  }
+  const thumb=at(len*.38,-rad*.89),thumbTip=at(len*.82,-rad*1.20);
+  out+=ln('M'+xy(at(len*.22,-rad*.39))+' Q'+xy(thumb)+' '+xy(thumbTip),c[1],2.8,.63)
+ }
+ return out+'</g>'
 }
 function fish(m){
  const c=m.colors,side=m.view==='side',back=m.view==='back';
@@ -238,123 +262,199 @@ function fish(m){
  return o+'</g>'
 }
 function torso(m){
- const c=m.colors,view=m.view,side=view==='side';
- const sw=side?m.depth*.96:m.sw,wa=side?m.depth*.73:m.wa,hip=side?m.depth*.85:m.hip;
- const cx=310,z0=300;
- let d='M'+F(cx-sw)+' 286Q310 263 '+F(cx+sw)+' 286Q'+F(cx+sw+9)+' 302 '+F(cx+sw*.90)+' 337Q'+F(cx+wa*.82)+' 370 '+F(cx+wa)+' 418Q'+F(cx+hip+5)+' 450 '+F(cx+hip)+' 474Q310 490 '+F(cx-hip)+' 474Q'+F(cx-hip-7)+' 447 '+F(cx-wa)+' 418Q'+F(cx-wa*.9)+' 374 '+F(cx-sw*.9)+' 337Q'+F(cx-sw-9)+' 298 '+F(cx-sw)+' 286Z';
- const kind=m.race;
- let o='<g data-v80-part="torso">'+sPath(d,'url(#v80skin)',c[2],4);
- o+='<defs><clipPath id="v80bodyclip"><path d="'+d+'"/></clipPath></defs><g clip-path="url(#v80bodyclip)">';
- if(side){
-  o+=ln('M'+F(cx-m.depth*.65)+' 303Q'+F(cx+m.depth*1.2)+' 318 '+F(cx+m.depth*.7)+' 366',c[1],2.2,.36);
-  o+=ln('M'+F(cx-m.depth*.7)+' 316Q'+F(cx-m.depth*.92)+' 390 '+F(cx-m.depth*.4)+' 459',c[2],1.8,.39);
+ const c=m.colors,side=m.view==='side',sw=side?m.depth*1.0:m.sw,wa=side?m.depth*.71:m.wa,hip=side?m.depth*.88:m.hip,cx=310;
+ const race=m.race,collar=race==='draconic'?1.1:race==='fae'?.82:1;
+ const upper=sw*collar;
+ const shape='M'+F(cx-upper*.67)+' 279Q310 '+(race==='arboreal'?266:271)+' '+F(cx+upper*.67)+' 279'+
+ 'Q'+F(cx+sw*1.11)+' 287 '+F(cx+sw*1.16)+' 313'+
+ 'Q'+F(cx+sw*1.06)+' 343 '+F(cx+wa*.96)+' 365'+
+ 'Q'+F(cx+wa*.79)+' 393 '+F(cx+wa*.99)+' 419'+
+ 'Q'+F(cx+hip*1.09)+' 446 '+F(cx+hip)+' 474'+
+ 'Q310 497 '+F(cx-hip)+' 474'+
+ 'Q'+F(cx-hip*1.09)+' 447 '+F(cx-wa*.99)+' 419'+
+ 'Q'+F(cx-wa*.79)+' 393 '+F(cx-wa*.96)+' 365'+
+ 'Q'+F(cx-sw*1.06)+' 343 '+F(cx-sw*1.16)+' 313'+
+ 'Q'+F(cx-sw*1.11)+' 287 '+F(cx-upper*.67)+' 279Z';
+ const cut='v81bodyclip';
+ let o='<g data-v80-part="torso" data-v81-anatomy="sculpted">'+sPath(shape,'url(#v80skin)',c[2],3.7);
+ o+='<defs><clipPath id="'+cut+'"><path d="'+shape+'"/></clipPath></defs><g clip-path="url(#'+cut+')">';
+ // Shoulder caps, collarbones and ribcage taper into the waist.
+ for(const sign of [-1,1]){
+  o+=sPath('M'+F(cx+sign*upper*.55)+' 286Q'+F(cx+sign*sw*1.15)+' 283 '+F(cx+sign*sw*1.1)+' 321Q'+F(cx+sign*sw*.88)+' 342 '+F(cx+sign*sw*.55)+' 329Z','url(#v80edge)',c[1],1.7,.44);
+  o+=ln('M'+F(cx+sign*upper*.18)+' 291Q'+F(cx+sign*sw*.67)+' 308 '+F(cx+sign*sw*.80)+' 324',c[1],2.1,.55);
+  o+=ln('M'+F(cx+sign*sw*.84)+' 344Q'+F(cx+sign*wa*.70)+' 365 '+F(cx+sign*wa*.83)+' 392',c[2],1.6,.23);
+  o+=ln('M'+F(cx+sign*wa*.52)+' 406Q'+F(cx+sign*wa*.66)+' 428 '+F(cx+sign*hip*.74)+' 452',c[1],1.55,.3);
+ }
+ if(!side){
+  o+=ln('M310 316Q307 345 310 373Q316 393 310 410',c[1],2.1,.35);
+  o+=ln('M'+F(cx-sw*.62)+' 330Q310 347 '+F(cx+sw*.62)+' 330',c[2],1.5,.23);
+  o+=ln('M'+F(cx-hip*.72)+' 454Q310 465 '+F(cx+hip*.72)+' 454',c[1],1.65,.36);
  }else{
-  o+=ln('M'+F(cx-sw*.80)+' 304Q310 338 '+F(cx+sw*.80)+' 304',c[1],2.1,.4);
-  o+=ln('M310 334Q305 385 310 422',c[1],1.9,.31);
-  o+=ln('M'+F(cx-wa*.6)+' 431Q310 446 '+F(cx+wa*.6)+' 431',c[1],1.6,.26)
+  o+=ln('M'+F(cx-sw*.53)+' 304Q'+F(cx+sw*.92)+' 321 '+F(cx+sw*.65)+' 358',c[1],2.3,.43);
+  o+=ln('M'+F(cx-sw*.8)+' 320Q'+F(cx-sw*.85)+' 400 '+F(cx-wa*.4)+' 456',c[2],2,.36)
  }
- if(kind==='aquatic'||kind==='draconic'||m.skin==='scales'){
-  for(let row=0;row<Math.round(6+9*m.detail);row++)for(let j=-3;j<=3;j++){
-   const y=309+row*10.4,x=310+j*(side?12:15)+(row%2)*7;
-   o+=ln('M'+F(x-7)+' '+F(y)+'q7 10 14 0',c[1],1,.26+m.detail*.21);
+ if(race==='aquatic'||m.skin==='scales'||race==='draconic'){
+  for(let row=0;row<Math.round(5+m.detail*11);row++){
+   const y=309+row*11.2;
+   for(let j=-4;j<=4;j++){
+    const span=(side?12:14),x=cx+j*span+(row%2)*span*.5;
+    o+=sPath('M'+F(x-7)+' '+F(y)+'q7 11 14 0q-7 3 -14 0Z','url(#v80fin)',c[1],.8,.20+m.detail*.27)
+   }
   }
- }else if(kind==='arboreal'||m.skin==='bark'){
-  for(let j=0;j<Math.round(11+14*m.detail);j++){
-   const x=275+(j*23)%74,y=284+(j*31)%157;
-   o+=ln('M'+x+' '+y+'q'+(j%2?7:-5)+' 23 1 34',c[2],1.5,.38);
+  if(race==='draconic'){
+   for(let row=0;row<5;row++){
+    const y=306+row*28,dx=Math.max(12,26-row*3);
+    o+=sPath('M'+F(cx-dx)+' '+y+'Q310 '+F(y-17)+' '+F(cx+dx)+' '+y+'Q310 '+F(y+13)+' '+F(cx-dx)+' '+y+'Z','url(#v80edge)',c[1],1.65,.49)
+   }
   }
- }else if(kind==='alien'||kind==='fae')for(let i=0;i<Math.round(10+13*m.detail);i++){
-  const x=282+(i*17)%60,y=309+(i*31)%130;
-  o+=circle(x,y,kind==='fae'?2.2:1.3,'url(#v80shine)',.55)
+ }else if(race==='arboreal'||m.skin==='bark'){
+  for(let j=0;j<Math.round(18+m.detail*15);j++){
+   const x=270+(j*23)%82,y=280+(j*31)%185;
+   o+=ln('M'+x+' '+y+'q'+(j%2?8:-6)+' 26 '+(j%3?5:-5)+' 42',c[2],1.6,.40);
+   if(j%4===0)o+=sPath('M'+x+' '+y+'q14 -15 24 -8q-7 14 -24 8Z','url(#v80fin)',c[1],1,.68)
+  }
+ }else if(race==='alien'){
+  for(let j=0;j<21;j++){
+   const x=280+(j*23)%65,y=294+(j*17)%154;
+   o+=sPath('M'+x+' '+y+'l5 -10l6 10l-6 12Z','url(#v80fin)',c[1],1,.22+m.detail*.31);
+  }
+ }else if(race==='fae'){
+  for(let j=0;j<27;j++){
+   const x=278+(j*17)%62,y=302+(j*31)%143;
+   o+=circle(x,y,1.4+(j%3)*.7,'url(#v80shine)',.65);
+   if(j%5===0)o+=sPath('M'+x+' '+y+'q14 -14 20 -7q-9 12 -20 7Z','url(#v80fin)',c[1],1,.56)
+  }
+ }else for(let j=0;j<5;j++)o+=ln('M'+F(cx-20+j*9)+' '+(382+j%2*18)+'q6 11 13 0',c[1],1,.2);
+ o+='</g>';
+ // Optional gills and shoulder fins are outside the clip.
+ if(race==='aquatic'||(m.v.features||[]).includes('gills')){
+  for(const sign of [-1,1]){
+   const x=cx+sign*sw*.95;
+   o+=sPath('M'+F(x)+' 311Q'+F(x+sign*35)+' 298 '+F(x+sign*44)+' 347L'+F(x+sign*3)+' 338Z','url(#v80fin)',c[1],1.9,.78);
+   for(let k=0;k<4;k++)o+=ln('M'+F(x+sign*5)+' '+(314+k*6)+'l'+F(sign*(21+k*3))+' '+(9+k*3),c[1],1.1,.54)
+  }
  }
- o+='</g></g>';return o
+ return o+'</g>'
 }
 function head(m){
  const c=m.colors,side=m.view==='side',back=m.view==='back';
  const center=project(m,m.marks.head),cx=center.x,cy=center.y;
- const w=m.hw*(side?.98:1),h=m.race==='alien'?94:m.race==='draconic'?88:81;
- const top=cy-h,chin=cy+h*.82;
+ const w=m.hw*(side?.91:1),h=m.race==='alien'?89:m.race==='draconic'?91:m.race==='fae'?76:81;
+ const top=cy-h,chin=cy+h*.81,dragon=m.headType==='dragon',aquatic=m.headType==='aquatic'||m.race==='aquatic';
  let contour;
  if(side){
-  const nose=m.headType==='dragon'?19:m.race==='alien'?11:9;
-  contour='M'+F(cx-29)+' '+F(top+13)+'Q'+F(cx+19)+' '+F(top-9)+' '+F(cx+w*.81)+' '+F(top+41)+
-    'Q'+F(cx+w*.92+nose)+' '+F(cy-15)+' '+F(cx+w*.83+nose)+' '+F(cy+11)+
-    'L'+F(cx+w*.65)+' '+F(cy+26)+'Q'+F(cx+w*.90)+' '+F(cy+51)+' '+F(cx+w*.45)+' '+F(chin-4)+
-    'Q'+F(cx-12)+' '+F(chin+6)+' '+F(cx-33)+' '+F(cy+32)+'Q'+F(cx-w*.73)+' '+F(cy-39)+' '+F(cx-29)+' '+F(top+13)+'Z';
+  const nose=dragon?23:m.race==='alien'?18:10;
+  contour='M'+F(cx-29)+' '+F(top+14)+'Q'+F(cx-2)+' '+F(top-10)+' '+F(cx+29)+' '+F(top+3)+
+   'Q'+F(cx+w*.78)+' '+F(top+33)+' '+F(cx+w*.77)+' '+F(cy-28)+
+   'Q'+F(cx+w*.84+nose)+' '+F(cy-15)+' '+F(cx+w*.87+nose)+' '+F(cy-4)+
+   'L'+F(cx+w*.66)+' '+F(cy+22)+'Q'+F(cx+w*.81)+' '+F(cy+41)+' '+F(cx+w*.37)+' '+F(chin-4)+
+   'Q'+F(cx-13)+' '+F(chin+7)+' '+F(cx-33)+' '+F(cy+37)+
+   'Q'+F(cx-w*.78)+' '+F(cy-36)+' '+F(cx-29)+' '+F(top+14)+'Z';
  }else{
-  contour='M'+F(cx)+' '+F(top)+'Q'+F(cx-w*.91)+' '+F(top-8)+' '+F(cx-w)+' '+F(cy-27)+
-    'Q'+F(cx-w*1.01)+' '+F(cy+21)+' '+F(cx-w*.64)+' '+F(cy+43)+
-    'Q'+F(cx-w*.44)+' '+F(chin-3)+' '+F(cx)+' '+F(chin)+
-    'Q'+F(cx+w*.45)+' '+F(chin-3)+' '+F(cx+w*.64)+' '+F(cy+43)+
-    'Q'+F(cx+w*1.01)+' '+F(cy+21)+' '+F(cx+w)+' '+F(cy-27)+
-    'Q'+F(cx+w*.91)+' '+F(top-8)+' '+F(cx)+' '+F(top)+'Z'
+  const wide=m.race==='alien'?1.12:m.race==='fae'?.86:1;
+  contour='M'+F(cx)+' '+F(top)+'Q'+F(cx-w*wide*.8)+' '+F(top-6)+' '+F(cx-w*wide)+' '+F(cy-28)+
+   'Q'+F(cx-w*wide*1.05)+' '+F(cy+6)+' '+F(cx-w*.69)+' '+F(cy+38)+
+   'Q'+F(cx-w*.43)+' '+F(chin-12)+' '+F(cx)+' '+F(chin)+
+   'Q'+F(cx+w*.43)+' '+F(chin-12)+' '+F(cx+w*.69)+' '+F(cy+38)+
+   'Q'+F(cx+w*wide*1.05)+' '+F(cy+6)+' '+F(cx+w*wide)+' '+F(cy-28)+
+   'Q'+F(cx+w*wide*.8)+' '+F(top-6)+' '+F(cx)+' '+F(top)+'Z'
  }
- let o='<g data-v80-part="head">';
- // Species-specific ears sit BEHIND the cranium.
- if(m.headType!=='dragon')for(const sign of [-1,1]){
+ let o='<g data-v80-part="head" data-v81-face="sculpted">';
+ // Fins, pointed ears and cranial horns grow behind the silhouette.
+ if(!dragon)for(const sign of [-1,1]){
   if(side&&sign<0)continue;
-  const ex=cx+sign*w*.90,ey=cy-10;
-  if(m.headType==='aquatic'){
-   o+=sPath('M'+F(ex)+' '+F(ey-27)+'Q'+F(ex+sign*69)+' '+F(ey-89)+' '+F(ex+sign*85)+' '+F(ey-51)+
-     'L'+F(ex+sign*35)+' '+F(ey+35)+'Z','url(#v80fin)',c[1],2,.77)
+  const x=cx+(side?w*.77:sign*w*.94),y=cy-12;
+  if(aquatic){
+   o+=sPath('M'+F(x)+' '+F(y-34)+'Q'+F(x+sign*47)+' '+F(y-88)+' '+F(x+sign*76)+' '+F(y-77)+
+    'Q'+F(x+sign*62)+' '+F(y-28)+' '+F(x+sign*91)+' '+F(y-14)+
+    'Q'+F(x+sign*43)+' '+F(y+19)+' '+F(x)+' '+F(y+22)+'Z','url(#v80fin)',c[1],2,.84);
+   for(let k=0;k<4;k++)o+=ln('M'+F(x)+' '+F(y-22+k*9)+'Q'+F(x+sign*30)+' '+F(y-46+k*12)+' '+F(x+sign*(66-k*3))+' '+F(y-72+k*20),c[1],1.3,.4)
   }else{
-   o+=sPath('M'+F(ex)+' '+F(ey-32)+'Q'+F(ex+sign*41)+' '+F(ey-76)+' '+F(ex+sign*68)+' '+F(ey-109)+
-      'Q'+F(ex+sign*61)+' '+F(ey+20)+' '+F(ex)+' '+F(ey+21)+'Z','url(#v80edge)',c[2],1.9,.86)
+   o+=sPath('M'+F(x)+' '+F(y-34)+'Q'+F(x+sign*41)+' '+F(y-82)+' '+F(x+sign*(m.race==='fae'?94:70))+' '+F(y-122)+
+    'Q'+F(x+sign*62)+' '+F(y+14)+' '+F(x)+' '+F(y+23)+'Z','url(#v80edge)',c[2],2.1,.94);
+   o+=ln('M'+F(x)+' '+F(y-15)+'Q'+F(x+sign*37)+' '+F(y-69)+' '+F(x+sign*61)+' '+F(y-104),c[1],1.6,.44)
   }
  }
- o+=sPath(contour,'url(#v80skin)',c[2],3.9);
- if(back){
-  o+=ln('M'+F(cx-15)+' '+F(top+12)+'Q'+F(cx-30)+' '+F(cy-15)+' '+F(cx-12)+' '+F(chin-11),c[1],2,.27);
-  o+=ln('M'+F(cx+17)+' '+F(top+12)+'Q'+F(cx+33)+' '+F(cy-15)+' '+F(cx+10)+' '+F(chin-11),c[2],2,.27)
- }else{
-  const eyeY=cy-13,eyes=+m.eyeCount===1?[0]:+m.eyeCount===4?[-.68,-.25,.25,.68]:[-.43,.43];
+ o+=sPath(contour,'url(#v80skin)',c[2],3.5);
+ // Forehead, cheekbone highlights, temples and lower jaw shading.
+ o+=sPath('M'+F(cx-w*.59)+' '+F(top+32)+'Q'+F(cx)+' '+F(top+7)+' '+F(cx+w*.59)+' '+F(top+32)+
+   'Q'+F(cx+w*.35)+' '+F(cy-36)+' '+F(cx)+' '+F(cy-26)+'Q'+F(cx-w*.35)+' '+F(cy-36)+' '+F(cx-w*.59)+' '+F(top+32)+'Z','url(#v80fin)',c[1],1,.22);
+ if(!back){
+  for(const sign of [-1,1]){
+   if(side&&sign<0)continue;
+   const q=side?cx+w*.52:cx+sign*w*.64;
+   o+=sPath('M'+F(q-sign*17)+' '+F(cy+5)+'Q'+F(q+sign*17)+' '+F(cy-8)+' '+F(q+sign*21)+' '+F(cy+13)+
+    'Q'+F(q+sign*12)+' '+F(cy+33)+' '+F(q-sign*6)+' '+F(cy+35)+'Z','url(#v80fin)',c[1],.6,.20);
+  }
+  const eyeY=cy-19,eyes=m.eyeCount===1?[0]:m.eyeCount===4?[-.65,-.23,.23,.65]:[-.42,.42];
   for(const fac of eyes){
-   const x=cx+(side?w*.53:fac*w),rx=(side?11:Math.max(7,w*.23))*(eyes.length===4?.76:1);
    if(side&&fac<0)continue;
-   const y=eyeY+(eyes.length===4&&Math.abs(fac)<.5?17:0);
-   const d='M'+F(x-rx)+' '+F(y)+'Q'+F(x)+' '+F(y-10)+' '+F(x+rx)+' '+F(y)+
-     'Q'+F(x)+' '+F(y+9)+' '+F(x-rx)+' '+F(y)+'Z';
-   o+=sPath(d,m.face==='blank'?'url(#v80edge)':'#e4f7ef',c[2],1.9);
+   const x=cx+(side?w*.49:fac*w),y=eyeY+(eyes.length===4&&Math.abs(fac)<.4?17:0),rx=side?12:eyes.length===4?w*.15:w*.28;
+   const ld='M'+F(x-rx)+' '+F(y+1)+'Q'+F(x-1)+' '+F(y-12)+' '+F(x+rx)+' '+F(y)+
+   'Q'+F(x+rx*.2)+' '+F(y+11)+' '+F(x-rx)+' '+F(y+1)+'Z';
+   o+=sPath(ld,m.face==='blank'?'url(#v80edge)':'#edf9f1',c[2],1.85);
    if(m.face!=='blank'){
-    const vertical=m.face==='slit'||m.headType==='dragon';
-    o+=ellipse(x,y,vertical?2.3:5.2,vertical?7.1:5.3,'#184c60');
-    o+=circle(x-2,y-3,1.8,'#fff')
+    const slit=m.face==='slit'||dragon;
+    o+=ellipse(x,y,slit?2.9:7,slit?8.1:6.5,'url(#v81iris)');
+    o+=ellipse(x,y,slit?1.2:3,slit?6:3.3,'#102937');
+    o+=circle(x-3,y-3,2.3,'#ffffff',.99);
+    o+=circle(x+4,y+3,1,'#dafcf6',.78)
    }
-   o+=ln('M'+F(x-rx-2)+' '+F(y-13)+'Q'+F(x)+' '+F(y-20)+' '+F(x+rx+2)+' '+F(y-12),c[2],2.1,.44)
+   o+=ln('M'+F(x-rx-4)+' '+F(y-3)+'Q'+F(x)+' '+F(y-17)+' '+F(x+rx+4)+' '+F(y-4),c[2],2.6,.53);
+   o+=ln('M'+F(x-rx-5)+' '+F(y-19)+'Q'+F(x)+' '+F(y-26)+' '+F(x+rx+5)+' '+F(y-17),c[1],2,.44)
   }
   if(!side){
-   o+=ln('M'+F(cx)+' '+F(cy+4)+'q-6 17 1 21q5 2 12 -1',c[2],1.8,.48);
-   o+=ln('M'+F(cx-15)+' '+F(cy+43)+'Q'+F(cx)+' '+F(cy+51)+' '+F(cx+15)+' '+F(cy+43),c[2],2,.64)
+   o+=ln('M'+F(cx-1)+' '+F(cy-11)+'Q'+F(cx-8)+' '+F(cy+7)+' '+F(cx-5)+' '+F(cy+20)+
+       'Q'+F(cx+3)+' '+F(cy+28)+' '+F(cx+13)+' '+F(cy+19),c[2],1.6,.39);
+   o+=ln('M'+F(cx-17)+' '+F(cy+42)+'Q'+F(cx)+' '+F(cy+51)+' '+F(cx+17)+' '+F(cy+42),c[2],2.2,.66);
+   o+=ln('M'+F(cx-11)+' '+F(cy+53)+'Q'+F(cx)+' '+F(cy+58)+' '+F(cx+11)+' '+F(cy+53),c[1],1.3,.39)
   }else{
-   o+=ln('M'+F(cx+w*.63)+' '+F(cy+33)+'q-12 9 -21 4',c[2],1.9,.61)
+   o+=ln('M'+F(cx+w*.73)+' '+F(cy+35)+'Q'+F(cx+w*.5)+' '+F(cy+44)+' '+F(cx+w*.25)+' '+F(cy+38),c[2],2,.61)
   }
-  if(m.headType==='aquatic')for(const sign of [-1,1]){
-   const ex=side?cx+w*.42:cx+sign*w*.76;if(side&&sign<0)continue;
-   for(let i=0;i<3;i++)o+=ln('M'+F(ex)+' '+F(cy+i*9)+'l'+F(sign*12)+' -3',c[1],1.6,.51)
-  }
- }
- // Horns join to the cranium at world-space sockets, consistent across views.
- if(['pair','single','antlers'].includes(m.horns)){
-  const signs=m.horns==='single'?[0]:[-1,1];
-  for(const sign of signs){
+  if(aquatic)for(const sign of [-1,1]){
    if(side&&sign<0)continue;
-   const x=cx+(side?14:sign*w*.51);
-   const y=top+14;
-   const dx=side?22:sign*43;
-   o+=sPath('M'+F(x-10)+' '+F(y+3)+'Q'+F(x+dx*.14)+' '+F(y-31)+' '+F(x+dx)+' '+F(y-88)+
-     'Q'+F(x+dx*.65)+' '+F(y-26)+' '+F(x+12)+' '+F(y+3)+'Z','url(#v80edge)',c[1],2.2);
-   if(m.horns==='antlers')for(let k=0;k<3;k++)o+=ln('M'+F(x+dx*.3+k*dx*.17)+' '+F(y-22-k*18)+
-     'Q'+F(x+dx*.55+sign*17)+' '+F(y-47-k*19)+' '+F(x+dx*.74+sign*24)+' '+F(y-66-k*19),c[1],3.2,.78)
+   const x=side?cx+w*.38:cx+sign*w*.79;
+   for(let i=0;i<4;i++)o+=ln('M'+F(x)+' '+F(cy+i*10)+'l'+F(sign*13)+' -3',c[1],1.65,.61)
+  }
+ }else{
+  for(const sign of [-1,1])o+=ln('M'+F(cx+sign*w*.29)+' '+F(top+18)+'Q'+F(cx+sign*w*.54)+' '+F(cy-28)+' '+F(cx+sign*w*.25)+' '+F(chin-9),c[1],2.3,.31)
+ }
+ if(dragon||m.race==='draconic'){
+  for(let j=0;j<5;j++){
+   const x=cx+(j-2)*w*.31,y=top+17+(j%2)*6;
+   o+=sPath('M'+F(x-10)+' '+F(y)+'Q'+F(x)+' '+F(y+15)+' '+F(x+10)+' '+F(y)+'Q'+F(x)+' '+F(y+4)+' '+F(x-10)+' '+F(y)+'Z','url(#v80fin)',c[1],1,.40);
   }
  }
- o+='</g>';return o
+ if(m.race==='arboreal')for(let i=0;i<11;i++){
+  const x=cx-w*.5+(i*17)%(w),y=top+20+(i*29)%120;
+  o+=ln('M'+F(x)+' '+F(y)+'q'+(i%2?4:-6)+' 21 1 29',c[2],1.1,.41)
+ }
+ // Horns stay in the same world-space sockets across all projections.
+ if(['pair','single','antlers'].includes(m.horns)){
+  const arr=m.horns==='single'?[0]:[-1,1];
+  for(const sign of arr){
+   if(side&&sign<0)continue;
+   const x=cx+(side?12:sign*w*.53),y=top+11,dx=side?20:sign*44;
+   o+=sPath('M'+F(x-11)+' '+F(y+7)+'Q'+F(x+dx*.16)+' '+F(y-37)+' '+F(x+dx)+' '+F(y-92)+
+     'Q'+F(x+dx*.66)+' '+F(y-28)+' '+F(x+14)+' '+F(y+5)+'Z','url(#v80edge)',c[1],2.2,.96);
+   if(m.horns==='antlers')for(let k=0;k<3;k++)o+=ln('M'+F(x+dx*.32+k*dx*.13)+' '+F(y-24-k*18)+
+    'Q'+F(x+dx*.58+sign*17)+' '+F(y-49-k*22)+' '+F(x+dx*.8+sign*22)+' '+F(y-68-k*20),c[1],3.1,.86)
+  }
+ }
+ return o+'</g>'
 }
 function neck(m){
- const p=project(m,m.marks.neck),head=project(m,m.marks.head);
- const width=m.race==='draconic'?[23,27,33]:m.race==='fae'?[12,16,24]:[15,20,28];
- return '<g data-v80-part="neck">'+
- sPath(tube([{x:p.x,y:head.y+58},{x:p.x,y:p.y+14},{x:p.x,y:p.y+67}],width),'url(#v80skin)',m.colors[2],1.9)+
- ln('M'+F(p.x-5)+' '+F(head.y+70)+'Q'+F(p.x-8)+' '+F(p.y+3)+' '+F(p.x-6)+' '+F(p.y+38),m.colors[1],1.5,.24)+'</g>'
+ const p=project(m,m.marks.neck),head=project(m,m.marks.head),c=m.colors;
+ const upper= m.race==='draconic'?25:m.race==='alien'?14:m.race==='fae'?13:18;
+ const low= m.race==='draconic'?35:m.race==='alien'?24:m.race==='fae'?21:28;
+ const base= {x:p.x,y:p.y+38},top={x:p.x,y:head.y+65};
+ let out='<g data-v80-part="neck">';
+ out+=sPath(tube([top,{x:p.x,y:p.y-15},base],[upper,upper*.93,low]),'url(#v80edge)',c[2],2.3);
+ for(const sign of [-1,1]){
+  out+=ln('M'+F(p.x+sign*upper*.6)+' '+F(top.y+6)+'Q'+F(p.x+sign*(upper*.8))+' '+F(p.y+2)+' '+F(p.x+sign*low*.8)+' '+F(base.y-4),c[1],1.7,.38);
+ }
+ if(m.race==='aquatic')for(const sign of [-1,1])for(let j=0;j<3;j++)out+=ln('M'+F(p.x+sign*upper*.7)+' '+F(top.y+21+j*10)+'l'+F(sign*12)+' -3',c[1],1.3,.51);
+ return out+'</g>'
 }
 function sketch(m){
  const body=[];
@@ -422,7 +522,7 @@ if(note)note.textContent='Единый каркас для трёх ракурс
 const title=document.querySelector('#modular73 h3');
 if(title)title.textContent='Анатомический конструктор 2D';
 const badge=document.querySelector('.atlas76status');
-if(badge)badge.textContent='SVG-анатомия · единый каркас · v0.8.0';
+if(badge)badge.textContent='SVG-анатомия · художественные формы · v0.8.1';
 render=function(sync=true){
  oldRender(sync);
  fitView();
@@ -444,7 +544,7 @@ svgSource=function(){
  return generated.replace('<g data-v80-fit="true">','<g data-v80-fit="true" transform="'+esc(tr)+'">');
 };
 render();
-window.AtlasRig080={version:'0.8.0',getModel:()=>rig(s),getFit:()=>{
+window.AtlasRig080={version:'0.8.1',getModel:()=>rig(s),getFit:()=>{
  const g=document.querySelector('[data-v80-fit]');return g?{fitted:g.dataset.fitted,nominal:Number(g.dataset.nominal),actual:Number(g.dataset.actual)}:null},
  render:()=>render(false)};
 })();
